@@ -15,3 +15,4 @@ class UserAdmin(admin.ModelAdmin):
    exclude= ['deleted_at']
    inlines = [AddressAdmin,]
 
+admin.site.register(Customer,UserAdmin)

@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from .serializers import ProductSerializer, RegisterSerializer, FarmerSerializer,LoginUserSerializer,TokenSerializer
-from .models import Farmer, Products, Token
+from .serializers import ProductSerializer, RegisterSerializer, FarmerSerializer,LoginUserSerializer,TokenSerializer,AddProductSerializer
+from .models import Categories, Farmer, Products, Token
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_auth.views import LoginView as RestLoginView
@@ -81,20 +81,28 @@ class Profile(generics.GenericAPIView):
         return Response(serializer.data)
 
     def post(self, request):       
-        name = request.POST['name']
-        email = request.POST['email']
-        password = request.POST['password']
-        photo = request.FILES['profile_photo']
-        contact = request.POST['contact']
-        state = request.POST['state']
-        village = request.POST['village']
-        district = request.POST['district']
-        postal_address = request.POST['postal_address']
+        serializer = FarmerSerializer(Farmer.objects.get(_id=request.user._id),data=request.data)      
+        if serializer.is_valid():
+           serializer.update(Farmer.objects.get(_id=request.user._id),request.data)
+           return Response({'detail':'Profile Updated'},status=status.HTTP_201_CREATED)
+        else:
+           return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)
+       
 
 
-        Farmer.objects.filter(_id=request.user._id).update(name=name,email=email,password=password,profile_photo=photo,contact=contact,state=state,village=village,district=district,postal_address=postal_address)
-        return Response({"detail":"Profile Updated Succesfully."},status=status.HTTP_201_CREATED)
-        
+class AddProduct(generics.GenericAPIView):
+    def post(self,request):
+        try:
+            request.data['farmer']= request.user._id
+            serializer = AddProductSerializer(data=request.data)
+            serializer.is_valid()                  
+            serializer.save()
+            return Response({'detail':'Product Added'},status=status.HTTP_201_CREATED)
+        except:
+            return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)
+
+
+
 class AllProducts(generics.GenericAPIView):
     serializer_class = ProductSerializer
     pagination_class = ProductPagination
@@ -104,7 +112,6 @@ class AllProducts(generics.GenericAPIView):
     def get(self,request):     
         serializer = ProductSerializer(Products.objects.filter(farmer___id=request.user._id), many=True)
         if serializer.data:
-            # return Response(serializer.data,status=status.HTTP_200_OK)
             page = self.paginate_queryset(Products.objects.filter(farmer___id=request.user._id))
             if page is not None:
                 serializer = self.get_serializer(page, many=True)
@@ -121,12 +128,25 @@ class ProductDetail(generics.GenericAPIView):
     serializer_class = ProductSerializer
 
     def get(self,request,id):
-        serializer = ProductSerializer(Products.objects.get(_id=id))
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        try:
+            serializer = ProductSerializer(Products.objects.get(_id=id))
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        except:
+            return Response({'detail':'Product Not Found'},status=status.HTTP_204_NO_CONTENT)
+
 
     def post(self,request,id):
-        serializer = self.get_serializer(data=request.data)
-        # serializer.is_valid(raise_exception=True)
-        serializer.update(Products.objects.get(_id=id),request.data)
-        return Response({'detail':'Updated'},status=status.HTTP_201_CREATED)
-      
+        try:
+            serializer = ProductSerializer(data=request.data)
+            serializer.is_valid()       
+            serializer.update(Products.objects.get(_id=id),request.data)
+            return Response({'detail':'Product Updated'},status=status.HTTP_201_CREATED)
+        except:
+            return Response({'detail':'Product Not Updated'},status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self,request,id):
+        try:
+            Products.objects.get(_id=id).delete()
+            return Response({'detail':'Product Deleted'},status=status.HTTP_200_OK)
+        except:
+            return Response({'detail':'Error While Deleting'},status=status.HTTP_400_BAD_REQUEST)

@@ -1,5 +1,5 @@
 from rest_framework import  serializers
-from .models import Customer, Token
+from .models import Customer, Token, Address
 from django.utils.translation import gettext_lazy as _
 
 
@@ -51,11 +51,18 @@ class RegisterSerializer(serializers.ModelSerializer):
             'password':{'write_only': True},
         }
 
+class AddressSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Address
+        exclude = ['deleted']
+
 class CustomerSerializer(serializers.ModelSerializer):
-   
+    address = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = Customer
-        # fields = '__all__'
+        # fields = ['address']
         exclude = ['deleted_at']
 
 class TokenSerializer(serializers.ModelSerializer):

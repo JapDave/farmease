@@ -68,4 +68,19 @@ class Logout(APIView):
       
         return response
 
+class Profile(generics.GenericAPIView):
+   authentication_classes = (TokenAuthentication,)
+   serializer_class = CustomerSerializer
 
+   def get(self, request):
+        profile = Customer.objects.get(_id=request.user._id)         
+        serializer = CustomerSerializer(profile)
+        return Response(serializer.data)
+
+   def post(self, request):       
+        serializer = CustomerSerializer(Customer.objects.get(_id=request.user._id),data=request.data)
+        if serializer.is_valid():
+            serializer.update(Customer.objects.get(_id=request.user._id),request.data)
+            return Response({'detail':'Profile Updated'},status=status.HTTP_201_CREATED)
+        else:
+            return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)

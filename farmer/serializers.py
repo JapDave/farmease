@@ -1,5 +1,5 @@
 from rest_framework import  serializers
-from .models import Farmer, Products, Token
+from .models import Categories, Farmer, Products, Token
 from django.utils.translation import gettext_lazy as _
 
 
@@ -52,6 +52,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
       
 
+class CategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Categories
+        fields = ['_id','name']
+
+
 class FarmerSerializer(serializers.ModelSerializer):
    
     class Meta:
@@ -66,9 +73,17 @@ class TokenSerializer(serializers.ModelSerializer):
         model = Token
         fields = ('key','user')
 
-class ProductSerializer(serializers.ModelSerializer):   
-    # farmers = FarmerSerializer(Farmer.objects.all())
-    # farmer = farmers.name
+
+class AddProductSerializer(serializers.ModelSerializer):   
+  
     class Meta:
         model = Products
         exclude = ['created_at','updated_at','deleted_at']
+
+
+class ProductSerializer(serializers.ModelSerializer):   
+    category = CategorySerializer(Categories.objects.all())
+    
+    class Meta:
+        model = Products
+        exclude = ['farmer','created_at','updated_at','deleted_at']

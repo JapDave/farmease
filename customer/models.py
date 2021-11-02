@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import RegexValidator ,FileExtensionValidator
+from django.core.validators import RegexValidator ,FileExtensionValidator,MinValueValidator,MaxValueValidator
 import uuid
 from django.db import models
 from farmer.models import Token
@@ -12,48 +12,46 @@ import os
 class ParanoidModelManager(models.Manager):
     def get_queryset(self):
         return super(ParanoidModelManager, self).get_queryset().filter(deleted_at__isnull=True)
-
-
-
+    
 
 class Customer(models.Model):
-   _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-   name = models.CharField(("Name"), max_length=50,unique=True)
-   password = models.CharField(("Password"), max_length=64)
-   email = models.EmailField(("Email"), max_length=254,unique=True)
-   profile_photo = models.ImageField(("Profile Photo"), upload_to='Customer', height_field=None, width_field=None, max_length=None)
-   phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{10}$")
-   contact = models.CharField(("Contact No"),validators=[phoneNumberRegex],max_length=10,unique=True)
-   created_at = models.DateTimeField(auto_now_add=True)
-   updated_at = models.DateTimeField(auto_now=True)
-   deleted_at = models.DateTimeField(blank=True,null=True ,default=None)
-   objects = ParanoidModelManager()   
+    _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(("Name"), max_length=50)
+    password = models.CharField(("Password"), max_length=64)
+    email = models.EmailField(("Email"), max_length=54,unique=True)
+    profile_photo = models.ImageField(("Profile Photo"), upload_to='Customer', height_field=None, width_field=None, max_length=None)
+    phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{10}$")
+    contact = models.CharField(("Contact No"),validators=[phoneNumberRegex],max_length=10,unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(blank=True,null=True ,default=None)
+    objects = ParanoidModelManager()   
 
 
-   class Meta:
-      verbose_name = 'Customers'
+    class Meta:
+        verbose_name_plural = "Customers"
         
-   def __str__(self):
-      return self.name
+    def __str__(self):
+        return self.name
 
 
-   def is_authenticated(self):
-      return True
+    def is_authenticated(self):
+        return True
 
-   def delete(self, hard=False, **kwargs):
-      if hard:
-         super(Customer, self).delete()
-      else:
-         self.deleted_at = now()
-         self.save()
+    def delete(self, hard=False, **kwargs):
+        if hard:
+            super(Customer, self).delete()
+        else:
+            self.deleted_at = now()
+            self.save()
 
 
 class Address(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    customer = models.ForeignKey(Customer, verbose_name=("User"), on_delete=models.CASCADE)
-    state = models.CharField(("State"), max_length=50)
-    city = models.CharField(("City"), max_length=50)
-    pin_code =  models.PositiveIntegerField(("Pincode"))
+    customer = models.ForeignKey(Customer, verbose_name=("User"), on_delete=models.CASCADE,related_name='address')
+    state = models.CharField(("State"), max_length=30)
+    city = models.CharField(("City"), max_length=30)
+    pin_code =  models.PositiveIntegerField(("Pincode"), validators=[MinValueValidator(111111), MaxValueValidator(99999)])
     postal_address = models.TextField(("Postal Address"))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -71,7 +69,7 @@ class Address(models.Model):
             self.save()
 
     def __str__(self):
-        return self.postal_address +', '+self.city +', '+ self.state +', '+ self.country
+        return self.postal_address +', '+self.city +', '+ self.state 
 
 
 class Token(models.Model):

@@ -15,14 +15,19 @@ class ParanoidModelManager(models.Manager):
 
 class Categories(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    category_name = models.CharField(("Category-Name"),max_length=50)
+    name = models.CharField(("Category-Name"),max_length=50)
+    image = models.ImageField(("Profile Photo"), upload_to='category',validators=[FileExtensionValidator(['jpg','jpeg','png','webp'])],height_field=None, width_field=None, max_length=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True,null=True ,default=None)
     objects = ParanoidModelManager()
 
+
+    class Meta:
+        verbose_name_plural = "Categories"
+
     def __str__(self) :
-        return self.category_name 
+        return self.name 
 
     def delete(self, hard=False, **kwargs):
         if hard:
@@ -34,14 +39,14 @@ class Categories(models.Model):
 class Farmer(models.Model ):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(("Name"), max_length=50)  
-    email = models.EmailField(("Email"), max_length=254,unique=True)
+    email = models.EmailField(("Email"), max_length=54,unique=True)
     password = models.CharField(("Password"), max_length=64)
-    profile_photo = models.ImageField(("Profile Photo"), upload_to='farmer', height_field=None, width_field=None, max_length=None)
+    profile_photo = models.ImageField(("Profile Photo"), upload_to='farmer',validators=[FileExtensionValidator(['jpg','jpeg','png','webp'])],height_field=None, width_field=None, max_length=None)
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{10}$")
     contact = models.CharField(("Contact No"),validators=[phoneNumberRegex],max_length=10,unique=True)
-    state = models.CharField(("State"), max_length=50)
-    district = models.CharField(("district"), max_length=50)
-    village = models.CharField(("village"), max_length=50)
+    state = models.CharField(("State"), max_length=20)
+    district = models.CharField(("district"), max_length=20,)
+    village = models.CharField(("village"), max_length=20)
     postal_address = models.TextField(("Postal Address"))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -49,7 +54,7 @@ class Farmer(models.Model ):
     objects = ParanoidModelManager()   
 
     class Meta:
-        verbose_name = 'farmers'
+        verbose_name_plural = "farmers"
         
     def __str__(self):
         return self.name
@@ -96,13 +101,13 @@ class Token(models.Model):
    
 class Products(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    farmer = models.ForeignKey(Farmer,on_delete=models.CASCADE,null=True,blank=True,verbose_name=("Owner") )
+    farmer = models.ForeignKey(Farmer,on_delete=models.CASCADE,verbose_name=("Farmer"))
     category = models.ForeignKey(Categories,on_delete=models.CASCADE, verbose_name=("Category"))
-    product_name = models.CharField(("Name"), max_length=50, null=False, blank=False)
-    img = models.ImageField(("Image"), upload_to='Product', height_field=None, width_field=None,validators=[FileExtensionValidator(['jpg','jpeg','png','webp'])] ,max_length=None)
-    price = models.PositiveIntegerField(("Price"))
-    description = models.TextField(("Description"))
-    stock = models.PositiveIntegerField(("Stock"))
+    name = models.CharField(("Name"), max_length=50, null=False, blank=False)
+    image = models.ImageField(("Image"), upload_to='Product', height_field=None, width_field=None,validators=[FileExtensionValidator(['jpg','jpeg','png','webp'])] ,max_length=None)
+    price = models.PositiveIntegerField(("Price"),null=False, blank=False)
+    description = models.TextField(("Description"),null=False, blank=False)
+    stock = models.PositiveIntegerField(("Stock"),null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True, null=True, default=None)
@@ -112,7 +117,7 @@ class Products(models.Model):
         verbose_name_plural = "Products"
     
     def __str__(self):
-        return self.product_name
+        return self.name
 
     def delete(self, hard=False, **kwargs):
         if hard:
