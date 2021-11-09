@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,10 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'modeltranslation',
     'rest_auth',
     'farmer',
     'customer',
- 
    
 ]
 
@@ -57,14 +59,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
 ugettext = lambda s: s  # default (fallback) language
-# LANGUAGES = (            # supported languages
-#     ('en', 'English'),
-#     ('bg', 'Bulgarian'),
-#     ('ga', 'Irish'),
-#     ('fr', 'French'),
-# )
+LANGUAGES = (            # supported languages
+    ('en', 'English'),
+    ('gu', 'Gujarati'),
+
+)
+
+MODELTRANSLATION_LANGUAGES = ('gu','en')
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
+
 
 from django.conf.global_settings import LANGUAGES
 LOCALE_PATHS = (
@@ -109,7 +114,6 @@ DATABASES = {
         }
      }
  }
-
 
 
 # Password validation
@@ -176,7 +180,3 @@ REST_FRAMEWORK = {
    
 }
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#     'PAGE_SIZE': 1
-# }

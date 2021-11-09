@@ -1,11 +1,11 @@
-from rest_framework import  serializers
-from .models import Categories, Farmer, Products, Token
+from rest_framework import  serializers as restserial
+from .models import Categories, CategoryField, Farmer, FarmerField, Products, Token
 from django.utils.translation import gettext_lazy as _
+from rest_meets_djongo import serializers
 
-
-class LoginUserSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField(
+class LoginUserSerializer(restserial.Serializer):
+    email = restserial.EmailField()
+    password = restserial.CharField(
         style={'input_type': 'password'}, trim_whitespace=False)
 
     def validate(self, attrs):
@@ -41,8 +41,22 @@ class LoginUserSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
+class FarmerFieldSerializer(serializers.EmbeddedModelSerializer):
+    
+    class Meta:
+        model = FarmerField
+        fields = '__all__'
 
-class RegisterSerializer(serializers.ModelSerializer):
+class CategoryFieldSerializer(serializers.EmbeddedModelSerializer):
+    
+    class Meta:
+        model = CategoryField
+        fields = '__all__'
+
+
+class RegisterSerializer(serializers.DjongoModelSerializer):
+    gu = FarmerFieldSerializer()
+    en = FarmerFieldSerializer()
 
     class Meta:
         model = Farmer
@@ -51,22 +65,23 @@ class RegisterSerializer(serializers.ModelSerializer):
             'password':{'write_only': True},
         }
       
-
-class CategorySerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.DjongoModelSerializer):
 
     class Meta:
         model = Categories
-        fields = ['_id','name']
+        exclude = ('deleted_at',)
 
 
-class FarmerSerializer(serializers.ModelSerializer):
-   
+class FarmerSerializer(serializers.DjongoModelSerializer):
+    gu = FarmerFieldSerializer()
+    en = FarmerFieldSerializer()
+
     class Meta:
         model = Farmer
-        # fields = '__all__'
         exclude = ['deleted_at']
 
-class TokenSerializer(serializers.ModelSerializer):
+
+class TokenSerializer(serializers.DjongoModelSerializer):
     user = FarmerSerializer(Farmer.objects.all())
 
     class Meta:
@@ -74,16 +89,16 @@ class TokenSerializer(serializers.ModelSerializer):
         fields = ('key','user')
 
 
-class AddProductSerializer(serializers.ModelSerializer):   
+class AddProductSerializer(serializers.DjongoModelSerializer):   
   
     class Meta:
         model = Products
-        exclude = ['created_at','updated_at','deleted_at']
+        exclude = ('deleted_at',)
 
 
-class ProductSerializer(serializers.ModelSerializer):   
+class ProductSerializer(serializers.DjongoModelSerializer):   
     category = CategorySerializer(Categories.objects.all())
     
     class Meta:
         model = Products
-        exclude = ['farmer','created_at','updated_at','deleted_at']
+        exclude = ['farmer','deleted_at']

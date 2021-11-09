@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import RegexValidator ,FileExtensionValidator,MinValueValidator,MaxValueValidator
 import uuid
 from django.db import models
-from farmer.models import Token
+# from farmer.models import Token
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
 import binascii
@@ -51,7 +51,7 @@ class Address(models.Model):
     customer = models.ForeignKey(Customer, verbose_name=("User"), on_delete=models.CASCADE,related_name='address')
     state = models.CharField(("State"), max_length=30)
     city = models.CharField(("City"), max_length=30)
-    pin_code =  models.PositiveIntegerField(("Pincode"), validators=[MinValueValidator(111111), MaxValueValidator(99999)])
+    pin_code =  models.PositiveIntegerField(("Pincode"), validators=[MinValueValidator(111111), MaxValueValidator(999999)])
     postal_address = models.TextField(("Postal Address"))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

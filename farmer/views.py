@@ -1,6 +1,7 @@
+from django.core.validators import ProhibitNullCharactersValidator
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from .serializers import ProductSerializer, RegisterSerializer, FarmerSerializer,LoginUserSerializer,TokenSerializer,AddProductSerializer
+from .serializers import FarmerFieldSerializer, ProductSerializer, RegisterSerializer, FarmerSerializer,LoginUserSerializer,TokenSerializer,AddProductSerializer
 from .models import Categories, Farmer, Products, Token
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
@@ -41,7 +42,8 @@ class Register(generics.GenericAPIView):
 
     def post(self, request, *args,  **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        serializer.is_valid()
+        # print(serializer.data)
         user = serializer.save()
         return Response({
             "user": FarmerSerializer(user,context=self.get_serializer_context()).data,
@@ -71,19 +73,18 @@ class Logout(APIView):
       
         return response
 
-
-
 class Profile(generics.GenericAPIView):
-
+   
     def get(self, request):
         profile = Farmer.objects.get(_id=request.user._id)         
         serializer = FarmerSerializer(profile)
         return Response(serializer.data)
 
     def post(self, request):       
-        serializer = FarmerSerializer(Farmer.objects.get(_id=request.user._id),data=request.data)      
+        serializer = FarmerSerializer(Farmer.objects.get(_id=request.user._id),data=request.data)   
+        print(serializer)   
         if serializer.is_valid():
-           serializer.update(Farmer.objects.get(_id=request.user._id),request.data)
+           serializer.save()
            return Response({'detail':'Profile Updated'},status=status.HTTP_201_CREATED)
         else:
            return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)
@@ -121,7 +122,7 @@ class AllProducts(generics.GenericAPIView):
             return Response(serializer.data)
 
         else:
-            return Response({"detail":"No Products Found."},status=status.HTTP_200_OK)
+            return Response({"detail":"No Products Found."},status=status.HTTP_204_NO_CONTENT)
     
        
 class ProductDetail(generics.GenericAPIView):
