@@ -14,10 +14,11 @@ class Register(generics.GenericAPIView):
     serializer_class = RegisterSerializer
     permission_classes = (permissions.AllowAny,)
 
-    def post(self, request, *args,  **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)     
+        serializer.is_valid(raise_exception=True)      
+        
+        user = serializer.create(request.data)
         return Response({
             "user": CustomerSerializer(user,context=self.get_serializer_context()).data,
             "message": "Customer Created Successfully.  Now perform Login to get your token",

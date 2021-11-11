@@ -1,11 +1,17 @@
-from rest_framework import  serializers
-from .models import Customer, Token, Address
+from rest_framework import  serializers as restserial
+from .models import Customer, CustomerField, Token, Address
 from django.utils.translation import gettext_lazy as _
+from rest_meets_djongo import serializers
+
+from googletrans import Translator
+translator = Translator(service_urls=[
+      'translate.google.com',])
 
 
-class LoginUserSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField(
+
+class LoginUserSerializer(restserial.Serializer):
+    email = restserial.EmailField()
+    password = restserial.CharField(
         style={'input_type': 'password'}, trim_whitespace=False)
 
     def validate(self, attrs):
@@ -19,7 +25,7 @@ class LoginUserSerializer(serializers.Serializer):
             
             except:
                  msg = {'detail': 'user is not  registered.'}
-                 raise serializers.ValidationError(msg)
+                 raise restserial.ValidationError(msg)
 
             if user_obj and user_obj.password == password:
                 user = user_obj
@@ -27,22 +33,37 @@ class LoginUserSerializer(serializers.Serializer):
             else:
                 msg = {'detail': 'user is not  registered.',
                     'register': False}
-                raise serializers.ValidationError(msg)
+                raise restserial.ValidationError(msg)
 
             if user == False:
                 msg = {
                     'detail': 'Unable to log in with provided credentials.', 'register': True}
-                raise serializers.ValidationError(msg, code='authorization')
+                raise restserial.ValidationError(msg, code='authorization')
     
         else:
             msg = 'Must include "username" and "password".'
-            raise serializers.ValidationError(msg, code='authorization')
+            raise restserial.ValidationError(msg, code='authorization')
 
         attrs['user'] = user
         return attrs
 
 
-class RegisterSerializer(serializers.ModelSerializer):
+
+class AddressSerializer(serializers.EmbeddedModelSerializer):
+  
+    class Meta:
+        model = Address
+        fields = '__all__'
+
+class CustomerFieldSerializer(serializers.EmbeddedModelSerializer):
+    addresses = AddressSerializer(many=True)
+    class Meta:
+        model = CustomerField
+        fields = '__all__'
+
+class RegisterSerializer(serializers.DjongoModelSerializer):
+    # gu = CustomerFieldSerializer()
+    # en = CustomerFieldSerializer()   
 
     class Meta:
         model = Customer
@@ -51,21 +72,29 @@ class RegisterSerializer(serializers.ModelSerializer):
             'password':{'write_only': True},
         }
 
-class AddressSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+      
+        if validated_data['language_selected'] == 'gu':
+            validated_data.pop('language_selected')
+          
+           
+            return True
+        else:
+            
+            validated_data.pop('name')
+            validated_data.pop('language_selected')
+            user = Customer.objects.create(**validated_data)
+            user.save()
+            return user
 
-    class Meta:
-        model = Address
-        exclude = ['deleted']
 
-class CustomerSerializer(serializers.ModelSerializer):
-    address = serializers.StringRelatedField(many=True)
+class CustomerSerializer(serializers.DjongoModelSerializer):
 
     class Meta:
         model = Customer
-        # fields = ['address']
         exclude = ['deleted_at']
 
-class TokenSerializer(serializers.ModelSerializer):
+class TokenSerializer(serializers.DjongoModelSerializer):
     user = CustomerSerializer(Customer.objects.all())
 
     class Meta:
