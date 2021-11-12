@@ -1,13 +1,20 @@
 from rest_framework import generics, permissions
-from rest_framework.response import Response
-from .serializers import  ProductSerializer, RegisterSerializer, FarmerSerializer,LoginUserSerializer,TokenSerializer,AddProductSerializer
-from .models import Categories, Farmer, Products, Token
+from .serializers import *
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import status
 from rest_auth.views import LoginView as RestLoginView
 from rest_framework.views import APIView
 from .authentication import TokenAuthentication
 from .paginations import ProductPagination
+
+
+class GetMaster(generics.GenericAPIView):
+    def get(self,request):
+        category_serial = CategorySerializer(Categories.objects.all(), many=True)
+        state_serial = StateSerializer(State.objects.all(), many=True)
+        district_serial = DistrictSerializer(District.objects.all(), many=True)
+        return Response({'result':{'categories':category_serial.data,
+                                    'states':state_serial.data,
+                                    'district':district_serial.data}},status=status.HTTP_200_OK)
 
 
 class Login(RestLoginView):
@@ -42,7 +49,6 @@ class Register(generics.GenericAPIView):
     def post(self, request, *args,  **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid()
-        # print(serializer.data)
         user = serializer.save()
         return Response({
             "user": FarmerSerializer(user,context=self.get_serializer_context()).data,
@@ -72,7 +78,7 @@ class Logout(APIView):
       
         return response
 
-class Profile(generics.RetrieveUpdateAPIView):
+class Profile(generics.GenericAPIView):
 
     def get(self, request):
         try:
@@ -83,16 +89,15 @@ class Profile(generics.RetrieveUpdateAPIView):
             return Response({'detail':'Farmer Does Not Exsits'},status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):       
-        queryset = Farmer.objects.get(_id=request.user._id)
-        serializer = FarmerSerializer(queryset,data=request.data,partial=True)   
+        instance = Farmer.objects.get(_id=request.user._id)
+        serializer = FarmerSerializer(instance,data=request.data)   
         if serializer.is_valid():
-            serializer.save()
+            serializer.update(instance,request.data)
             return Response({'detail':'Profile Updated'},status=status.HTTP_201_CREATED)
         else:
            return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)
        
-
-
+         
 class AddProduct(generics.GenericAPIView):
 
     def post(self,request):
@@ -106,7 +111,6 @@ class AddProduct(generics.GenericAPIView):
                 return Response({'detail':result},status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class AllProducts(generics.GenericAPIView):
@@ -131,7 +135,6 @@ class AllProducts(generics.GenericAPIView):
     
        
 class ProductDetail(generics.GenericAPIView):
-    # serializer_class = ProductSerializer
 
     def get(self,request,id):
         try:
@@ -139,7 +142,6 @@ class ProductDetail(generics.GenericAPIView):
             return Response(serializer.data,status=status.HTTP_200_OK)
         except:
             return Response({'detail':'Product Not Found'},status=status.HTTP_204_NO_CONTENT)
-
 
     def post(self,request,id):
         try:

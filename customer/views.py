@@ -1,13 +1,24 @@
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from .serializers import RegisterSerializer, CustomerSerializer,TokenSerializer,LoginUserSerializer
-from .models import Customer, Token
+from farmer.serializers import CategorySerializer,StateSerializer,DistrictSerializer
+from .models import Customer, Token, State, District,Categories
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_auth.views import LoginView as RestLoginView
 from rest_framework.views import APIView
 from .authentication import TokenAuthentication
 # from .paginations import ProductPagination
+
+class GetMaster(generics.GenericAPIView):
+    def get(self,request):
+        category_serial = CategorySerializer(Categories.objects.all(), many=True)
+        state_serial = StateSerializer(State.objects.all(), many=True)
+        district_serial = DistrictSerializer(District.objects.all(), many=True)
+        return Response({'result':{'categories':category_serial.data,
+                                    'states':state_serial.data,
+                                    'district':district_serial.data}},status=status.HTTP_200_OK)
+
 
 
 class Register(generics.GenericAPIView):
@@ -17,8 +28,7 @@ class Register(generics.GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)     
         serializer.is_valid(raise_exception=True)      
-        
-        user = serializer.create(request.data)
+        user = serializer.save()
         return Response({
             "user": CustomerSerializer(user,context=self.get_serializer_context()).data,
             "message": "Customer Created Successfully.  Now perform Login to get your token",

@@ -48,11 +48,19 @@ class Categories(models.Model):
             self.deleted_at = now()
             self.save()
 
+class State(models.Model):
+    _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(("State"), max_length=50)
 
+    def __str__(self):
+        return self.name
 
+class District(models.Model):
+    _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(("District"), max_length=50)
 
-
-
+    def __str__(self):
+        return self.name
 
 class Farmer(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -62,8 +70,8 @@ class Farmer(models.Model):
     profile_photo = models.ImageField(("Profile Photo"), upload_to='farmer',validators=[FileExtensionValidator(['jpg','jpeg','png','webp'])],height_field=None, width_field=None, max_length=None)
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{10}$")
     contact = models.CharField(("Contact No"),validators=[phoneNumberRegex],max_length=10,unique=True)
-    state = models.CharField(("State"), max_length=20)
-    district = models.CharField(("District"), max_length=20,)
+    state = models.ForeignKey(State, verbose_name=_("State"), on_delete=models.CASCADE)
+    district = models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE)
     village = models.CharField(("Village"), max_length=20)
     postal_address = models.TextField(("Postal Address"))
     created_at = models.DateTimeField(auto_now_add=True)

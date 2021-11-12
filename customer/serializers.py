@@ -1,5 +1,5 @@
 from rest_framework import  serializers as restserial
-from .models import Customer, CustomerField, Token, Address
+from .models import Customer, Token, Address
 from django.utils.translation import gettext_lazy as _
 from rest_meets_djongo import serializers
 
@@ -55,15 +55,7 @@ class AddressSerializer(serializers.EmbeddedModelSerializer):
         model = Address
         fields = '__all__'
 
-class CustomerFieldSerializer(serializers.EmbeddedModelSerializer):
-    addresses = AddressSerializer(many=True)
-    class Meta:
-        model = CustomerField
-        fields = '__all__'
-
 class RegisterSerializer(serializers.DjongoModelSerializer):
-    # gu = CustomerFieldSerializer()
-    # en = CustomerFieldSerializer()   
 
     class Meta:
         model = Customer
@@ -71,21 +63,7 @@ class RegisterSerializer(serializers.DjongoModelSerializer):
         extra_kwargs = {
             'password':{'write_only': True},
         }
-
-    def create(self, validated_data):
-      
-        if validated_data['language_selected'] == 'gu':
-            validated_data.pop('language_selected')
-          
-           
-            return True
-        else:
-            
-            validated_data.pop('name')
-            validated_data.pop('language_selected')
-            user = Customer.objects.create(**validated_data)
-            user.save()
-            return user
+        depth=1
 
 
 class CustomerSerializer(serializers.DjongoModelSerializer):
@@ -93,6 +71,7 @@ class CustomerSerializer(serializers.DjongoModelSerializer):
     class Meta:
         model = Customer
         exclude = ['deleted_at']
+        depth=1
 
 class TokenSerializer(serializers.DjongoModelSerializer):
     user = CustomerSerializer(Customer.objects.all())

@@ -1,5 +1,5 @@
 from rest_framework import  serializers as restserial
-from .models import Categories, CategoryField, Farmer, ProductField, Products, Token
+from .models import Categories, CategoryField, District, Farmer, ProductField, Products, State, Token
 from django.utils.translation import gettext_lazy as _
 from rest_meets_djongo import serializers
 from rest_framework.response import Response
@@ -7,6 +7,22 @@ from rest_framework import status
 from googletrans import Translator
 translator = Translator(service_urls=[
       'translate.google.com',])
+
+
+
+
+
+class StateSerializer(serializers.DjongoModelSerializer):
+
+    class Meta:
+        model = State
+        fields = '__all__'
+
+class DistrictSerializer(serializers.DjongoModelSerializer):
+
+    class Meta:
+        model = District
+        fields = '__all__'
 
 
 class LoginUserSerializer(restserial.Serializer):
@@ -47,8 +63,6 @@ class LoginUserSerializer(restserial.Serializer):
         attrs['user'] = user
         return attrs
 
-
-
 class CategoryFieldSerializer(serializers.EmbeddedModelSerializer):
     
     class Meta:
@@ -82,7 +96,16 @@ class FarmerSerializer(serializers.DjongoModelSerializer):
     class Meta:
         model = Farmer
         exclude = ['deleted_at']
+        depth = 1
 
+    def update(self,instance,data):
+        state = State.objects.get(_id=data.get('state'))
+        data.pop('state')
+        data['state'] = state
+        district = District.objects.get(_id=data.get('district'))
+        data.pop('district')
+        data['district'] = district
+        return super().update(instance,validated_data=data)
 
 class TokenSerializer(serializers.DjongoModelSerializer):
     user = FarmerSerializer(Farmer.objects.all())
