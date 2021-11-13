@@ -2,7 +2,7 @@ from rest_framework import  serializers as restserial
 from .models import Customer, Token, Address
 from django.utils.translation import gettext_lazy as _
 from rest_meets_djongo import serializers
-
+import uuid
 from googletrans import Translator
 translator = Translator(service_urls=[
       'translate.google.com',])
@@ -50,28 +50,31 @@ class LoginUserSerializer(restserial.Serializer):
 
 
 class AddressSerializer(serializers.EmbeddedModelSerializer):
-  
+    _id = restserial.UUIDField(default=uuid.uuid4)
     class Meta:
         model = Address
         fields = '__all__'
+        # depth = 1
 
 class RegisterSerializer(serializers.DjongoModelSerializer):
+    # addresses = AddressSerializer()
 
     class Meta:
         model = Customer
-        exclude = ['deleted_at']
+        exclude = ['farmer','deleted_at']
         extra_kwargs = {
             'password':{'write_only': True},
         }
-        depth=1
+        
 
 
 class CustomerSerializer(serializers.DjongoModelSerializer):
-
+    # addresses = AddressSerializer()
+  
     class Meta:
         model = Customer
         exclude = ['deleted_at']
-        depth=1
+        
 
 class TokenSerializer(serializers.DjongoModelSerializer):
     user = CustomerSerializer(Customer.objects.all())

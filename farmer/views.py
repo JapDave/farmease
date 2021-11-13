@@ -1,11 +1,12 @@
+from customer.serializers import CustomerSerializer
 from rest_framework import generics, permissions
 from .serializers import *
 from django.core.exceptions import ObjectDoesNotExist
 from rest_auth.views import LoginView as RestLoginView
 from rest_framework.views import APIView
 from .authentication import TokenAuthentication
-from .paginations import ProductPagination
-
+from .paginations import ProductPagination,CustomerPagination
+from customer.models import Customer
 
 class GetMaster(generics.GenericAPIView):
     def get(self,request):
@@ -58,9 +59,7 @@ class Register(generics.GenericAPIView):
 
 class Logout(APIView):
 
-    # permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
-    
     def post(self, request, *args, **kwargs):
         
         return self.logout(request)
@@ -79,6 +78,7 @@ class Logout(APIView):
         return response
 
 class Profile(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
 
     def get(self, request):
         try:
@@ -99,6 +99,7 @@ class Profile(generics.GenericAPIView):
        
          
 class AddProduct(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
 
     def post(self,request):
         try:
@@ -114,20 +115,21 @@ class AddProduct(generics.GenericAPIView):
 
 
 class AllProducts(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
     serializer_class = ProductSerializer
     pagination_class = ProductPagination
     page_size = 1
     page = 1
   
     def get(self,request):     
-        serializer = ProductSerializer(Products.objects.filter(farmer___id=request.user._id), many=True)
-        if serializer.data:
-            page = self.paginate_queryset(Products.objects.filter(farmer___id=request.user._id))
+        product_data = Products.objects.filter(farmer___id=request.user._id)
+        if product_data.count() > 0:
+            page = self.paginate_queryset(product_data)
             if page is not None:
                 serializer = self.get_serializer(page, many=True)
                 return self.get_paginated_response(serializer.data)
 
-            serializer = self.get_serializer(Products.objects.filter(farmer___id=request.user._id), many=True)
+            serializer = self.get_serializer(product_data, many=True)
             return Response(serializer.data)
 
         else:
@@ -135,6 +137,8 @@ class AllProducts(generics.GenericAPIView):
     
        
 class ProductDetail(generics.GenericAPIView):
+
+    authentication_classes = (TokenAuthentication,)
 
     def get(self,request,id):
         try:
@@ -165,3 +169,26 @@ class ProductDetail(generics.GenericAPIView):
             return Response({'detail':'Product Deleted'},status=status.HTTP_200_OK)
         except:
             return Response({'detail':'Product Already Deleted.'},status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class CustomerList(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = CustomerSerializer
+    pagination_class = CustomerPagination
+    page_size = 1
+    page = 1
+
+    def get(self,request):
+        customer_data = Customer.objects.filter(farmer = request.user._id)
+        if customer_data.count() > 0 :
+            page = self.paginate_queryset(customer_data)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = self.get_serializer(customer_data, many=True)
+            return Response(serializer.data)
+
+        else:
+            return Response({'detail':'error'})

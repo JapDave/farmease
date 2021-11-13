@@ -2,12 +2,12 @@ from django.db import models
 from django.core.validators import RegexValidator ,FileExtensionValidator,MinValueValidator,MaxValueValidator
 import uuid
 from djongo import models 
-from farmer.models import State,District,Categories
+from farmer.models import Farmer, State,District,Categories
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
 import binascii
 import os
-
+from farmer.models import Products
 
 class ParanoidModelManager(models.Manager):
     def get_queryset(self):
@@ -15,17 +15,12 @@ class ParanoidModelManager(models.Manager):
 
 class Address(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    state = models.ForeignKey(State, verbose_name=_("State"), on_delete=models.CASCADE)
-    district = models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE)
     pin_code =  models.PositiveIntegerField(("Pincode"), validators=[MinValueValidator(111111), MaxValueValidator(999999)])
     postal_address = models.TextField(("Postal Address"))
-   
-    class Meta:
-        verbose_name_plural = "Address"
-        abstract=True
+    objects = models.DjongoManager()
 
-    def __str__(self):
-        return self.postal_address 
+    class Meta:
+        abstract = True
     
 class Customer(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -35,7 +30,10 @@ class Customer(models.Model):
     profile_photo = models.ImageField(("Profile Photo"), upload_to='Customer', height_field=None, width_field=None, max_length=None)
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{10}$")
     contact = models.CharField(("Contact No"),validators=[phoneNumberRegex],max_length=10,unique=True)
+    state = models.ForeignKey(State, verbose_name=_("State"), on_delete=models.CASCADE)
+    district = models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE)
     addresses = models.ArrayField(model_container=Address, verbose_name=("Addresses"))
+    farmer = models.ForeignKey(Farmer, verbose_name=_("Farmer"), on_delete=models.CASCADE,default='')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True,null=True ,default=None)
@@ -56,6 +54,33 @@ class Customer(models.Model):
         else:
             self.deleted_at = now()
             self.save()
+
+class Cart(models.Model):
+    _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(Customer, verbose_name=("user"), on_delete=models.CASCADE)
+    product_items = models.ForeignKey(Products, verbose_name=("Product-item"), on_delete=models.CASCADE)
+    qty = models.PositiveIntegerField(("product_qty"),default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(blank=True, null=True, default=None)
+    objects = ParanoidModelManager()
+
+    class Meta:
+           verbose_name_plural = "Cart"
+        
+ 
+    def delete(self, hard=False, **kwargs):
+        if hard:
+            super(Cart, self).delete()
+        else:
+            self.deleted_at = now()
+            self.save()
+    
+    def __str__(self):
+        return self.user.name
+
+
+
 
 class Token(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

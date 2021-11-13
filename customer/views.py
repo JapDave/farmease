@@ -1,14 +1,15 @@
+from farmer.models import Farmer,Products
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from .serializers import RegisterSerializer, CustomerSerializer,TokenSerializer,LoginUserSerializer
-from farmer.serializers import CategorySerializer,StateSerializer,DistrictSerializer
+from .serializers import AddressSerializer, RegisterSerializer, CustomerSerializer,TokenSerializer,LoginUserSerializer
+from farmer.serializers import CategorySerializer,StateSerializer,DistrictSerializer,FarmerSerializer,ProductSerializer
 from .models import Customer, Token, State, District,Categories
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_auth.views import LoginView as RestLoginView
 from rest_framework.views import APIView
 from .authentication import TokenAuthentication
-# from .paginations import ProductPagination
+from farmer.paginations import ProductPagination
 
 class GetMaster(generics.GenericAPIView):
     def get(self,request):
@@ -20,7 +21,6 @@ class GetMaster(generics.GenericAPIView):
                                     'district':district_serial.data}},status=status.HTTP_200_OK)
 
 
-
 class Register(generics.GenericAPIView):
     serializer_class = RegisterSerializer
     permission_classes = (permissions.AllowAny,)
@@ -28,9 +28,9 @@ class Register(generics.GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)     
         serializer.is_valid(raise_exception=True)      
-        user = serializer.save()
+        serializer.save()
         return Response({
-            "user": CustomerSerializer(user,context=self.get_serializer_context()).data,
+            "user": serializer.data,
             "message": "Customer Created Successfully.  Now perform Login to get your token",
         })
 
@@ -81,7 +81,7 @@ class Logout(APIView):
 
 class Profile(generics.GenericAPIView):
    authentication_classes = (TokenAuthentication,)
-   serializer_class = CustomerSerializer
+  
 
    def get(self, request):
         profile = Customer.objects.get(_id=request.user._id)         
@@ -89,9 +89,134 @@ class Profile(generics.GenericAPIView):
         return Response(serializer.data)
 
    def post(self, request):       
-        serializer = CustomerSerializer(Customer.objects.get(_id=request.user._id),data=request.data)
+        serializer = CustomerSerializer(Customer.objects.get(_id=request.user._id),data=request.data,partial=True)
         if serializer.is_valid():
-            serializer.update(Customer.objects.get(_id=request.user._id),request.data)
+            serializer.save()
             return Response({'detail':'Profile Updated'},status=status.HTTP_201_CREATED)
         else:
             return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)
+
+class AddressView(generics.GenericAPIView):
+        authentication_classes = (TokenAuthentication,)
+
+        def get(self,request,customer_id):
+            try:
+                customer_obj = Customer.objects.get(_id=customer_id)
+                serializer = AddressSerializer(customer_obj.addresses,many=True)
+                return Response({'Addresses':serializer.data},status=status.HTTP_200_OK)
+            except:
+                return Response({'detail':'No Address Found'},status=status.HTTP_400_BAD_REQUEST)
+
+class AddressDetail(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+   
+    def get(self,request,address_id):
+        customer_obj = Customer.objects.get(_id=request.user._id)
+        for add in customer_obj.addresses:
+            if str(add._id) == address_id:
+                data = add
+                break
+        try:
+            serializer = AddressSerializer(data)
+            return Response({'Address':serializer.data},status=status.HTTP_200_OK) 
+        except Exception as e:
+            return Response({'detail':'Error To Get Data'},status=status.HTTP_400_BAD_REQUEST) 
+    
+    def delete(self,request,address_id):
+        customer_obj = Customer.objects.get(_id=request.user._id)
+        for add in customer_obj.addresses:
+            if str(add._id) == address_id:
+                data = add
+                break
+        try:
+            customer_obj.addresses.remove(data)
+            customer_obj.save()
+            return Response({'detail':'Address Deleted'},status=status.HTTP_200_OK) 
+        except Exception as e:
+            return Response({'detail':'Error To Get Data'},status=status.HTTP_400_BAD_REQUEST) 
+    
+    def post(self,request,address_id):
+        customer_obj = Customer.objects.get(_id=request.user._id)
+       
+        for add in customer_obj.addresses:
+            counter = 0
+            if str(add._id) == address_id:
+                address_serial = AddressSerializer(add,request.data,partial=True)
+                address_serial.is_valid()
+                address_obj = address_serial.save()
+                try:
+                    customer_obj.addresses[counter] = address_obj
+                    customer_obj.save()
+                    return Response({'detail':'Address updated'},status=status.HTTP_200_OK) 
+                except Exception as e:
+                    
+                    return Response({'detail':'Error To update Data'},status=status.HTTP_400_BAD_REQUEST) 
+            counter = +1
+
+
+class AddAddress(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+    
+    def post(self,request,customer_id):
+        try:
+            customer_obj = Customer.objects.get(_id=customer_id)
+            address_serializer = AddressSerializer(data=request.data)
+            if address_serializer.is_valid():              
+                address_obj = address_serializer.save()
+                customer_obj.addresses.append(address_obj)
+                customer_obj.save()
+                return Response({'detail':'Address Added Successfully',
+                                'address':address_serializer.data},status=status.HTTP_201_CREATED)
+            else:
+                return Response({'detail':address_serializer.errors},status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+                return Response({'detail':'Address Not Added'},status=status.HTTP_400_BAD_REQUEST)
+
+
+class SelectedFarmerView(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+    
+    def get(self,request):
+        try:
+            farmer_obj = Farmer.objects.filter(district = request.user.district._id)
+            serializer = FarmerSerializer(farmer_obj, many=True)
+            return Response({'Available Farmers':serializer.data},status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'detail':'No Farmers Available At Your District'},status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self,request):
+        try:
+            farmer_obj = Farmer.objects.get(_id=request.data['farmer'])
+            if farmer_obj.customer_capacity > 0:
+                customer_obj = Customer.objects.get(_id=request.user._id)
+                customer_obj.farmer = farmer_obj
+                customer_obj.save()
+                farmer_obj.customer_capacity -= 1
+                farmer_obj.save()
+                return Response({'detail':'Farmer is Added To Favourite.'},status=status.HTTP_201_CREATED)
+            else:
+                return Response({'detail':'OOps Farmer Not Available.'},status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({'detail':'Error While Selecting Farmer Try Again Later'},status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProductList(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = ProductSerializer
+    pagination_class = ProductPagination
+    page_size = 1
+    page = 1
+  
+    def get(self,request):     
+        product_data = Products.objects.filter(farmer___id=request.user.farmer._id)
+        if product_data.count() > 0:
+            page = self.paginate_queryset(product_data)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = self.get_serializer(product_data, many=True)
+            return Response(serializer.data)
+
+        else:
+            return Response({"detail":"No Products Found."},status=status.HTTP_204_NO_CONTENT)

@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import RegexValidator ,FileExtensionValidator
+from django.core.validators import RegexValidator ,FileExtensionValidator,MinValueValidator
 import uuid
 from djongo import models
 from django.utils.translation import ugettext_lazy as _
@@ -74,6 +74,7 @@ class Farmer(models.Model):
     district = models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE)
     village = models.CharField(("Village"), max_length=20)
     postal_address = models.TextField(("Postal Address"))
+    customer_capacity = models.PositiveIntegerField(_("Customer-Capacity"),default=2147483647,validators=[MinValueValidator(1)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True,null=True ,default=None)
@@ -125,7 +126,6 @@ class Token(models.Model):
             self.save()
 
    
-
 class ProductField(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(("Name"), max_length=50, null=False, blank=False)
