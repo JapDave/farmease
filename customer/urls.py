@@ -13,5 +13,8 @@ urlpatterns = [
    path('addressdetail/<address_id>',AddressDetail.as_view()),
    path('farmers',SelectedFarmerView.as_view()),
    path('products',ProductList.as_view()),
+   path('productdetail/<product_id>',ProductDetail.as_view()),
+   path('productcart/<product_id>',ProductCartView.as_view()),
+   path('cart',CartList.as_view()),
    
 ]

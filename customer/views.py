@@ -1,9 +1,9 @@
 from farmer.models import Farmer,Products
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from .serializers import AddressSerializer, RegisterSerializer, CustomerSerializer,TokenSerializer,LoginUserSerializer
+from .serializers import AddressSerializer, CartSerializer, RegisterSerializer, CustomerSerializer,TokenSerializer,LoginUserSerializer,CartFieldSerializer
 from farmer.serializers import CategorySerializer,StateSerializer,DistrictSerializer,FarmerSerializer,ProductSerializer
-from .models import Customer, Token, State, District,Categories
+from .models import Cart, Customer, Token, State, District,Categories
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_auth.views import LoginView as RestLoginView
@@ -208,15 +208,94 @@ class ProductList(generics.GenericAPIView):
     page = 1
   
     def get(self,request):     
-        product_data = Products.objects.filter(farmer___id=request.user.farmer._id)
-        if product_data.count() > 0:
-            page = self.paginate_queryset(product_data)
-            if page is not None:
-                serializer = self.get_serializer(page, many=True)
-                return self.get_paginated_response(serializer.data)
+        try:
+            product_data = Products.objects.filter(farmer___id=request.user.farmer._id)
+            if product_data.count() > 0:
+                page = self.paginate_queryset(product_data)
+                if page is not None:
+                    serializer = self.get_serializer(page, many=True)
+                    return self.get_paginated_response(serializer.data)
 
-            serializer = self.get_serializer(product_data, many=True)
-            return Response(serializer.data)
+                serializer = self.get_serializer(product_data, many=True)
+                return Response(serializer.data)
+            else:
+                return Response({"detail":"No Products Found."},status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            
+            return Response({'detail':'Error To Get Product Or Farmer Not Selected'},status=status.HTTP_404_NOT_FOUND)
 
-        else:
-            return Response({"detail":"No Products Found."},status=status.HTTP_204_NO_CONTENT)
+
+class ProductDetail(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+
+    def get(self,request,product_id):
+        try:
+            product_obj = Products.objects.get(_id = product_id)
+            serializer = ProductSerializer(product_obj)
+            return Response({'detail':serializer.data},status=status.HTTP_200_OK)
+        except:
+            return Response({'detail':'Product Not Found'},status=status.HTTP_204_NO_CONTENT)
+
+
+class ProductCartView(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+
+    def post(self,request,product_id):
+        try:
+            cart_obj = Cart.objects.get(user___id=request.user._id)
+            serializer = CartFieldSerializer(data=request.data)
+            serializer.is_valid()
+            if cart_obj.item != None:
+                for item in cart_obj.item:
+                    if str(item.product._id) == product_id:
+                        return Response({'detail':'Product Already Present'})
+
+                cartfield_obj = serializer.save(product=Products.objects.get(_id=product_id))
+                cart_obj.item.append(cartfield_obj)
+                cart_obj.save()
+                return Response({'detail':'Product Added To Cart'},status=status.HTTP_201_CREATED) 
+
+            cartfield_obj = serializer.save(product=Products.objects.get(_id=product_id))
+            cart_obj.item = []
+            cart_obj.item.append(cartfield_obj)
+            cart_obj.save()
+            return Response({'detail':'Product Added To Cart'},status=status.HTTP_201_CREATED)      
+        except Exception as e:
+            return Response({'detail':serializer.errors},status=status.HTTP_404_NOT_FOUND)
+            
+
+class CartList(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = CartFieldSerializer
+    pagination_class = ProductPagination
+    page_size = 1
+    page = 1
+    
+    def get(self,request):
+        try:
+            cart_obj = Cart.objects.get(user___id = request.user._id)
+            if cart_obj.item != []:
+                page = self.paginate_queryset(cart_obj.item)
+                if page is not None:
+                    serializer = self.get_serializer(page, many=True)
+                    return self.get_paginated_response(serializer.data)
+
+                serializer = self.get_serializer(cart_obj.item, many=True)
+                return Response(serializer.data)
+            else:
+                return Response({"detail":"No Products Found."},status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            return Response({'detail':'Error To Get Product'},status=status.HTTP_404_NOT_FOUND)
+        
+    def delete(self,request):
+        try:
+            cart_obj = Cart.objects.get(user___id=request.user._id)
+            for item in cart_obj.item:
+                cart_obj.item.remove(item)
+                cart_obj.save()
+           
+            return Response({"detail":"Cart Empted"},status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response({'detail':'Error To Delete CartList'},status=status.HTTP_404_NOT_FOUND)
+        

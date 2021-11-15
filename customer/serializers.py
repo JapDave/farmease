@@ -1,5 +1,7 @@
+from farmer.models import Products
+from farmer.serializers import ProductSerializer
 from rest_framework import  serializers as restserial
-from .models import Customer, Token, Address
+from .models import Cart, CartField, Customer, Token, Address
 from django.utils.translation import gettext_lazy as _
 from rest_meets_djongo import serializers
 import uuid
@@ -74,7 +76,24 @@ class CustomerSerializer(serializers.DjongoModelSerializer):
     class Meta:
         model = Customer
         exclude = ['deleted_at']
-        
+
+
+class CartFieldSerializer(serializers.EmbeddedModelSerializer):
+    # product = ProductSerializer()
+    class Meta:
+        model = CartField
+        fields = '__all__'
+        depth = 1
+
+class CartSerializer(serializers.DjongoModelSerializer):
+    
+    class Meta:
+        model = Cart
+        exclude = ['user','deleted_at'] 
+        depth = 1
+
+
+
 
 class TokenSerializer(serializers.DjongoModelSerializer):
     user = CustomerSerializer(Customer.objects.all())

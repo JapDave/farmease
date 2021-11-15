@@ -55,11 +55,20 @@ class Customer(models.Model):
             self.deleted_at = now()
             self.save()
 
+
+
+class CartField(models.Model):
+    _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    product = models.ForeignKey(Products, verbose_name=("Product-item"), on_delete=models.CASCADE)
+    qty = models.PositiveIntegerField(("product_qty"),default=1)
+
+    class Meta:
+        abstract = True
+
 class Cart(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(Customer, verbose_name=("user"), on_delete=models.CASCADE)
-    product_items = models.ForeignKey(Products, verbose_name=("Product-item"), on_delete=models.CASCADE)
-    qty = models.PositiveIntegerField(("product_qty"),default=1)
+    item = models.ArrayField(CartField,verbose_name=("Items"),default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True, null=True, default=None)

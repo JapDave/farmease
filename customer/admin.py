@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Address,Customer
+from .models import Address,Customer,Cart
 
 # class AddressAdmin(admin.ModelAdmin):
 #     model = Address
@@ -16,3 +16,4 @@ class UserAdmin(admin.ModelAdmin):
 #    inlines = [AddressAdmin,]
 
 admin.site.register(Customer,UserAdmin)
+admin.site.register(Cart)
