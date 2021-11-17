@@ -68,7 +68,7 @@ class CartField(models.Model):
 class Cart(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(Customer, verbose_name=("user"), on_delete=models.CASCADE)
-    item = models.ArrayField(CartField,verbose_name=("Items"),default=None)
+    item = models.ArrayField(CartField,verbose_name=("Items"),null=True,default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True, null=True, default=None)
@@ -88,7 +88,41 @@ class Cart(models.Model):
     def __str__(self):
         return self.user.name
 
+class OrderField(models.Model):
+    _id = models.UUIDField(default=uuid.uuid4)
+    product = models.ForeignKey(Products, verbose_name=_("Product"), on_delete=models.CASCADE)
+    qty = models.PositiveIntegerField(("Product-qty"),default=1) 
+    CHOICES = [('0','Pending'),('1','Approved'),('2','Dispatched'),('3','Delievered'),('4','Cancelled')]
+    status = models.CharField(("status"),choices=CHOICES, max_length=50,default='pending')
+    objects = models.DjongoManager()
 
+    class Meta:
+        abstract = True
+    
+
+class Order(models.Model):
+    _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    customer = models.ForeignKey(Customer, verbose_name=("Customer"), on_delete=models.CASCADE)
+    items = models.ArrayField(OrderField, verbose_name=("Items"),default=None)  
+    total = models.PositiveIntegerField(("Total-Amount"))
+    address = models.EmbeddedField(Address)
+    CHOICES = [('0','COD'),('1','ONLINE')]
+    payment_method = models.CharField(("Payment-Method"), max_length=50) 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(blank=True, null=True, default=None)
+    objects = ParanoidModelManager()
+
+
+    def delete(self, hard=False, **kwargs):
+        if hard:
+            super(Order, self).delete()
+        else:
+            self.deleted_at = now()
+            self.save()
+
+    def __str__(self):
+        return self.customer.name
 
 
 class Token(models.Model):

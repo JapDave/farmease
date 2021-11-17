@@ -1,7 +1,9 @@
+from django.core.validators import integer_validator
+from django.db.models import fields
 from farmer.models import Products
 from farmer.serializers import ProductSerializer
 from rest_framework import  serializers as restserial
-from .models import Cart, CartField, Customer, Token, Address
+from .models import Cart, CartField, Customer, Order, OrderField, Token, Address
 from django.utils.translation import gettext_lazy as _
 from rest_meets_djongo import serializers
 import uuid
@@ -92,7 +94,22 @@ class CartSerializer(serializers.DjongoModelSerializer):
         exclude = ['user','deleted_at'] 
         depth = 1
 
+class QtySerializer(restserial.Serializer):
+    qty = restserial.IntegerField(max_value=None, min_value=1) 
+   
 
+class OrderFieldSerializer(serializers.EmbeddedModelSerializer):
+    _id = restserial.UUIDField(default=uuid.uuid4)
+
+    class Meta:
+        model = OrderField
+        fields = '__all__'
+
+class OrderSerializer(serializers.DjongoModelSerializer):
+    class Meta:
+        model = Order
+        exclude = ['deleted_at']
+     
 
 
 class TokenSerializer(serializers.DjongoModelSerializer):
