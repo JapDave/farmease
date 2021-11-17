@@ -92,8 +92,7 @@ class OrderField(models.Model):
     _id = models.UUIDField(default=uuid.uuid4)
     product = models.ForeignKey(Products, verbose_name=_("Product"), on_delete=models.CASCADE)
     qty = models.PositiveIntegerField(("Product-qty"),default=1) 
-    CHOICES = [('0','Pending'),('1','Approved'),('2','Dispatched'),('3','Delievered'),('4','Cancelled')]
-    status = models.CharField(("status"),choices=CHOICES, max_length=50,default='pending')
+   
     objects = models.DjongoManager()
 
     class Meta:
@@ -103,9 +102,12 @@ class OrderField(models.Model):
 class Order(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     customer = models.ForeignKey(Customer, verbose_name=("Customer"), on_delete=models.CASCADE)
+    farmer = models.ForeignKey(Farmer, verbose_name=_(""), on_delete=models.CASCADE,default=None)
     items = models.ArrayField(OrderField, verbose_name=("Items"),default=None)  
     total = models.PositiveIntegerField(("Total-Amount"))
     address = models.EmbeddedField(Address)
+    CHOICES = [('0','Pending'),('1','Approved'),('2','Dispatched'),('3','Delievered'),('4','Cancelled')]
+    status = models.CharField(("status"),choices=CHOICES, max_length=50,default='pending')
     CHOICES = [('0','COD'),('1','ONLINE')]
     payment_method = models.CharField(("Payment-Method"), max_length=50) 
     created_at = models.DateTimeField(auto_now_add=True)

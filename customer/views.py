@@ -1,3 +1,4 @@
+from django.db import reset_queries
 from farmer.models import Farmer,Products
 from rest_framework import generics, permissions
 from rest_framework.response import Response
@@ -210,6 +211,20 @@ class ProductList(generics.GenericAPIView):
   
     def get(self,request):     
         try:
+            if request.data['search']:
+                   
+                product_data = Products.objects.filter(name__contains = request.data['search'],farmer___id=request.user.farmer._id)
+                if product_data.count() > 0:
+                    page = self.paginate_queryset(product_data)
+                    if page is not None:
+                        serializer = self.get_serializer(page, many=True)
+                        return self.get_paginated_response(serializer.data)
+
+                    serializer = self.get_serializer(product_data, many=True)
+                    return Response(serializer.data)
+                else:
+                    return Response({"detail":"No Products Found."},status=status.HTTP_204_NO_CONTENT)
+
             product_data = Products.objects.filter(farmer___id=request.user.farmer._id)
             if product_data.count() > 0:
                 page = self.paginate_queryset(product_data)
@@ -364,6 +379,7 @@ class BuyProduct(generics.GenericAPIView):
 
                 order_dict = {
                         'customer' : request.user,
+                        'farmer': request.user.farmer,
                         'items': [order_field_obj,],
                         'address': new_address,
                         'total': int(serializer.validated_data['qty'] * product_obj.en.price),
@@ -418,6 +434,7 @@ class CartCheckout(generics.GenericAPIView):
 
             order_dict = {
                         'customer' : request.user,
+                        'farmer' : request.user.farmer,
                         'items': order_field_list,
                         'address': new_address,
                         'total': total,

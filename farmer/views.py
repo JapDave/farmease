@@ -1,12 +1,14 @@
 from customer.serializers import CustomerSerializer
 from rest_framework import generics, permissions
 from .serializers import *
+from customer.serializers import OrderSerializer,OrderFieldSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from rest_auth.views import LoginView as RestLoginView
 from rest_framework.views import APIView
 from .authentication import TokenAuthentication
 from .paginations import ProductPagination,CustomerPagination
-from customer.models import Customer
+from customer.paginations import OrderPagination
+from customer.models import Customer, Order
 
 class GetMaster(generics.GenericAPIView):
     def get(self,request):
@@ -192,3 +194,60 @@ class CustomerList(generics.GenericAPIView):
 
         else:
             return Response({'detail':'error'})
+
+
+class OrderList(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = OrderSerializer
+    pagination_class = OrderPagination
+    page_size = 1
+    page = 1
+    
+    def get(self,request):
+        try:
+            order_obj = Order.objects.filter(farmer=request.user._id)        
+            page = self.paginate_queryset(order_obj)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = self.get_serializer(order_obj, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({'detail':'Error To Get Order History'},status=status.HTTP_404_NOT_FOUND)
+
+class OrderDetail(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = OrderFieldSerializer
+    pagination_class = OrderPagination
+    page_size = 1
+    page = 1
+    
+    def get(self,request,order_id):
+        try:
+            order_obj = Order.objects.get(_id = order_id)
+            if order_obj.items != []:
+                page = self.paginate_queryset(order_obj.items)
+                if page is not None:
+                    serializer = self.get_serializer(page, many=True)
+                    return self.get_paginated_response(serializer.data)
+
+                serializer = self.get_serializer(order_obj.items, many=True)
+                return Response(serializer.data)
+            else:
+                return Response({"detail":"No Products Found."},status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            return Response({'detail':'Error To Get Product'},status=status.HTTP_404_NOT_FOUND)
+    
+    def post(self,request,order_id):
+        try:
+            order_status = request.data['status']
+            order_obj = Order.objects.get(_id=order_id)
+            order_obj.status = order_status
+            order_obj.save()
+            serializer = OrderSerializer(order_obj)
+            return Response({'detail':serializer.data},status=status.HTTP_200_OK)          
+        except:
+            return Response({'detail':'Error TO Get Order Detail'},status=status.HTTP_404_NOT_FOUND)
+
+   
