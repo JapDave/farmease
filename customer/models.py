@@ -107,7 +107,7 @@ class Order(models.Model):
     total = models.PositiveIntegerField(("Total-Amount"))
     address = models.EmbeddedField(Address)
     CHOICES = [('0','Pending'),('1','Approved'),('2','Dispatched'),('3','Delievered'),('4','Cancelled')]
-    status = models.CharField(("status"),choices=CHOICES, max_length=50,default='pending')
+    status = models.CharField(("status"),choices=CHOICES, max_length=50,default='0')
     CHOICES = [('0','COD'),('1','ONLINE')]
     payment_method = models.CharField(("Payment-Method"), max_length=50) 
     created_at = models.DateTimeField(auto_now_add=True)

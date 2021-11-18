@@ -1,4 +1,5 @@
 from django.db import reset_queries
+from customer.tasks import mail_sender_farmer, mail_sender_user
 from farmer.models import Farmer,Products
 from rest_framework import generics, permissions
 from rest_framework.response import Response
@@ -388,9 +389,12 @@ class BuyProduct(generics.GenericAPIView):
                 order_obj = Order(**order_dict)
                 order_obj.save()
                 order_serializer = OrderSerializer(order_obj)
+                mail_sender_farmer.delay(order_serializer.data['_id'])
+                mail_sender_user.delay(request.user.email)
                 return Response({'detail':'Ordered Placed Successfully',
                                 'data':order_serializer.data
                                 },status=status.HTTP_201_CREATED)
+                
             return Response({'detail',serializer.errors},status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:         
             return Response({'detail':'Ordered Failed To Placed'})
@@ -407,7 +411,6 @@ class CartCheckout(generics.GenericAPIView):
                 return Response({'detail':serializer.data},status=status.HTTP_200_OK)
             else:
                 return Response({"detail":"No Products Found."},status=status.HTTP_204_NO_CONTENT)
-
         except Exception as e:
             return Response({'detail':'Error To Get Cart Products'},status=status.HTTP_404_NOT_FOUND)
     
@@ -443,6 +446,8 @@ class CartCheckout(generics.GenericAPIView):
             order_obj = Order(**order_dict)
             order_obj.save()
             order_serializer = OrderSerializer(order_obj)
+            mail_sender_farmer.delay(order_serializer.data['_id'])
+            mail_sender_user.delay(request.user.email)
             return Response({'detail':'Ordered Placed Successfully',
                             'data':order_serializer.data
                             },status=status.HTTP_201_CREATED)     

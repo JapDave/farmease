@@ -1,12 +1,20 @@
+amqp==5.0.6
+anyjson==0.3.3
 asgiref==3.2.10
+billiard==3.6.4.0
 bson==0.5.8
+celery==5.1.1
 certifi==2021.10.8
 chardet==3.0.4
 charset-normalizer==2.0.7
-click==8.0.3
+click==7.1.2
+click-didyoumean==0.3.0
+click-plugins==1.1.1
+click-repl==0.2.0
 dataclasses==0.6
 defusedxml==0.7.1
 Django==2.1.1
+django-celery==3.3.1
 django-jsonfield==1.4.1
 django-modeltranslation==0.17.3
 django-mongodb-engine @ git+https://github.com/django-nonrel/mongodb-engine@1314786975d3d17fb1a2e870dfba004158a5e431
@@ -16,6 +24,7 @@ djangorestframework==3.12.4
 djangorestframework-simplejwt==5.0.0
 djongo==1.3.0
 drf-writable-nested==0.6.3
+environ==1.0
 googletrans==4.0.0rc1
 h11==0.9.0
 h2==3.2.0
@@ -26,16 +35,20 @@ httpie==2.6.0
 httpx==0.13.3
 hyperframe==5.2.0
 idna==2.10
+kombu==5.2.2
 libretranslatepy==2.1.1
 lxml==4.6.3
 mongoengine==0.23.1
 Pillow==8.4.0
+prompt-toolkit==3.0.22
 Pygments==2.10.0
 PyJWT==2.3.0
 pymongo==3.12.1
 PySocks==1.7.1
 python-dateutil==2.8.2
+python-dotenv==0.19.2
 pytz==2021.3
+redis-server==6.0.9
 requests==2.26.0
 requests-toolbelt==0.9.1
 rest-meets-djongo==0.0.13
@@ -44,3 +57,5 @@ six==1.16.0
 sniffio==1.2.0
 sqlparse==0.2.4
 urllib3==1.26.7
+vine==5.0.0
+wcwidth==0.2.5

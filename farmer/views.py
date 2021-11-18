@@ -1,3 +1,4 @@
+from os import stat
 from customer.serializers import CustomerSerializer
 from rest_framework import generics, permissions
 from .serializers import *
@@ -9,15 +10,19 @@ from .authentication import TokenAuthentication
 from .paginations import ProductPagination,CustomerPagination
 from customer.paginations import OrderPagination
 from customer.models import Customer, Order
+from .tasks import  mail_user_updateorder
+
 
 class GetMaster(generics.GenericAPIView):
+    permission_classes = (permissions.AllowAny,)
+    
     def get(self,request):
         category_serial = CategorySerializer(Categories.objects.all(), many=True)
         state_serial = StateSerializer(State.objects.all(), many=True)
         district_serial = DistrictSerializer(District.objects.all(), many=True)
         return Response({'result':{'categories':category_serial.data,
                                     'states':state_serial.data,
-                                    'district':district_serial.data}},status=status.HTTP_200_OK)
+                                    'district':district_serial.data}},status=status.HTTP_201_OK)
 
 
 class Login(RestLoginView):
@@ -50,13 +55,16 @@ class Register(generics.GenericAPIView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, *args,  **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid()
-        user = serializer.save()
-        return Response({
-            "user": FarmerSerializer(user,context=self.get_serializer_context()).data,
-            "message": "Farmer Created Successfully.  Now perform Login to get your token",
-        })
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid()
+            user = serializer.save()
+            return Response({
+                "user": FarmerSerializer(user,context=self.get_serializer_context()).data,
+                "message": "Farmer Created Successfully.  Now perform Login to get your token",
+            })
+        except:
+            return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)
 
 
 class Logout(APIView):
@@ -245,9 +253,17 @@ class OrderDetail(generics.GenericAPIView):
             order_obj = Order.objects.get(_id=order_id)
             order_obj.status = order_status
             order_obj.save()
+            if order_obj.status == '1':
+                for item in order_obj.items:
+                    item.product.en.stock -= item.qty 
+                    item.product.gu.stock -= item.qty
+                    item.product.save()
+              
+        
+            mail_user_updateorder.delay(order_status,order_obj.customer.email,order_obj._id)
             serializer = OrderSerializer(order_obj)
             return Response({'detail':serializer.data},status=status.HTTP_200_OK)          
-        except:
-            return Response({'detail':'Error TO Get Order Detail'},status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'detail':'Error To Change Status'},status=status.HTTP_404_NOT_FOUND)
 
    
