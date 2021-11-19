@@ -21,7 +21,6 @@ class CartPagination(PageNumberPagination):
           })
 
 
-
 class OrderPagination(PageNumberPagination):
       page_size = 5
       offset = 1 

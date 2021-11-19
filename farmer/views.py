@@ -47,7 +47,6 @@ class ForgotPassword(generics.GenericAPIView):
             return Response({'detail':'Error To Get Registered Farmer '},status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class OtpVerification(generics.GenericAPIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -89,7 +88,6 @@ class ChangePassword(generics.GenericAPIView):
 class ProfileChangePassword(generics.GenericAPIView):
     authentication_classes = (TokenAuthentication,)
     
-
     def post(self,request,farmer_id):
         try:
             new_password = request.POST['new_password']
@@ -146,7 +144,8 @@ class Register(generics.GenericAPIView):
                 "user": FarmerSerializer(user,context=self.get_serializer_context()).data,
                 "message": "Farmer Created Successfully.  Now perform Login to get your token",
             })
-        except:
+        except Exception as e:
+         
             return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)
 
 
