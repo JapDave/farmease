@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_meets_djongo import serializers
 from rest_framework.response import Response
 from rest_framework import status
+import hashlib
 from googletrans import Translator
 translator = Translator(service_urls=[
       'translate.google.com',])
@@ -37,18 +38,17 @@ class LoginUserSerializer(restserial.Serializer):
 
         if email and password:
             try:
-               user_obj=Farmer.objects.get(email=email)
+               user_obj=Farmer.objects.get(email=email,status='1')
             
             except:
-                 msg = {'detail': 'user is not  registered.'}
+                 msg = {'detail': 'User Not Found Or Not Yet Approved By Admin. '}
                  raise restserial.ValidationError(msg)
 
-            if user_obj and user_obj.password == password:
+            if user_obj and user_obj.password == hashlib.sha256(str.encode(password)).hexdigest():
                 user = user_obj
              
             else:
-                msg = {'detail': 'user is not  registered.',
-                    'register': False}
+                msg = {'detail': 'user password wrong'}
                 raise restserial.ValidationError(msg)
 
             if user == False:
@@ -98,7 +98,7 @@ class FarmerSerializer(serializers.DjongoModelSerializer):
         exclude = ['deleted_at']
         depth = 1
 
-    def update(self,instance,data):
+    def update_data(self,instance,data):
         state = State.objects.get(_id=data.get('state'))
         data.pop('state')
         data['state'] = state

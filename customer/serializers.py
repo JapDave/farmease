@@ -7,6 +7,7 @@ from .models import Cart, CartField, Customer, Order, OrderField, Token, Address
 from django.utils.translation import gettext_lazy as _
 from rest_meets_djongo import serializers
 import uuid
+import hashlib
 from googletrans import Translator
 translator = Translator(service_urls=[
       'translate.google.com',])
@@ -31,12 +32,11 @@ class LoginUserSerializer(restserial.Serializer):
                  msg = {'detail': 'user is not  registered.'}
                  raise restserial.ValidationError(msg)
 
-            if user_obj and user_obj.password == password:
+            if user_obj and user_obj.password == hashlib.sha256(str.encode(password)).hexdigest():
                 user = user_obj
              
             else:
-                msg = {'detail': 'user is not  registered.',
-                    'register': False}
+                msg = {'detail': 'user password wrong '}
                 raise restserial.ValidationError(msg)
 
             if user == False:

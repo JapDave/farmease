@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'farmer',
     'customer',
+    'subadmin'
    
 ]
 

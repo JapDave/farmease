@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 
 class CartPagination(PageNumberPagination):
-      page_size = 1 
+      page_size = 10 
       offset = 1 
       limit = 10 
       count = 10 
@@ -23,7 +23,7 @@ class CartPagination(PageNumberPagination):
 
 
 class OrderPagination(PageNumberPagination):
-      page_size = 1 
+      page_size = 5
       offset = 1 
       limit = 10 
       count = 10 

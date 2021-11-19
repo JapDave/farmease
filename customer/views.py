@@ -13,6 +13,13 @@ from rest_framework.views import APIView
 from .authentication import TokenAuthentication
 from .paginations import CartPagination, OrderPagination
 from farmer.paginations import ProductPagination
+import random
+from django.conf import settings
+from django.core.mail import send_mail
+import hashlib
+
+
+
 
 class GetMaster(generics.GenericAPIView):
     def get(self,request):
@@ -22,6 +29,81 @@ class GetMaster(generics.GenericAPIView):
         return Response({'result':{'categories':category_serial.data,
                                     'states':state_serial.data,
                                     'district':district_serial.data}},status=status.HTTP_200_OK)
+
+class ForgotPassword(generics.GenericAPIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self,request):
+        try:
+            email = request.POST['email']
+            farmer_obj = Customer.objects.get(email=email)
+            generated_otp = random.randint(1111, 9999)
+            request.session['user'] = str(farmer_obj._id)
+            request.session['otp'] = generated_otp
+            subject = 'Acount Recovery'
+            message = f'''your otp for account recovery is {generated_otp}'''
+            email_from = settings.EMAIL_HOST_USER
+            recepient = [farmer_obj.email, ]
+            send_mail(subject, message, email_from, recepient)
+            return Response({'detail':'Otp Sent To Email'},status=status.HTTP_200_OK)
+        except:
+            return Response({'detail':'Error To Get Registered Farmer '},status=status.HTTP_400_BAD_REQUEST)
+
+class OtpVerification(generics.GenericAPIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self,request):
+        try:
+            user_otp = request.POST['otp']
+            if user_otp == str(request.session.get('otp')):
+                del request.session['otp']
+                return Response({'detail':'Otp Verified'},status=status.HTTP_200_OK)
+            else:
+                return Response({'detail':'Wrong Otp'},status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({'detail':'Error To Verify Otp'},status=status.HTTP_404_NOT_FOUND)
+
+class ChangePassword(generics.GenericAPIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self,request):
+        try:
+            if not request.session.get('otp'):
+                new_password = request.POST['new_password']
+                confirm_password = request.POST['confirm_password']
+                
+                if new_password == confirm_password:
+                    farmer_obj = Customer.objects.get(_id = str(request.session.get('user')))
+                    farmer_obj.password = hashlib.sha256(str.encode(new_password)).hexdigest()
+                    farmer_obj.save()
+                    del request.session['user']
+                    return Response({'detail':'Password Changed Successfully'},status=status.HTTP_200_OK)
+                else:
+                    return Response({'detail':'Password Not Matched'},status=status.HTTP_400_BAD_REQUEST)
+            else:
+                    return Response({'detail':'Cannot Change Password Without otp verification '},status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+           
+            return Response({'detail':'Password Not Changed'},status=status.HTTP_404_NOT_FOUND)
+
+class ProfileChangePassword(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+    
+    def post(self,request,customer_id):
+        try:
+            new_password = request.POST['new_password']
+            confirm_password = request.POST['confirm_password']
+            
+            if new_password == confirm_password:
+                customer_obj = Customer.objects.get(_id = customer_id)
+                customer_obj.password = hashlib.sha256(str.encode(new_password)).hexdigest()
+                customer_obj.save()
+                return Response({'detail':'Password Changed Successfully'},status=status.HTTP_200_OK)
+            else:
+                return Response({'detail':'Password Not Matched'},status=status.HTTP_400_BAD_REQUEST)
+    
+        except Exception as e:         
+            return Response({'detail':'Password Not Changed'},status=status.HTTP_404_NOT_FOUND)
 
 
 class Register(generics.GenericAPIView):
@@ -86,8 +168,7 @@ class Profile(generics.GenericAPIView):
    authentication_classes = (TokenAuthentication,)
   
 
-   def get(self, request):
-        # profile = Customer.objects.get(_id=request.user._id)         
+   def get(self, request):       
         serializer = CustomerSerializer(request.user)
         return Response(serializer.data)
 
