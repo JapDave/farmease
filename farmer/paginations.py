@@ -21,7 +21,7 @@ class ProductPagination(PageNumberPagination):
           })
 
 class CustomerPagination(PageNumberPagination):
-      page_size = 1 
+      page_size = 10
       offset = 1 
       limit = 10 
       count = 10 

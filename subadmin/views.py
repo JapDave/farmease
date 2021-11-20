@@ -1,8 +1,7 @@
-from customer.models import Order
+from customer.models import Order,Customer
 from farmer.models import Farmer, Products
-from farmer.paginations import ProductPagination
 from rest_framework import generics, permissions
-from customer.serializers import OrderSerializer
+from customer.serializers import OrderSerializer,CustomerSerializer
 from farmer.serializers import FarmerSerializer, ProductSerializer
 from rest_auth.views import LoginView as RestLoginView
 from .authentication import TokenAuthentication
@@ -12,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .paginations import FarmerPagination
 from customer.paginations import OrderPagination
+from farmer.paginations import ProductPagination,CustomerPagination
 import random
 from django.conf import settings
 from django.core.mail import send_mail
@@ -155,6 +155,28 @@ class FarmerList(generics.GenericAPIView):
                 return self.get_paginated_response(serializer.data)
 
             serializer = self.get_serializer(farmer_obj, many=True)
+            return Response({'detail':serializer.data},status=status.HTTP_200_OK)
+
+        else:
+            return Response({"detail":"No Products Found."},status=status.HTTP_204_NO_CONTENT)
+
+
+class CustomerList(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = CustomerSerializer
+    pagination_class = CustomerPagination
+    page_size = 10
+    page = 1
+  
+    def get(self,request):     
+        customer_obj = Customer.objects.filter(state = request.user.state)
+        if customer_obj.count() > 0:
+            page = self.paginate_queryset(customer_obj)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = self.get_serializer(customer_obj, many=True)
             return Response({'detail':serializer.data},status=status.HTTP_200_OK)
 
         else:

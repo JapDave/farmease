@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
 import binascii
 import os
+from django_measurement.models import MeasurementField
 
 class ParanoidModelManager(models.Manager):
     def get_queryset(self):
@@ -132,9 +133,9 @@ class ProductField(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(("Name"), max_length=50, null=False, blank=False)
     description = models.TextField(("Description"),null=False, blank=False)
-    price = models.PositiveIntegerField(("Price"),null=False, blank=False)
-    stock = models.PositiveIntegerField(("Stock"),null=False, blank=False)
   
+    # stock = MeasurementField(measurement=kilogram)
+
 
     class Meta:
         abstract = True
@@ -145,11 +146,13 @@ class ProductField(models.Model):
 
 class Products(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    gu = models.EmbeddedField(model_container= ProductField)
-    en = models.EmbeddedField(model_container=ProductField)
     farmer = models.ForeignKey(Farmer,on_delete=models.CASCADE,verbose_name=("Farmer"))
     category = models.ForeignKey(Categories,on_delete=models.CASCADE, verbose_name=("Category")) 
     image = models.ImageField(("Image"), upload_to='Product', height_field=None, width_field=None,validators=[FileExtensionValidator(['jpg','jpeg','png','webp'])] ,max_length=None) 
+    price = models.PositiveIntegerField(("Price"),null=False, blank=False)
+    stock = models.PositiveIntegerField(("Stock"),null=False, blank=False)
+    gu = models.EmbeddedField(model_container= ProductField)
+    en = models.EmbeddedField(model_container=ProductField)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True, null=True, default=None)
