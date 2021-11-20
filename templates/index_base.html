@@ -19,10 +19,14 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link rel="stylesheet" href="{% static 'assets/css/sb-admin-2.min.css' %}">
-    
+   <link rel="stylesheet" href="{% static 'assets/css/sb-admin-2.min.css' %}">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+   <link href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
+
+   {% block head %}{% endblock head %}    
 
 </head>
+
 <body id="page-top">
    <div id="wrapper">
       <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -98,8 +102,8 @@
             </a>
             <div id="collapse2One" class="collapse" aria-labelledby="heading2One" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="#">Show Admins</a>
-                     <a class="collapse-item" href="#">Add Admin</a>                       
+                     <a class="collapse-item" href="{% url 'alladmin' %}">Show Admins</a>
+                     <a class="collapse-item" href="{% url 'addadmin' %}">Add Admin</a>                       
                </div>
             </div>
          </li>
