@@ -10,7 +10,8 @@ from farmer.models import State,District,ParanoidModelManager
 
 class SubAdmin(models.Model):
    _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-   name = models.CharField(("Name"), max_length=50)  
+   first_name = models.CharField(("FirstName"), max_length=50)  
+   Last_name = models.CharField(("LastName"), max_length=50)  
    email = models.EmailField(("Email"), max_length=54,unique=True)
    password = models.CharField(("Password"), max_length=64)
    profile_photo = models.ImageField(("Profile Photo"), upload_to='farmer',validators=[FileExtensionValidator(['jpg','jpeg','png','webp'])],height_field=None, width_field=None, max_length=None)
@@ -28,7 +29,7 @@ class SubAdmin(models.Model):
         verbose_name_plural = "Admin"
         
    def __str__(self):
-      return self.name
+      return self.first_name
 
    def is_authenticated(self):
       return True
