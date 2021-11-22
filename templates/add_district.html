@@ -15,17 +15,21 @@
          <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-               <h6 class="m-0 font-weight-bold text-primary">Add District </h6>
-
+               {% if lan == 'gu' %}
+                  <h5 class="m-0 font-weight-bold text-primary"> જિલ્લો ઉમેરો </h5>
+                  {% else %}
+                <h6 class="m-0 font-weight-bold text-primary"> Add  District </h6>
+               {% endif %}
             </div>
             <!-- Card Body -->
             <div class="card-body">
-               <div class="chart-area ">
-               
+               <div class="chart-area ">   
                   <form class="adminform" method="POST">
+                  {% if msg %}
                      <div > 
-                        <h1>{{msg}}</h1>                              
-                     </div>                 
+                        <h1 class="msg">{{msg}}</h1>                              
+                     </div>      
+                  {% endif %}           
                         {% csrf_token %}
                         <div class="formrow">
                            <div>
@@ -38,7 +42,13 @@
                               </div>
                              </div> 
                         </div>    
-                     <button type="submit" class="bouton-contact w-25">Add District</button>
+                     <button type="submit" class="bouton-contact w-25">
+                        {% if lan == 'gu' %}
+                              <h5 class="m-0 "> જિલ્લો ઉમેરો</h5>
+                              {% else %}
+                              Add District 
+                        {% endif %}
+                     </button>
                   </form>              
                </div>
             </div>

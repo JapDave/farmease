@@ -15,7 +15,7 @@ class ParanoidModelManager(models.Manager):
 
 class CategoryField(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(("Category-Name"),max_length=50)
+    name = models.CharField(("Category-Name"),max_length=50,unique=True)
     
     class Meta:
         abstract = True
@@ -73,9 +73,11 @@ class Farmer(models.Model):
     profile_photo = models.ImageField(("Profile Photo"), upload_to='farmer',validators=[FileExtensionValidator(['jpg','jpeg','png','webp'])],height_field=None, width_field=None, max_length=None)
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{10}$")
     contact = models.CharField(("Contact No"),validators=[phoneNumberRegex],max_length=10,unique=True)
+    age = models.PositiveIntegerField(("Age"),blank=False)
+    gender = models.CharField(("Gender"), max_length=50,blank=False)
     state = models.ForeignKey(State, verbose_name=_("State"), on_delete=models.CASCADE)
     district = models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE)
-    village = models.CharField(("Village"), max_length=20)
+    # village = models.CharField(("Village"), max_length=20)
     postal_address = models.TextField(("Postal Address"))
     customer_capacity = models.PositiveIntegerField(_("Customer-Capacity"),default=2147483647,validators=[MinValueValidator(1)])
     created_at = models.DateTimeField(auto_now_add=True)

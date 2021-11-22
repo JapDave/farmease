@@ -34,14 +34,24 @@
          <!-- Sidebar - Brand -->
          <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'index' %}">
             
-            <div class="sidebar-brand-text mx-3">Farmease</div>
+            <div class="sidebar-brand-text mx-3"> 
+            {% if lan == 'gu' %}
+                  <h3>ડેશબોર્ડ</h3>
+               {% else %}
+                  Dashboard
+            {% endif %} 
+            </div>
          </a>
          <!-- Divider -->
          <hr class="sidebar-divider">
 
          <!-- Heading -->
          <div class="sidebar-heading">
-            Master
+           {% if lan == 'gu' %}
+                  <h6>માસ્ટર</h6>
+               {% else %}
+                  Master
+            {% endif %} 
          </div>
 
          <!-- Nav Item - Pages Collapse Menu -->
@@ -49,12 +59,30 @@
             <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
-               <span>Categories</span>
+               <span>
+                  {% if lan == 'gu' %}
+                      <small class="sidebar-item-gu"> શ્રેણીઓ </small>
+                     {% else %}
+                      Categories
+                  {% endif %} 
+               </span>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="{% url 'allcategory' %}">Show Categories</a>
-                     <a class="collapse-item" href="{% url 'addcategory' %}">Add Categories</a>                       
+                     <a class="collapse-item" href="{% url 'allcategory' %}">
+                        {% if lan == 'gu' %}
+                         <small class="sidebar-item-gu"> શ્રેણીઓ બતાવો </small>                              
+                           {% else %}
+                              Show Categories
+                        {% endif %}                       
+                     </a>
+                     <a class="collapse-item" href="{% url 'addcategory' %}">
+                     {% if lan == 'gu' %}
+                         <small class="sidebar-item-gu"> શ્રેણીઓ ઉમેરો </small>                              
+                           {% else %}
+                              Add Categories
+                        {% endif %}     
+                     </a>                       
                </div>
             </div>
          </li>
@@ -62,12 +90,30 @@
             <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapseThree"
                aria-expanded="true" aria-controls="collapseThree">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
-               <span>State</span>
+               <span>
+                  {% if lan == 'gu' %}
+                      <small class="sidebar-item-gu"> રાજ્ય </small>
+                     {% else %}
+                      State
+                  {% endif %}
+               </span>
             </a>
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="{% url 'allstate' %}">Show State</a>
-                     <a class="collapse-item" href="{% url 'addstate' %}">Add State</a>                       
+                     <a class="collapse-item" href="{% url 'allstate' %}">
+                      {% if lan == 'gu' %}
+                         <small class="sidebar-item-gu"> રાજ્ય બતાવો </small>                              
+                           {% else %}
+                              Show State
+                        {% endif %}     
+                     </a>
+                     <a class="collapse-item" href="{% url 'addstate' %}">
+                      {% if lan == 'gu' %}
+                         <small class="sidebar-item-gu"> રાજ્ય ઉમેરો </small>                              
+                           {% else %}
+                              Add State
+                        {% endif %}     
+                     </a>                       
                </div>
             </div>
          </li>
@@ -75,12 +121,30 @@
             <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapsefour"
                aria-expanded="true" aria-controls="collapsefour">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
-               <span>District</span>
+               <span>
+                  {% if lan == 'gu' %}
+                      <small class="sidebar-item-gu"> જિલ્લો </small>
+                     {% else %}
+                      District
+                  {% endif %}
+               </span>
             </a>
             <div id="collapsefour" class="collapse" aria-labelledby="headingfour" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="{% url 'alldistrict' %}">Show District</a>
-                     <a class="collapse-item" href="{% url 'adddistrict' %}">Add District</a>                       
+                     <a class="collapse-item" href="{% url 'alldistrict' %}">
+                      {% if lan == 'gu' %}
+                         <small class="sidebar-item-gu"> જિલ્લો બતાવો </small>                              
+                           {% else %}
+                              Show District
+                        {% endif %} 
+                     </a>
+                     <a class="collapse-item" href="{% url 'adddistrict' %}">
+                      {% if lan == 'gu' %}
+                         <small class="sidebar-item-gu"> જિલ્લો ઉમેરો </small>                              
+                           {% else %}
+                              Add District
+                        {% endif %} 
+                     </a>                       
                </div>
             </div>
          </li>
@@ -91,45 +155,103 @@
 
          <!-- Heading -->
          <div class="sidebar-heading">
-            Users
+            {% if lan == 'gu' %}
+                  <h6>વપરાશકર્તા</h6>
+               {% else %}
+                  User
+            {% endif %} 
          </div>
          
          <li class="nav-item">
             <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapse2One"
                aria-expanded="true" aria-controls="collapse2One">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
-               <span>Admin</span>
+               <span>
+                  {% if lan == 'gu' %}
+                     <small class="sidebar-item-gu"> એડમિન </small>
+                     {% else %}
+                         Admin
+                  {% endif %}
+               </span>
             </a>
             <div id="collapse2One" class="collapse" aria-labelledby="heading2One" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="{% url 'alladmin' %}">Show Admins</a>
-                     <a class="collapse-item" href="{% url 'addadmin' %}">Add Admin</a>                       
+                     <a class="collapse-item" href="{% url 'alladmin' %}">
+                     {% if lan == 'gu' %}
+                        <small class="sidebar-item-gu">એડમિન બતાવો </small>
+                        {% else %}
+                           Show Admin
+                     {% endif %} 
+                     </a>
+                     <a class="collapse-item" href="{% url 'addadmin' %}">
+                     {% if lan == 'gu' %}
+                        <small class="sidebar-item-gu">એડમિન ઉમેરો </small>
+                        {% else %}
+                           Add Admin
+                     {% endif %} 
+                     </a>                       
                </div>
             </div>
          </li>
          <li class="nav-item">
-            <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapse2Two"
+            <a class="nav-link collapsed pl-4 p-2"  data-toggle="collapse" data-target="#collapse2Two"
                aria-expanded="true" aria-controls="collapse2Two">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
-               <span>Farmer</span>
+               <span>
+                {% if lan == 'gu' %}
+                     <small class="sidebar-item-gu"> ખેડૂત </small>
+                     {% else %}
+                         Farmer
+                  {% endif %}
+               </span>
             </a>
             <div id="collapse2Two" class="collapse" aria-labelledby="heading2Two" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="#">Show Farmer</a>
-                     <a class="collapse-item" href="#">Add Farmer</a>                       
+                     <a class="collapse-item" href="{% url 'allfarmer' %}">
+                        {% if lan == 'gu' %}
+                           <small class="sidebar-item-gu">ખેડૂત બતાવો </small>
+                           {% else %}
+                              Show Farmer
+                        {% endif %} 
+                     </a>
+                     <a class="collapse-item" href="{% url 'addfarmer' %}">
+                        {% if lan == 'gu' %}
+                           <small class="sidebar-item-gu"> ખેડૂત ઉમેરો </small>
+                           {% else %}
+                              Add Farmer
+                        {% endif %} 
+                     </a>                       
                </div>
             </div>
          </li>
          <li class="nav-item">
-            <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapse2Three"
+            <a class="nav-link collapsed pl-4 p-2"  data-toggle="collapse" data-target="#collapse2Three"
                aria-expanded="true" aria-controls="collapse2Three">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
-               <span>Customer</span>
+               <span>
+                  {% if lan == 'gu' %}
+                     <small class="sidebar-item-gu"> ગ્રાહક </small>
+                     {% else %}
+                         Customer
+                  {% endif %}
+               </span>
             </a>
             <div id="collapse2Three" class="collapse" aria-labelledby="heading2Three" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="#">Show Customer</a>
-                     <a class="collapse-item" href="#">Add Customer</a>                       
+                     <a class="collapse-item" href="{% url 'allcustomer' %}">
+                        {% if lan == 'gu' %}
+                           <small class="sidebar-item-gu">ગ્રાહક બતાવો </small>
+                           {% else %}
+                              Show Customer
+                        {% endif %} 
+                     </a>
+                     <a class="collapse-item" href="{% url 'addcustomer' %}">
+                        {% if lan == 'gu' %}
+                           <small class="sidebar-item-gu"> ગ્રાહક ઉમેરો </small>
+                           {% else %}
+                              Add Customer
+                        {% endif %} 
+                     </a>                       
                </div>
             </div>
          </li>
@@ -138,19 +260,41 @@
 
          <!-- Heading -->
          <div class="sidebar-heading">
-            products
+           {% if lan == 'gu' %}
+                  <h6>ઉત્પાદનો</h6>
+               {% else %}
+                  Products
+            {% endif %} 
          </div>
          
          <li class="nav-item">
             <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapse3One"
                aria-expanded="true" aria-controls="collapse3One">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
-               <span>Product</span>
+               <span>
+                 {% if lan == 'gu' %}
+                     <small class="sidebar-item-gu"> ઉત્પાદનો </small>
+                     {% else %}
+                        Product
+                  {% endif %}
+               </span>
             </a>
             <div id="collapse3One" class="collapse" aria-labelledby="heading3One" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="#">Show products</a>
-                     <a class="collapse-item" href="#">Add product</a>                       
+                     <a class="collapse-item" href="#">
+                        {% if lan == 'gu' %}
+                           <small class="sidebar-item-gu"> ઉત્પાદનો બતાવો </small>
+                           {% else %}
+                              Show Product
+                        {% endif %} 
+                     </a>
+                     <a class="collapse-item" href="#">
+                        {% if lan == 'gu' %}
+                          <small class="sidebar-item-gu">ઉત્પાદનો ઉમેરો </small>
+                           {% else %}
+                              Add Product
+                        {% endif %} 
+                     </a>                       
                </div>
             </div>
          </li>
@@ -158,19 +302,41 @@
 
          <!-- Heading -->
          <div class="sidebar-heading">
-            Orders
+           {% if lan == 'gu' %}
+                 <h6>ઓર્ડર</h6>
+               {% else %}
+                  Orders
+            {% endif %} 
          </div>
          
          <li class="nav-item">
             <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapse4One"
                aria-expanded="true" aria-controls="collapse4One">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
-               <span>Orders</span>
+               <span>
+                  {% if lan == 'gu' %}
+                     <small class="sidebar-item-gu"> ઓર્ડર </small>
+                     {% else %}
+                        Orders
+                  {% endif %}
+               </span>
             </a>
             <div id="collapse4One" class="collapse" aria-labelledby="heading4One" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="#">Show Orders</a>
-                     <a class="collapse-item" href="#">Place Order</a>                       
+                     <a class="collapse-item" href="#">
+                        {% if lan == 'gu' %}
+                           <small class="sidebar-item-gu">ઓર્ડર બતાવો </small>
+                           {% else %}
+                              Show Orders
+                        {% endif %} 
+                     </a>
+                     <a class="collapse-item" href="#">
+                        {% if lan == 'gu' %}
+                           <small class="sidebar-item-gu"> ઓર્ડર ઉમેરો </small>
+                           {% else %}
+                              Add Order
+                        {% endif %} 
+                     </a>                       
                </div>
             </div>
          </li>
@@ -207,7 +373,18 @@
                <!-- Topbar Navbar -->
                {% comment %} <h1 class="h3 mb-0 text-gray-800">Dashboard</h1> {% endcomment %}
                <ul class="navbar-nav ml-auto">
-                     
+
+                  <li class="nav-item m-auto">
+                    <form method = "GET" name="form">
+                        <div>
+                           <label>Language</label>
+                            <select class='select-lan' name="prefered_language" onchange="this.form.submit()">
+                              <option value="en">English</option>
+                              <option value="gu" {% if lan == 'gu' %}selected{% endif %}>Gujarati</option>
+                            </select>
+                        </div>
+                    </form>
+                  </li>
                      <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                      <li class="nav-item dropdown no-arrow d-sm-none">
                         <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"

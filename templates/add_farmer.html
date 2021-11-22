@@ -1,8 +1,12 @@
 {% extends 'index_base.html' %} {% load static %} 
-{% block title %}Add|Admin{%endblock title %} 
+
+{% block title %}Add|Farmer{%endblock title %} 
+
 {% block head %}
 <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
-{% endblock head %} {% block body %}
+{% endblock head %} 
+
+{% block body %}
 <div class="container-fluid">
   <div class="row">
     <!-- Area Chart -->
@@ -11,9 +15,9 @@
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3d-flex flex-row align-items-center justify-content-between">
           {% if lan == 'gu' %}
-              <h5 class="m-0 font-weight-bold text-primary"> એડમિન ઉમેરો </h5>
+              <h5 class="m-0 font-weight-bold text-primary"> ખેડૂત ઉમેરો </h5>
                   {% else %}
-              <h6 class="m-0 font-weight-bold text-primary"> Add Admin  </h6>
+              <h6 class="m-0 font-weight-bold text-primary"> Add Farmer  </h6>
             {% endif %}
         </div>
         <!-- Card Body -->
@@ -82,7 +86,7 @@
                     <small class="text-danger p-0 ">{{form.postal_address.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
                     {{form.postal_address}}
-                    <div class="validation"></div>
+                 
                   </div>
                 </div>
 
@@ -114,14 +118,31 @@
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     {{form.contact}}
                   </div>
+
+                    <div class="form-group">
+                    <p>{{form.customer_capacity.label}} <span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.customer_capacity.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
+                    {{form.customer_capacity}}
+                  </div>
+
+                    <div class="form-group">
+                    <p>{{form.status.label}} <span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.status.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
+                    {{form.status}}
+                  </div>
+
+
+
                 </div>
               </div>
 
               <button type="submit" class="bouton-contact">
                  {% if lan == 'gu' %}
-                    <h5 class="m-0 "> એડમિન ઉમેરો </h5>
+                    <h5 class="m-0 "> ખેડૂત ઉમેરો </h5>   
                     {% else %}
-                    Add Admin 
+                    Add Farmer 
                   {% endif %}
               </button>
             </form>

@@ -1,8 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from farmer.models import Categories, District, State
 
+from customer.models import Address, Customer
+from farmer.models import Categories, District, Farmer, State
 from subadmin.models import SubAdmin
 
 
@@ -36,6 +35,13 @@ class DistrictForm(forms.ModelForm):
         model = District
         exclude = ['deleted_at']
 
+class AddressForm(forms.ModelForm):
+
+    class Meta:
+        model = Address
+        fields = '__all__'
+    
+
 class CategoryForm(forms.ModelForm):
     
     class Meta:
@@ -50,3 +56,20 @@ class AdminForm(forms.ModelForm):
       exclude = ['deleted_at']
       CHOICES = [('M','Male'),('F','Female')]
       widgets = {'gender':forms.RadioSelect(choices=CHOICES)}
+
+class FarmerForm(forms.ModelForm):
+   
+   class Meta:
+      model = Farmer
+      exclude = ['deleted_at']
+      CHOICES = [('M','Male'),('F','Female')]
+      widgets = {'gender':forms.RadioSelect(choices=CHOICES)}
+
+class CustomerForm(forms.ModelForm):
+   
+   class Meta:
+      model = Customer
+      exclude = ['deleted_at']
+      CHOICES = [('M','Male'),('F','Female')]
+      widgets = {'gender':forms.RadioSelect(choices=CHOICES)}
+

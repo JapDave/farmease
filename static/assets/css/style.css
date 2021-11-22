@@ -4,7 +4,7 @@ body {
   font-family: "Open Sans", sans-serif;
 }
 
-.adminform div h1 {
+.msg {
   font-size: 18px;
   background: #2653d491;
   color: rgb(255, 255, 255);
@@ -44,20 +44,20 @@ h1 {
 }
 
 input {
-  border-radius: 0px 5px 5px 0px;
-  border: 1px solid #eee;
+  border: 1px solid #3a3b45;
   margin-bottom: 15px;
-  width: 96%;
+  width: 85%;
+  border-radius: 5px;
   height: 32px;
-}
+  }
 
 a {
   text-decoration: inherit;
 }
 
 textarea {
-  border-radius: 0px 5px 5px 0px;
-  border: 1px solid #eee;
+  border-radius: 5px;
+  border: 1px solid #3a3b45;
   margin: 0;
   width: 75%;
   height: 130px;
@@ -107,21 +107,14 @@ i {
   display: flex;
   justify-content: space-between;
 }
-/* .leftcontact {
-   width:49.5%; 
-   float:left;
-   border-right: 1px dotted #CCC;
-   box-sizing: border-box;
-   /* padding: 0px 15px 0px 0px; 
- }
- 
- .rightcontact {
-   width:49.5%;
-   float:right;
-   box-sizing: border-box;
-   padding: 0px 0px 0px 15px;
- }
-  */
+.select-lan{
+  width: 57%;
+  padding: 1%;
+  text-transform: capitalize;
+  border: none;
+  background-color: #e3e6f033;
+  border-radius: 5px;
+}
 
 .sendmessage {
   border: 1px solid #fff;
@@ -141,5 +134,7 @@ i {
   justify-content: space-around;
 }
 
-.form-gender ul li label {
+.sidebar-item-gu{
+  font-size: 24px;
+  font-weight: lighter;
 }

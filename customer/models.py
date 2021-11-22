@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
 import binascii
 import os
+
 from farmer.models import Products
 
 class ParanoidModelManager(models.Manager):
@@ -31,9 +32,11 @@ class Customer(models.Model):
     profile_photo = models.ImageField(("Profile Photo"), upload_to='Customer', height_field=None, width_field=None, max_length=None)
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{10}$")
     contact = models.CharField(("Contact No"),validators=[phoneNumberRegex],max_length=10,unique=True)
+    age = models.PositiveIntegerField(("Age"),blank=False)
+    gender = models.CharField(("Gender"), max_length=50,blank=False)
     state = models.ForeignKey(State, verbose_name=_("State"), on_delete=models.CASCADE)
     district = models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE)
-    addresses = models.ArrayField(model_container=Address, verbose_name=("Addresses"))
+    addresses = models.ArrayField(model_container=Address, verbose_name=("Addresses"),null=True,blank=True,default=[])
     farmer = models.ForeignKey(Farmer, verbose_name=_("Farmer"), on_delete=models.CASCADE,default='')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

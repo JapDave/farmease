@@ -3,7 +3,7 @@
 
 {% block title %}Add|Category{% endblock title %}
 {% block head %}
-<link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
 {% endblock head %}
 
 {% block body %}
@@ -15,19 +15,22 @@
          <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-               <h6 class="m-0 font-weight-bold text-primary">Add Category </h6>
-
+               {% if lan == 'gu' %}
+                  <h5 class="m-0 font-weight-bold text-primary"> શ્રેણી ઉમેરો </h5>
+                  {% else %}
+                <h6 class="m-0 font-weight-bold text-primary"> Add  Category </h6>
+               {% endif %}
             </div>
             <!-- Card Body -->
             <div class="card-body">
                <div class="chart-area ">
                  
                   <form class="adminform" method="POST" enctype="multipart/form-data">
-
+                  {% if msg %}
                      <div > 
-                        <h1>{{msg}}</h1>                              
+                        <h1 class="msg">{{msg}}</h1>                              
                      </div>
-                
+                  {% endif %}
                         {% csrf_token %}
                         <div class="formrow">
                            <div>
@@ -57,7 +60,13 @@
 
                             </div> 
                         </div>    
-                     <button type="submit" class="bouton-contact w-25">Add Category</button>
+                     <button type="submit" class="bouton-contact w-25">
+                        {% if lan == 'gu' %}
+                              <h5 class="m-0 "> શ્રેણી ઉમેરો</h5>
+                              {% else %}
+                              Add Category 
+                        {% endif %}
+                     </button>
                   </form>
                
                </div>

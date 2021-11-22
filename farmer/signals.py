@@ -8,7 +8,7 @@ import hashlib
 @receiver(post_save, sender=Farmer)
 def notify_user(sender, instance, created, **kwargs):
     if created:
-        mail_sender_newfarmer.delay(instance.email)
+        # mail_sender_newfarmer.delay(instance.email)
 
         instance.password = hashlib.sha256(str.encode(instance.password)).hexdigest()
         super(Farmer, instance).save()

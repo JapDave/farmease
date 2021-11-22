@@ -80,8 +80,8 @@ from django.conf.global_settings import LANGUAGES
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale/'),
 )
-lang_dict = dict(LANGUAGES)
-print(lang_dict)
+# lang_dict = dict(LANGUAGES)
+# print(lang_dict)
 
 
 ROOT_URLCONF = 'core.urls'
