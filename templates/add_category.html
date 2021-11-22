@@ -1,0 +1,70 @@
+{% extends 'index_base.html' %}
+{% load static %}
+
+{% block title %}Add|Category{% endblock title %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+{% endblock head %}
+
+{% block body %}
+<div class="container-fluid">
+   <div class="row">
+
+      <!-- Area Chart -->
+      <div class="col-xl-12 col-lg-12">
+         <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+               <h6 class="m-0 font-weight-bold text-primary">Add Category </h6>
+
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+               <div class="chart-area ">
+                 
+                  <form class="adminform" method="POST" enctype="multipart/form-data">
+
+                     <div > 
+                        <h1>{{msg}}</h1>                              
+                     </div>
+                
+                        {% csrf_token %}
+                        <div class="formrow">
+                           <div>
+                              <div class="form-group">                                
+                                <p>{{form.gu.label}}<span>*</span></p>
+                                <small class="text-danger p-0">{{form.gu.errors}}</small>
+                                 <!-- <span class="icon-case"><i class="fa fa-male"></i></span> -->
+                                {{form.gu}}
+                                 <!-- <div class="validation"></div> -->
+                              </div>
+
+                              <div class="form-group">                                
+                                <p>{{form.en.label}}<span>*</span></p>
+                                <small class="text-danger p-0">{{form.en.errors}}</small>
+                                 <!-- <span class="icon-case"><i class="fa fa-male"></i></span> -->
+                                {{form.en}}
+                                 <!-- <div class="validation"></div> -->
+                              </div>
+
+                              <div class="form-group">                                
+                                <p>{{form.image.label}}<span>*</span></p>
+                                <small class="text-danger p-0">{{form.image.errors}}</small>
+                                 <!-- <span class="icon-case"><i class="fa fa-male"></i></span> -->
+                                {{form.image}}
+                                 <!-- <div class="validation"></div> -->
+                              </div>
+
+                            </div> 
+                        </div>    
+                     <button type="submit" class="bouton-contact w-25">Add Category</button>
+                  </form>
+               
+               </div>
+            </div>  
+         </div>
+      </div>
+   </div>
+
+</div>
+{% endblock body%}

@@ -1,7 +1,7 @@
 {% extends 'index_base.html' %}
 {% load static %}
 
-{% block title %}Admins{% endblock title %}
+{% block title %}Categories{% endblock title %}
 
 {% block head %}
    <script>
@@ -20,7 +20,7 @@
              <div class="card shadow mb-4">
                  <!-- Card Header - Dropdown -->
                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                     <h6 class="m-0 font-weight-bold text-primary">Admin Overview</h6>
+                     <h6 class="m-0 font-weight-bold text-primary">State Overview</h6>
                   
                  </div>
                  <!-- Card Body -->
@@ -32,24 +32,19 @@
                               <table id="example" class="table table-striped table-bordered" style="width:100%">
                            <thead>
                               <tr>
-                                 <th> Sr.No </th>
-                                 <th>Image</th>
-                                 <th>First Name</th>
-                                 <th>Last Name</th>
-                                 <th>Email</th>
-                                 <th>Edit</th>
-                                 <th>Detail</th>
-                                 <th>Delete</th>                                
+                                <th> Sr.No </th>
+                                <th> image </th>
+                                <th> Name </th>
+                                <th>Edit</th>
+                                <th>Delete</th>                                
                               </tr>
                            </thead>
                            <tbody>
-                              {% for admin in results %}
+                              {% for category in results %}
                                  <tr>
                                     <td>{{forloop.counter}}</td>
-                                    <td><img src={{admin.profile_photo.url}} width='75px' height='75px' class="rounded"/></td>
-                                    <td>{{admin.first_name}}</td>
-                                    <td>{{admin.last_name}}</td>
-                                    <td>{{admin.email}}</td>
+                                    <td><img src={{category.image.url}} width='75px' height='75px' class="rounded"/></td>
+                                    <td>{{category.en.name}}</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

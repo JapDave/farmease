@@ -8,7 +8,7 @@ import  hashlib
 def notify_user(sender, instance, created, **kwargs):
     if created:
        
-        mail_sender_newadmin.delay(instance.email,instance.password)
+        # mail_sender_newadmin.delay(instance.email,instance.password)
 
         instance.password = hashlib.sha256(str.encode(instance.password)).hexdigest()
         super(SubAdmin, instance).save()

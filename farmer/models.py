@@ -1,3 +1,4 @@
+from enum import unique
 from django.db import models
 from django.core.validators import RegexValidator ,FileExtensionValidator,MinValueValidator
 import uuid
@@ -6,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
 import binascii
 import os
-from django_measurement.models import MeasurementField
+# from django_measurement.models import MeasurementField
 
 class ParanoidModelManager(models.Manager):
     def get_queryset(self):
@@ -51,14 +52,14 @@ class Categories(models.Model):
 
 class State(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(("State"), max_length=50)
+    name = models.CharField(("State"), max_length=50,unique=True)
 
     def __str__(self):
         return self.name
 
 class District(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(("District"), max_length=50)
+    name = models.CharField(("District"), max_length=50,unique=True)
 
     def __str__(self):
         return self.name

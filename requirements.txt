@@ -1,5 +1,4 @@
 amqp==5.0.6
-anyjson==0.3.3
 asgiref==3.2.10
 billiard==3.6.4.0
 bson==0.5.8
@@ -14,11 +13,6 @@ click-repl==0.2.0
 dataclasses==0.6
 defusedxml==0.7.1
 Django==2.1.1
-django-celery==3.3.1
-django-jsonfield==1.4.1
-django-modeltranslation==0.17.3
-django-mongodb-engine @ git+https://github.com/django-nonrel/mongodb-engine@1314786975d3d17fb1a2e870dfba004158a5e431
-django-parler==2.2.1
 django-rest-auth==0.9.5
 djangorestframework==3.12.4
 djangorestframework-simplejwt==5.0.0
@@ -48,7 +42,6 @@ PySocks==1.7.1
 python-dateutil==2.8.2
 python-dotenv==0.19.2
 pytz==2021.3
-redis-server==6.0.9
 requests==2.26.0
 requests-toolbelt==0.9.1
 rest-meets-djongo==0.0.13

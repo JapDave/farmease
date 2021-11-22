@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
+# from dotenv import load_dotenv
+
+# load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,7 +31,7 @@ SECRET_KEY = 'django-insecure-9v0xl)%@nris_i!($%zma09as$oxrrrb63_v-wp4^27=5d2!38
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1',]
 
 
 # Application definition
@@ -43,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'modeltranslation',
     'rest_auth',
     'farmer',
     'customer',
@@ -68,19 +68,20 @@ ugettext = lambda s: s  # default (fallback) language
 LANGUAGES = (            # supported languages
     ('en', 'English'),
     ('gu', 'Gujarati'),
+    ('hi', 'hindi'),
 
 )
 
-MODELTRANSLATION_LANGUAGES = ('gu','en')
-MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
+# MODELTRANSLATION_LANGUAGES = ('gu','en')
+# MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
 
 
 from django.conf.global_settings import LANGUAGES
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale/'),
 )
-# lang_dict = dict(LANGUAGES)
-# print(lang_dict)
+lang_dict = dict(LANGUAGES)
+print(lang_dict)
 
 
 ROOT_URLCONF = 'core.urls'
@@ -98,6 +99,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            
         },
     },
 ]
@@ -192,10 +194,15 @@ REST_FRAMEWORK = {
 
 MAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
-EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = os.getenv("EMAIL_PORT")
+# EMAIL_HOST = os.getenv("EMAIL_HOST")
+# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+# EMAIL_PORT = os.getenv("EMAIL_PORT")
+
+EMAIL_HOST='smtp.mailtrap.io'
+EMAIL_HOST_USER='026d7a5a700d84'
+EMAIL_HOST_PASSWORD='cad62dfe8f0de1'
+EMAIL_PORT=2525
 
 # Celery Config
 
