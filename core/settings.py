@@ -72,10 +72,6 @@ LANGUAGES = (            # supported languages
 
 )
 
-# MODELTRANSLATION_LANGUAGES = ('gu','en')
-# MODELTRANSLATION_DEFAULT_LANGUAGE = 'en'
-
-
 from django.conf.global_settings import LANGUAGES
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale/'),

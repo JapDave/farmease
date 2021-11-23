@@ -2,6 +2,7 @@
 
 <html lang="en">
 {% load static %}
+{% load i18n %}
 <head>
 
     <meta charset="utf-8">
@@ -35,11 +36,7 @@
          <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'index' %}">
             
             <div class="sidebar-brand-text mx-3"> 
-            {% if lan == 'gu' %}
-                  <h3>ડેશબોર્ડ</h3>
-               {% else %}
-                  Dashboard
-            {% endif %} 
+               <h5 class="index-header">{% trans 'Dashboard' %}</h5>
             </div>
          </a>
          <!-- Divider -->
@@ -47,11 +44,7 @@
 
          <!-- Heading -->
          <div class="sidebar-heading">
-           {% if lan == 'gu' %}
-                  <h6>માસ્ટર</h6>
-               {% else %}
-                  Master
-            {% endif %} 
+            <small class="index-utils-header">{% trans 'Master' %}</small>
          </div>
 
          <!-- Nav Item - Pages Collapse Menu -->
@@ -60,28 +53,16 @@
                aria-expanded="true" aria-controls="collapseTwo">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
                <span>
-                  {% if lan == 'gu' %}
-                      <small class="sidebar-item-gu"> શ્રેણીઓ </small>
-                     {% else %}
-                      Categories
-                  {% endif %} 
+                  <small class="sidebar-item-gu"> {% trans 'Categories' %} </small>
                </span>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
                      <a class="collapse-item" href="{% url 'allcategory' %}">
-                        {% if lan == 'gu' %}
-                         <small class="sidebar-item-gu"> શ્રેણીઓ બતાવો </small>                              
-                           {% else %}
-                              Show Categories
-                        {% endif %}                       
+                        <small class="sidebar-item-gu"> {% trans 'Show Categories' %} </small>
                      </a>
                      <a class="collapse-item" href="{% url 'addcategory' %}">
-                     {% if lan == 'gu' %}
-                         <small class="sidebar-item-gu"> શ્રેણીઓ ઉમેરો </small>                              
-                           {% else %}
-                              Add Categories
-                        {% endif %}     
+                       <small class="sidebar-item-gu"> {% trans 'Add Categories' %} </small>
                      </a>                       
                </div>
             </div>
@@ -91,28 +72,16 @@
                aria-expanded="true" aria-controls="collapseThree">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
                <span>
-                  {% if lan == 'gu' %}
-                      <small class="sidebar-item-gu"> રાજ્ય </small>
-                     {% else %}
-                      State
-                  {% endif %}
+                  <small class="sidebar-item-gu"> {% trans 'State' %} </small>
                </span>
             </a>
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
                      <a class="collapse-item" href="{% url 'allstate' %}">
-                      {% if lan == 'gu' %}
-                         <small class="sidebar-item-gu"> રાજ્ય બતાવો </small>                              
-                           {% else %}
-                              Show State
-                        {% endif %}     
+                       <small class="sidebar-item-gu"> {% trans 'Show State' %} </small>
                      </a>
                      <a class="collapse-item" href="{% url 'addstate' %}">
-                      {% if lan == 'gu' %}
-                         <small class="sidebar-item-gu"> રાજ્ય ઉમેરો </small>                              
-                           {% else %}
-                              Add State
-                        {% endif %}     
+                         <small class="sidebar-item-gu"> {% trans 'Add State' %} </small>
                      </a>                       
                </div>
             </div>
@@ -122,28 +91,16 @@
                aria-expanded="true" aria-controls="collapsefour">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
                <span>
-                  {% if lan == 'gu' %}
-                      <small class="sidebar-item-gu"> જિલ્લો </small>
-                     {% else %}
-                      District
-                  {% endif %}
+                  <small class="sidebar-item-gu"> {% trans 'District' %} </small>
                </span>
             </a>
             <div id="collapsefour" class="collapse" aria-labelledby="headingfour" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
                      <a class="collapse-item" href="{% url 'alldistrict' %}">
-                      {% if lan == 'gu' %}
-                         <small class="sidebar-item-gu"> જિલ્લો બતાવો </small>                              
-                           {% else %}
-                              Show District
-                        {% endif %} 
+                        <small class="sidebar-item-gu"> {% trans 'Show District' %} </small>
                      </a>
                      <a class="collapse-item" href="{% url 'adddistrict' %}">
-                      {% if lan == 'gu' %}
-                         <small class="sidebar-item-gu"> જિલ્લો ઉમેરો </small>                              
-                           {% else %}
-                              Add District
-                        {% endif %} 
+                         <small class="sidebar-item-gu"> {% trans 'Add District' %} </small>
                      </a>                       
                </div>
             </div>
@@ -155,11 +112,7 @@
 
          <!-- Heading -->
          <div class="sidebar-heading">
-            {% if lan == 'gu' %}
-                  <h6>વપરાશકર્તા</h6>
-               {% else %}
-                  User
-            {% endif %} 
+            <small class="index-utils-header">{% trans 'User' %}</small>
          </div>
          
          <li class="nav-item">
@@ -167,28 +120,16 @@
                aria-expanded="true" aria-controls="collapse2One">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
                <span>
-                  {% if lan == 'gu' %}
-                     <small class="sidebar-item-gu"> એડમિન </small>
-                     {% else %}
-                         Admin
-                  {% endif %}
+                   <small class="sidebar-item-gu"> {% trans 'Admin' %} </small>
                </span>
             </a>
             <div id="collapse2One" class="collapse" aria-labelledby="heading2One" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
                      <a class="collapse-item" href="{% url 'alladmin' %}">
-                     {% if lan == 'gu' %}
-                        <small class="sidebar-item-gu">એડમિન બતાવો </small>
-                        {% else %}
-                           Show Admin
-                     {% endif %} 
+                         <small class="sidebar-item-gu"> {% trans 'Show Admin' %} </small>
                      </a>
                      <a class="collapse-item" href="{% url 'addadmin' %}">
-                     {% if lan == 'gu' %}
-                        <small class="sidebar-item-gu">એડમિન ઉમેરો </small>
-                        {% else %}
-                           Add Admin
-                     {% endif %} 
+                         <small class="sidebar-item-gu"> {% trans 'Add Admin' %} </small>
                      </a>                       
                </div>
             </div>
@@ -198,28 +139,16 @@
                aria-expanded="true" aria-controls="collapse2Two">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
                <span>
-                {% if lan == 'gu' %}
-                     <small class="sidebar-item-gu"> ખેડૂત </small>
-                     {% else %}
-                         Farmer
-                  {% endif %}
+                 <small class="sidebar-item-gu"> {% trans 'Farmer' %} </small>
                </span>
             </a>
             <div id="collapse2Two" class="collapse" aria-labelledby="heading2Two" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
                      <a class="collapse-item" href="{% url 'allfarmer' %}">
-                        {% if lan == 'gu' %}
-                           <small class="sidebar-item-gu">ખેડૂત બતાવો </small>
-                           {% else %}
-                              Show Farmer
-                        {% endif %} 
+                         <small class="sidebar-item-gu"> {% trans 'Show Farmer' %} </small>
                      </a>
                      <a class="collapse-item" href="{% url 'addfarmer' %}">
-                        {% if lan == 'gu' %}
-                           <small class="sidebar-item-gu"> ખેડૂત ઉમેરો </small>
-                           {% else %}
-                              Add Farmer
-                        {% endif %} 
+                         <small class="sidebar-item-gu"> {% trans 'Add Farmer' %} </small>
                      </a>                       
                </div>
             </div>
@@ -229,28 +158,16 @@
                aria-expanded="true" aria-controls="collapse2Three">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
                <span>
-                  {% if lan == 'gu' %}
-                     <small class="sidebar-item-gu"> ગ્રાહક </small>
-                     {% else %}
-                         Customer
-                  {% endif %}
+                   <small class="sidebar-item-gu"> {% trans 'Customer' %} </small>
                </span>
             </a>
             <div id="collapse2Three" class="collapse" aria-labelledby="heading2Three" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
                      <a class="collapse-item" href="{% url 'allcustomer' %}">
-                        {% if lan == 'gu' %}
-                           <small class="sidebar-item-gu">ગ્રાહક બતાવો </small>
-                           {% else %}
-                              Show Customer
-                        {% endif %} 
+                       <small class="sidebar-item-gu"> {% trans 'Show Customer' %} </small>
                      </a>
                      <a class="collapse-item" href="{% url 'addcustomer' %}">
-                        {% if lan == 'gu' %}
-                           <small class="sidebar-item-gu"> ગ્રાહક ઉમેરો </small>
-                           {% else %}
-                              Add Customer
-                        {% endif %} 
+                       <small class="sidebar-item-gu"> {% trans 'Add Customer' %} </small>
                      </a>                       
                </div>
             </div>
@@ -260,40 +177,24 @@
 
          <!-- Heading -->
          <div class="sidebar-heading">
-           {% if lan == 'gu' %}
-                  <h6>ઉત્પાદનો</h6>
-               {% else %}
-                  Products
-            {% endif %} 
+            <small class="index-utils-header">{% trans 'Product' %}</small>
          </div>
          
          <li class="nav-item">
-            <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapse3One"
+            <a class="nav-link collapsed pl-4 p-2"  data-toggle="collapse" data-target="#collapse3One"
                aria-expanded="true" aria-controls="collapse3One">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
                <span>
-                 {% if lan == 'gu' %}
-                     <small class="sidebar-item-gu"> ઉત્પાદનો </small>
-                     {% else %}
-                        Product
-                  {% endif %}
+                 <small class="sidebar-item-gu"> {% trans 'Product' %} </small>
                </span>
             </a>
             <div id="collapse3One" class="collapse" aria-labelledby="heading3One" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="#">
-                        {% if lan == 'gu' %}
-                           <small class="sidebar-item-gu"> ઉત્પાદનો બતાવો </small>
-                           {% else %}
-                              Show Product
-                        {% endif %} 
+                     <a class="collapse-item" href="{% url 'allproduct' %}">
+                       <small class="sidebar-item-gu"> {% trans 'Show Products' %} </small>
                      </a>
-                     <a class="collapse-item" href="#">
-                        {% if lan == 'gu' %}
-                          <small class="sidebar-item-gu">ઉત્પાદનો ઉમેરો </small>
-                           {% else %}
-                              Add Product
-                        {% endif %} 
+                     <a class="collapse-item" href="{% url 'addproduct' %}">
+                         <small class="sidebar-item-gu"> {% trans 'Add Product' %} </small>
                      </a>                       
                </div>
             </div>
@@ -302,11 +203,7 @@
 
          <!-- Heading -->
          <div class="sidebar-heading">
-           {% if lan == 'gu' %}
-                 <h6>ઓર્ડર</h6>
-               {% else %}
-                  Orders
-            {% endif %} 
+             <small class="index-utils-header">{% trans 'Orders' %}</small>
          </div>
          
          <li class="nav-item">
@@ -314,28 +211,16 @@
                aria-expanded="true" aria-controls="collapse4One">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
                <span>
-                  {% if lan == 'gu' %}
-                     <small class="sidebar-item-gu"> ઓર્ડર </small>
-                     {% else %}
-                        Orders
-                  {% endif %}
+                  <small class="sidebar-item-gu"> {% trans 'Orders' %} </small>
                </span>
             </a>
             <div id="collapse4One" class="collapse" aria-labelledby="heading4One" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="#">
-                        {% if lan == 'gu' %}
-                           <small class="sidebar-item-gu">ઓર્ડર બતાવો </small>
-                           {% else %}
-                              Show Orders
-                        {% endif %} 
+                     <a class="collapse-item" href="{% url 'allorder' %}">
+                       <small class="sidebar-item-gu"> {% trans 'Show Orders' %} </small>
                      </a>
-                     <a class="collapse-item" href="#">
-                        {% if lan == 'gu' %}
-                           <small class="sidebar-item-gu"> ઓર્ડર ઉમેરો </small>
-                           {% else %}
-                              Add Order
-                        {% endif %} 
+                     <a class="collapse-item" href="{% url 'addorder' %}">
+                        <small class="sidebar-item-gu"> {% trans 'Add Orders' %} </small>
                      </a>                       
                </div>
             </div>

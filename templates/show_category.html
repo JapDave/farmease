@@ -1,6 +1,6 @@
 {% extends 'index_base.html' %}
 {% load static %}
-
+{% load i18n %}
 {% block title %}Categories{% endblock title %}
 
 {% block head %}
@@ -21,11 +21,7 @@
              <div class="card shadow mb-4">
                  <!-- Card Header - Dropdown -->
                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">                   
-                        {% if lan == 'gu' %}
-                          <h5 class="m-0 font-weight-bold text-primary"> શ્રેણી અવલોકન </h5>
-                           {% else %}
-                        <h6 class="m-0 font-weight-bold text-primary"> Category Overview </h6>
-                        {% endif %}        
+                     <h5 class="m-0 font-weight-bold text-primary">{% trans 'Show Categories' %}</h5>     
                  </div>
                  <!-- Card Body -->
                  <div class="card-body">

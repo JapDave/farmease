@@ -46,7 +46,7 @@ h1 {
 input {
   border: 1px solid #3a3b45;
   margin-bottom: 15px;
-  width: 85%;
+  width: 74%;
   border-radius: 5px;
   height: 32px;
   }
@@ -135,6 +135,13 @@ i {
 }
 
 .sidebar-item-gu{
-  font-size: 24px;
+  font-size: 19px;
   font-weight: lighter;
+}
+.index-header{
+  font-size: 22px;
+}
+
+.index-utils-header{
+  font-size: 15px;
 }

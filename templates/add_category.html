@@ -1,5 +1,6 @@
 {% extends 'index_base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}Add|Category{% endblock title %}
 {% block head %}
@@ -14,12 +15,8 @@
       <div class="col-xl-12 col-lg-12">
          <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-               {% if lan == 'gu' %}
-                  <h5 class="m-0 font-weight-bold text-primary"> શ્રેણી ઉમેરો </h5>
-                  {% else %}
-                <h6 class="m-0 font-weight-bold text-primary"> Add  Category </h6>
-               {% endif %}
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">              
+               <h5 class="m-0 font-weight-bold text-primary">{% trans 'Add Categories' %}</h5>               
             </div>
             <!-- Card Body -->
             <div class="card-body">
@@ -61,11 +58,7 @@
                             </div> 
                         </div>    
                      <button type="submit" class="bouton-contact w-25">
-                        {% if lan == 'gu' %}
-                              <h5 class="m-0 "> શ્રેણી ઉમેરો</h5>
-                              {% else %}
-                              Add Category 
-                        {% endif %}
+                       {% trans 'Add Categories' %}
                      </button>
                   </form>
                

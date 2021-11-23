@@ -1,7 +1,7 @@
 from django import forms
-
-from customer.models import Address, Customer
-from farmer.models import Categories, District, Farmer, State
+from django.forms import fields
+from customer.models import Address, Customer,Order, OrderField
+from farmer.models import Categories, District, Farmer, Products, State
 from subadmin.models import SubAdmin
 
 
@@ -46,7 +46,7 @@ class CategoryForm(forms.ModelForm):
     
     class Meta:
         model = Categories
-        exclude = ['deleted_at']
+        exclude = ['addresses','deleted_at']
 
 
 class AdminForm(forms.ModelForm):
@@ -73,3 +73,20 @@ class CustomerForm(forms.ModelForm):
       CHOICES = [('M','Male'),('F','Female')]
       widgets = {'gender':forms.RadioSelect(choices=CHOICES)}
 
+class ProductForm(forms.ModelForm):
+
+    class Meta:
+        model = Products
+        exclude = ['deleted_at']
+
+class OrderFieldForm(forms.ModelForm):
+
+    class Meta:
+        model = OrderField
+        exclude = ['_id']
+
+class OrderForm(forms.ModelForm):
+   
+    class Meta:
+        model = Order
+        exclude = ['items','deleted_at']

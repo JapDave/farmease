@@ -1,0 +1,67 @@
+{% extends 'index_base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Products{% endblock title %}
+
+{% block head %}
+   <script>
+      $(document).ready(function() {
+          $('#example').DataTable();
+      });
+   </script>
+   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+{% endblock head %}
+
+{% block body %}
+   <div class="container-fluid">
+      <div class="row">
+
+         <!-- Area Chart -->
+         <div class="col-xl-12 col-lg-12">
+             <div class="card shadow mb-4">
+                 <!-- Card Header - Dropdown -->
+                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                     <h5 class="m-0 font-weight-bold text-primary">{% trans 'Show Products' %}</h5> 
+                 </div>
+                 <!-- Card Body -->
+                 <div class="card-body">
+                     <div class="chart-area">
+                        {% if msg %}
+                           <p class="text-danger">{{msg}}</p>
+                           {% else %}
+                              <table id="example" class="table table-striped table-bordered" style="width:100%">
+                           <thead>
+                              <tr>
+                                 <th> Sr.No </th>
+                                 <th>Image</th>
+                                 <th>Name</th>
+                                 <th>Edit</th>
+                                 <th>Detail</th>
+                                 <th>Delete</th>                                
+                              </tr>
+                           </thead>
+                           <tbody>
+                              {% for product in results %}
+                                 <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td><img src={{product.image.url}} width='75px' height='75px' class="rounded"/></td>
+                                    <td>{{product.en.name}}</td>
+                                   
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                 </tr>
+                              {% endfor %}
+                              
+                           </tbody>   
+                        </table>
+                        {% endif %}   
+                     </div>
+                 </div>
+             </div>
+         </div>
+      </div>  
+   </div>
+
+{% endblock body %}

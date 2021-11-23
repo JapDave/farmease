@@ -1,9 +1,11 @@
-{% extends 'index_base.html' %} {% load static %} 
+{% extends 'index_base.html' %} 
+{% load static %} 
+{% load i18n %}
 
 {% block title %}Add|Farmer{%endblock title %} 
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+	<link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
 {% endblock head %} 
 
 {% block body %}
@@ -14,11 +16,7 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3d-flex flex-row align-items-center justify-content-between">
-          {% if lan == 'gu' %}
-              <h5 class="m-0 font-weight-bold text-primary"> ખેડૂત ઉમેરો </h5>
-                  {% else %}
-              <h6 class="m-0 font-weight-bold text-primary"> Add Farmer  </h6>
-            {% endif %}
+           <h5 class="m-0 font-weight-bold text-primary">{% trans 'Add Farmer' %}</h5> 
         </div>
         <!-- Card Body -->
         <div class="card-body">
@@ -133,17 +131,11 @@
                     {{form.status}}
                   </div>
 
-
-
                 </div>
               </div>
 
               <button type="submit" class="bouton-contact">
-                 {% if lan == 'gu' %}
-                    <h5 class="m-0 "> ખેડૂત ઉમેરો </h5>   
-                    {% else %}
-                    Add Farmer 
-                  {% endif %}
+                	{% trans 'Add Farmer' %}
               </button>
             </form>
           </div>

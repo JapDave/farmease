@@ -1,0 +1,112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: customer/models.py:109
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-11-23 04:44+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: customer/models.py:37 farmer/models.py:78 subadmin/models.py:22
+msgid "State"
+msgstr "રાજ્ય"
+
+#: customer/models.py:38 farmer/models.py:79 subadmin/models.py:23
+msgid "District"
+msgstr "જિલ્લો"
+
+#: customer/models.py:40
+msgid "Farmer"
+msgstr "ખેડૂત"
+
+#: customer/models.py:97
+msgid "Product"
+msgstr "ઉત્પાદનો"
+
+#: customer/models.py:136 farmer/models.py:108 subadmin/models.py:49
+msgid "Key"
+msgstr ""
+
+#: customer/models.py:139
+msgid "Customer"
+msgstr "ગ્રાહક"
+
+#: customer/models.py:141 farmer/models.py:113 subadmin/models.py:54
+msgid "Created"
+msgstr ""
+
+#: farmer/models.py:82
+msgid "Customer-Capacity"
+msgstr ""
+
+#: subadmin/models.py:52
+msgid "Admin"
+msgstr "એડમિન"
+
+msgid "Orders"
+msgstr "ઓર્ડર"
+
+msgid "User"
+msgstr "વપરાશકર્તા"
+
+msgid "Dashboard"
+msgstr "ડેશબોર્ડ"
+
+msgid "Categories"
+msgstr "શ્રેણીઓ"
+
+msgid "Show Categories"
+msgstr "શ્રેણીઓ બતાવો"
+
+msgid "Add Categories"
+msgstr "શ્રેણીઓ ઉમેરો"
+
+msgid "Show Farmer"
+msgstr "શ્રેણીઓ બતાવો"
+
+msgid "Add Farmer"
+msgstr "શ્રેણીઓ ઉમેરો"
+
+msgid "Show Customer"
+msgstr "ગ્રાહક બતાવો"
+
+msgid "Add Customer"
+msgstr "ગ્રાહક ઉમેરો"
+
+msgid "Show State"
+msgstr "રાજ્ય બતાવો"
+
+msgid "Add State"
+msgstr "રાજ્ય ઉમેરો"
+
+msgid "Show District"
+msgstr "જિલ્લો બતાવો"
+
+msgid "Add District"
+msgstr "જિલ્લો ઉમેરો"
+
+msgid "Show Products"
+msgstr "ઉત્પાદનો બતાવો"
+
+msgid "Add Product"
+msgstr "ઉત્પાદનો ઉમેરો"
+
+msgid "Show Orders"
+msgstr "ઓર્ડર બતાવો"
+
+msgid "Add Orders"
+msgstr "ઓર્ડર ઉમેરો"
+
+msgid "Master"
+msgstr "માસ્ટર"

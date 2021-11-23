@@ -1,5 +1,6 @@
 {% extends 'index_base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}Add|District{% endblock title %}
 {% block head %}
@@ -15,11 +16,7 @@
          <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-               {% if lan == 'gu' %}
-                  <h5 class="m-0 font-weight-bold text-primary"> જિલ્લો ઉમેરો </h5>
-                  {% else %}
-                <h6 class="m-0 font-weight-bold text-primary"> Add  District </h6>
-               {% endif %}
+               <h5 class="m-0 font-weight-bold text-primary">{% trans 'Add District' %}</h5> 
             </div>
             <!-- Card Body -->
             <div class="card-body">
@@ -43,11 +40,7 @@
                              </div> 
                         </div>    
                      <button type="submit" class="bouton-contact w-25">
-                        {% if lan == 'gu' %}
-                              <h5 class="m-0 "> જિલ્લો ઉમેરો</h5>
-                              {% else %}
-                              Add District 
-                        {% endif %}
+                        {% trans 'Add District' %}
                      </button>
                   </form>              
                </div>

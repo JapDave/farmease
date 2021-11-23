@@ -1,28 +1,24 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse
-from django.contrib import messages
 from django.views import View
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate,login
-from .forms import AddressForm, CategoryForm, DistrictForm, LoginForm, StateForm
+from .forms import AddressForm, CategoryForm, DistrictForm, LoginForm, OrderFieldForm, OrderForm, StateForm
 from subadmin.models import SubAdmin
-from customer.models import  Customer
-from farmer.models import Categories, Farmer,State,District
+from customer.models import  Customer, Order, OrderField
+from farmer.models import Categories, Farmer, Products,State,District
 from django.core.paginator import Paginator
-from django.forms import modelformset_factory
-from .forms import AdminForm,FarmerForm,CustomerForm
-
+from django.forms import inlineformset_factory
+from .forms import AdminForm,FarmerForm,CustomerForm,ProductForm
+from django.utils import translation
 
 def language(request):
-   if request.session['lan']:
-         lan = request.session['lan']
    if request.GET.get('prefered_language'):
-      lan = request.GET.get('prefered_language')
-      request.session['lan'] = lan
-   return lan
-
+      # translation.activate(request.GET.get('prefered_language'))
+      request.session['language'] = request.GET.get('prefered_language')
+   translation.activate(request.session['language'])
 
 class Login(View):
 
@@ -49,10 +45,10 @@ class Index(LoginRequiredMixin,View):
    login_url = 'login'
 
    def get(self,request):
+      # request.session[settings.LANGUAGE_SESSION_KEY] = 'en'
       if request.GET.get('prefered_language'):
-         lan = request.GET['prefered_language']
-         request.session['lan'] = lan
-         return render(request,'index.html',{'lan':lan})
+         language(request)
+         return render(request,'index.html',{'lan':request.session['language']})
       return render(request,'index.html')
 
 
@@ -61,13 +57,15 @@ class AddState(LoginRequiredMixin,View):
 
    def get(self,request):
       form = StateForm()
-      lan = language(request)
+      language(request)
+      lan = request.session['language']
       return render(request,'add_state.html',{'form':form,'lan':lan})
 
    def post(self,request):
       try:
          form = StateForm(request.POST)
-         lan = language(request)
+         language(request)
+         lan = request.session['language']
 
          if lan == 'gu':
             msg = 'રાજ્ય ઉમેર્યું'
@@ -89,8 +87,9 @@ class StateView(LoginRequiredMixin,View):
    def get(self,request):
       try:
          state_obj = State.objects.all()
-         lan = language(request)
-
+         language(request)
+         lan = request.session['language']
+         
          if state_obj:
             page = request.GET.get('page',1)
             paginator = Paginator(state_obj,10)
@@ -111,13 +110,15 @@ class AddDistrict(LoginRequiredMixin,View):
 
    def get(self,request):
       form = DistrictForm()
-      lan = language(request)
+      language(request)
+      lan = request.session['language']
       return render(request,'add_district.html',{'form':form,'lan':lan})
 
    def post(self,request):
       try:
          form = DistrictForm(request.POST)
-         lan = language(request)
+         language(request)
+         lan = request.session['language']
          if lan == 'gu':
             msg = 'જિલ્લો ઉમેર્યું'
          else:
@@ -141,7 +142,9 @@ class DistrictView(LoginRequiredMixin,View):
    def get(self,request):
       try:
          district_obj = District.objects.all()
-         lan = language(request)
+         language(request)
+         lan = request.session['language']
+         
          if district_obj:
             page = request.GET.get('page',1)
             paginator = Paginator(district_obj,10)
@@ -162,15 +165,17 @@ class AddCategory(LoginRequiredMixin,View):
    login_url = 'login'
 
    def get(self,request):
-      form = CategoryForm()
-      lan = language(request)
+      form = CategoryForm()     
+      language(request)
+      lan = request.session['language']
 
       return render(request,'add_category.html',{'form':form,'lan':lan})
 
    def post(self,request):
       form = CategoryForm(request.POST,request.FILES)
       try:
-         lan = language(request)
+         language(request)
+         lan = request.session['language']
 
          if lan == 'gu':
             msg = 'શ્રેણીઓ ઉમેર્યું'
@@ -193,7 +198,8 @@ class CategoryView(LoginRequiredMixin,View):
    def get(self,request):
       try:
          category_obj = Categories.objects.all()
-         lan = language(request)
+         language(request)
+         lan = request.session['language']
 
          if category_obj:
             page = request.GET.get('page',1)
@@ -206,7 +212,8 @@ class CategoryView(LoginRequiredMixin,View):
             else:
                msg = 'No Category Added Yet'
             return render(request,'show_category.html',{'lan':lan,'msg':msg})
-      except:
+      except Exception as e:
+         print(e)
          pass
          #404
 
@@ -216,13 +223,17 @@ class AddAdmin(LoginRequiredMixin,View):
 
    def get(self,request):  
       form = AdminForm()
-      lan = language(request)
+      language(request)
+      lan = request.session['language']
+
 
       return render(request,'add_admin.html',{'form':form,'lan':lan})
 
    def post(self,request):
       try:
-         lan = language(request)
+         language(request)
+         lan = request.session['language']
+
          if lan == 'gu':
             msg = 'નવો એડમિન ઉમેરાયો'
          else:
@@ -244,7 +255,8 @@ class AdminView(LoginRequiredMixin,View):
    def get(self,request):
       try:
          admin_obj = SubAdmin.objects.all()
-         lan = language(request)
+         language(request)
+         lan = request.session['language']
 
          if admin_obj:
             page = request.GET.get('page',1)
@@ -265,13 +277,16 @@ class AddFarmer(LoginRequiredMixin,View):
 
    def get(self,request):  
       form = FarmerForm()
-      lan = language(request)
+      language(request)
+      lan = request.session['language']      
 
       return render(request,'add_farmer.html',{'form':form,'lan':lan})
 
    def post(self,request):
       try:
-         lan = language(request)
+         language(request)
+         lan = request.session['language']
+         
          if lan == 'gu':
             msg = 'નવો ખેડૂત ઉમેરાયો'
          else:
@@ -293,8 +308,9 @@ class FarmerView(LoginRequiredMixin,View):
    def get(self,request):
       try:
          farmer_obj = Farmer.objects.all()
-         lan = language(request)
-         
+         language(request)
+         lan = request.session['language'] 
+        
          if farmer_obj:
             page = request.GET.get('page',1)
             paginator = Paginator(farmer_obj,10)
@@ -316,32 +332,30 @@ class AddCustomer(LoginRequiredMixin,View):
    def get(self,request):  
       form = CustomerForm()
       addressform = AddressForm()
-      lan = language(request)
+      language(request)
+      lan = request.session['language']
       return render(request,'add_customer.html',{'form':form,'addressform':addressform,'lan':lan})
 
    def post(self,request):
       try:
-         lan = language(request)
+         language(request)
+         lan = request.session['language']
          if lan == 'gu':
             msg = 'નવો ગ્રાહક ઉમેરાયો'
          else:
             msg = 'New Customer Added' 
          form  = CustomerForm(request.POST,request.FILES)
          addressform = AddressForm(request.POST,request.FILES)
+        
          if addressform.is_valid():
            
-            address_obj = addressform.save(commit=False)
-            print('yes')
-            form.data._mutable = True
-            form.data['addresses'] = [address_obj,]
-            form.data._mutable = False	
-            # form.is_valid()
-            print(form.errors)
-            form.save()
-       
+            address_obj = addressform.save(commit=False)    
+            customer_obj = form.save(commit=False)
+            customer_obj.addresses = [address_obj,]
+            customer_obj.save()
+
          return render(request,'add_customer.html',{'form':form,'addressform':addressform, 'msg': msg,'lan':lan})
       except Exception as e:
-         print(e)
          if lan == 'gu':
                msg = 'ગ્રાહક નથી ઉમેરાયો'
          else:
@@ -354,7 +368,8 @@ class CustomerView(LoginRequiredMixin,View):
    def get(self,request):
       try:
          customer_obj = Customer.objects.all()
-         lan = language(request)
+         language(request)
+         lan = request.session['language']
          
          if customer_obj:
             page = request.GET.get('page',1)
@@ -369,3 +384,121 @@ class CustomerView(LoginRequiredMixin,View):
             return render(request,'show_customer.html',{'msg': msg,'lan':lan})
       except:
          pass
+
+
+class AddProduct(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request):  
+      form = ProductForm()
+      language(request)
+      lan = request.session['language']
+      return render(request,'add_product.html',{'form':form,'lan':lan})
+
+   def post(self,request):
+      try:
+         language(request)
+         lan = request.session['language']
+         
+         if lan == 'gu':
+            msg = 'નવો ઉત્પાદનો ઉમેરાયો'
+         else:
+            msg = 'New Product Added' 
+         form  = ProductForm(request.POST,request.FILES)
+         form.is_valid()
+         form.save()
+         return render(request,'add_product.html',{'form':form,'msg': msg,'lan':lan})
+      except:
+         if lan == 'gu':
+               msg = 'ઉત્પાદનો નથી ઉમેરાયો'
+         else:
+            msg = 'Product Not Added'   
+         return render(request,'add_product.html',{'form':form,'msg': msg,'lan':lan})
+ 
+class ProductView(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request):
+      try:
+         product_obj = Products.objects.all()
+         language(request)
+         lan = request.session['language']
+         
+         if product_obj:
+            page = request.GET.get('page',1)
+            paginator = Paginator(product_obj,10)
+            product_data = paginator.page(page)
+            return render(request,'show_product.html',{'results':product_data,'lan':lan})
+         else:
+            if lan == 'gu':
+                  msg = 'હજુ સુધી કોઈ ઉત્પાદનો ઉમેરાઈ નથી'
+            else:
+               msg = 'No Product Added Yet'
+            return render(request,'show_product.html',{'msg': msg,'lan':lan})
+      except:
+         pass  
+
+
+
+class AddOrder(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request):  
+      form = OrderForm()
+      orderfieldform = OrderFieldForm()
+      language(request)
+      lan = request.session['language']
+      return render(request,'add_order.html',{'form':form,'itemform':orderfieldform,'lan':lan})
+
+   def post(self,request):
+      try:
+         language(request)
+         lan = request.session['language']
+         
+         if lan == 'gu':
+            msg = 'નવો ઓર્ડર ઉમેરાયો'
+         else:
+            msg = 'New Order Added' 
+         form  = OrderForm(request.POST,request.FILES)
+         orderfieldform = OrderFieldForm(request.POST,request.FILES)
+        
+         if orderfieldform.is_valid():
+           
+            orderfield_obj = orderfieldform.save(commit=False)   
+            order_obj = form.save(commit=False)
+            print(order_obj)
+            order_obj.items = [orderfield_obj,]
+            order_obj.save()
+           
+         
+         return render(request,'add_order.html',{'form':form,'itemform':orderfieldform,'msg': msg,'lan':lan})
+      except Exception as e:
+         print(e)
+         if lan == 'gu':
+               msg = 'ઓર્ડર નથી ઉમેરાયો'
+         else:
+            msg = 'Order Not Added'   
+         return render(request,'add_order.html',{'form':form,'itemform':orderfieldform,'msg': msg,'lan':lan})
+ 
+class OrderView(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request):
+      try:
+         order_obj = Order.objects.all()
+         language(request)
+         lan = request.session['language']
+         
+         if order_obj:
+            page = request.GET.get('page',1)
+            paginator = Paginator(order_obj,10)
+            order_data = paginator.page(page)
+            return render(request,'show_order.html',{'results':order_data,'lan':lan})
+         else:
+            if lan == 'gu':
+                  msg = 'હજુ સુધી કોઈ ઓર્ડર ઉમેરાઈ નથી'
+            else:
+               msg = 'No Orders Added Yet'
+            return render(request,'show_order.html',{'msg': msg,'lan':lan})
+      except:
+         pass  
