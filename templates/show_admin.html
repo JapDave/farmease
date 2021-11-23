@@ -1,5 +1,7 @@
 {% extends 'index_base.html' %}
 {% load static %}
+{% load i18n %}
+{% load tagger %}
 
 {% block title %}Admin{% endblock title %}
 
@@ -21,11 +23,7 @@
              <div class="card shadow mb-4">
                  <!-- Card Header - Dropdown -->
                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                     {% if lan == 'gu' %}
-                        <h5 class="m-0 font-weight-bold text-primary"> એડમિન અવલોકન </h5>
-                           {% else %}
-                        <h6 class="m-0 font-weight-bold text-primary"> Admin Overview </h6>
-                     {% endif %}
+                   <h5 class="m-0 font-weight-bold text-primary">{% trans 'Show Admin' %}</h5>        
                  </div>
                  <!-- Card Body -->
                  <div class="card-body">
@@ -41,8 +39,8 @@
                                  <th>First Name</th>
                                  <th>Last Name</th>
                                  <th>Email</th>
-                                 <th>Edit</th>
                                  <th>Detail</th>
+                                 <th>Edit</th>
                                  <th>Delete</th>                                
                               </tr>
                            </thead>
@@ -55,9 +53,29 @@
                                     <td>{{admin.last_name}}</td>
                                     <td>{{admin.email}}</td>
                                     <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td class="text-center pointer"><a href="{% url 'updateadmin' admin|private:'_id' %}"><i class="far fa-edit text-primary"></i></a></td>
+                                    <td class="text-center pointer"><a href="#myModal" data-toggle="modal"><i class="fas fa-trash-alt text-danger"></i></a></td>
                                  </tr>
+                                 <div id="myModal" class="modal fade">
+                                    <div class="modal-dialog modal-confirm">
+                                       <div class="modal-content">
+                                          <div class="modal-header flex-column">
+                                             <div class="icon-box">
+                                                <i class="fas fa-check"></i>
+                                             </div>						
+                                             <h4 class="modal-title w-100">Are you sure?</h4>	
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                          </div>
+                                          <div class="modal-body">
+                                             <p>Do you really want to delete category? This process cannot be undone.</p>
+                                          </div>
+                                          <div class="modal-footer justify-content-center">
+                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                             <a href="{% url 'deleteadmin' admin|private:'_id' %}" class="btn btn-danger">Delete</a>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div> 
                               {% endfor %}
                               
                            </tbody>   

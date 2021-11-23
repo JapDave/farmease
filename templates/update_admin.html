@@ -3,7 +3,7 @@
 {% load i18n %}
  {% load tagger %}
 
-{% block title %}Add|Admin{%endblock title %} 
+{% block title %}Update|Admin{%endblock title %} 
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
@@ -15,7 +15,7 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3d-flex flex-row align-items-center justify-content-between">
-           <h5 class="m-0 font-weight-bold text-primary">{% trans 'Add Admin' %}</h5>        
+           <h5 class="m-0 font-weight-bold text-primary">{% trans 'Update Admin' %}</h5>        
         </div>
         <!-- Card Body -->
         <div class="card-body">
@@ -119,7 +119,7 @@
               </div>
 
               <button type="submit" class="bouton-contact">
-                 {% trans 'Add Admin' %}
+                 {% trans 'Update Admin' %}
               </button>
             </form>
           </div>

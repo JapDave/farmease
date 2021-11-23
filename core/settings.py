@@ -86,8 +86,11 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
         'OPTIONS': {
+            'loaders': (
+                  'django.template.loaders.filesystem.Loader',
+                  'django.template.loaders.app_directories.Loader',
+              ),    
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.i18n',
@@ -95,6 +98,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries':{
+                'tagger': 'tagger',
+            }
             
         },
     },

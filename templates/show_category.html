@@ -1,6 +1,8 @@
 {% extends 'index_base.html' %}
 {% load static %}
 {% load i18n %}
+{% load tagger %}
+
 {% block title %}Categories{% endblock title %}
 
 {% block head %}
@@ -45,21 +47,69 @@
                                     <td>{{forloop.counter}}</td>
                                     <td><img src={{category.image.url}} width='75px' height='75px' class="rounded"/></td>
                                     <td>{{category.en.name}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td class="text-center pointer"><a href="{% url 'updatecategory' category|private:'_id' %}"><i class="far fa-edit text-primary"></i></a></td>
+                                    <td class="text-center pointer">
+                                       <a href="#{{state.en.name}}" data-toggle="modal"><i class="fas fa-trash-alt text-danger"></i>
+                                       </a>
+                                        <div class="modal fade" id="{{category.en.name}}">
+                                          <div class="modal-dialog modal-confirm">
+                                             <div class="modal-content">
+                                                <div class="modal-header flex-column">
+                                                   <div class="icon-box">
+                                                      <i class="fas fa-check"></i>
+                                                   </div>						
+                                                   <h4 class="modal-title w-100">Are you sure?</h4>	
+                                                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                   <p>Do you really want to delete state? This process cannot be undone.</p>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+                                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                   <a href="{% url 'deletestate' state|private:'_id' %}" class="btn btn-danger">Delete</a>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>               
+                                    </td>
+
                                  </tr>
-                              {% endfor %}
-                              
+                                
+                              {% endfor %}                             
                            </tbody>   
                         </table>
-                        {% endif %}   
+                        {% endif %}
+                      
                      </div>
                  </div>
              </div>
          </div>
       </div>  
-
+      <div >
+            {% if results.has_other_pages %}
+            <ul class="pagination">
+               {% if results.has_previous %}
+               <li><a href="?page={{ results.previous_page_number }}">&laquo;</a></li>
+               {% else %}
+               <li class="disabled"><span>&laquo;</span></li>
+               {% endif %}
+               {% for i in results.paginator.page_range %}
+               {% if results.number == i %}
+               <li class="active"><span>{{ i }} <span class=""></span></span></li>
+               {% else %}
+               <li><a href="?page={{ i }}">{{ i }}</a></li>
+               {% endif %}
+               {% endfor %}
+               {% if results.has_next %}
+               <li><a href="?page={{ results.next_page_number }}">&raquo;</a></li>
+               {% else %}
+               <li class="disabled"><span>&raquo;</span></li>
+               {% endif %}
+            </ul>
+            {% endif %}
+      </div>
+      
+     
    </div>
 
 {% endblock body %}

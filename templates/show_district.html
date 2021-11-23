@@ -1,6 +1,7 @@
 {% extends 'index_base.html' %}
 {% load static %}
 {% load i18n %}
+{% load tagger %}
 {% block title %}Districts{% endblock title %}
 
 {% block head %}
@@ -21,7 +22,7 @@
              <div class="card shadow mb-4">
                  <!-- Card Header - Dropdown -->
                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                     <h5 class="m-0 font-weight-bold text-primary">{% trans 'Show District' %}</h5> 
+                     <h5 class="m-0 font-weight-bold text-primary">{% trans 'Show Districts' %}</h5> 
                  </div>
                  <!-- Card Body -->
                  <div class="card-body">
@@ -43,10 +44,33 @@
                                  <tr>
                                     <td>{{forloop.counter}}</td>
                                     <td>{{district.name}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td class="text-center pointer"><a href="{% url 'updatedistrict' district|private:'_id' %}"><i class="far fa-edit text-primary"></i></a></td>
+                                     <td class="text-center pointer">
+                                       <a href="#{{district.name}}" data-toggle="modal"><i class="fas fa-trash-alt text-danger"></i>
+                                       </a>
+                                       <div id="{{district.name}}" class="modal fade">
+                                          <div class="modal-dialog modal-confirm">
+                                             <div class="modal-content">
+                                                <div class="modal-header flex-column">
+                                                   <div class="icon-box">
+                                                      <i class="fas fa-check"></i>
+                                                   </div>						
+                                                   <h4 class="modal-title w-100">Are you sure?</h4>	
+                                                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                   <p>Do you really want to delete district? This process cannot be undone.</p>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+                                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                   <a href="{% url 'deletedistrict' district|private:'_id' %}" class="btn btn-danger">Delete</a>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div> 
+                                     </td>
                                  </tr>
+                                  
                               {% endfor %}
                               
                            </tbody>   
@@ -57,6 +81,30 @@
              </div>
          </div>
       </div>  
+         <div >
+            {% if results.has_other_pages %}
+            <ul class="pagination">
+               {% if results.has_previous %}
+               <li><a href="?page={{ results.previous_page_number }}">&laquo;</a></li>
+               {% else %}
+               <li class="disabled"><span>&laquo;</span></li>
+               {% endif %}
+               {% for i in results.paginator.page_range %}
+               {% if results.number == i %}
+               <li class="active"><span>{{ i }} <span class=""></span></span></li>
+               {% else %}
+               <li><a href="?page={{ i }}">{{ i }}</a></li>
+               {% endif %}
+               {% endfor %}
+               {% if results.has_next %}
+               <li><a href="?page={{ results.next_page_number }}">&raquo;</a></li>
+               {% else %}
+               <li class="disabled"><span>&raquo;</span></li>
+               {% endif %}
+            </ul>
+            {% endif %}
+         </div>
+     
 
    </div>
 

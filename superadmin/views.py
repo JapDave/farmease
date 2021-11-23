@@ -51,7 +51,7 @@ class Index(LoginRequiredMixin,View):
          return render(request,'index.html',{'lan':request.session['language']})
       return render(request,'index.html')
 
-
+# State Section 
 class AddState(LoginRequiredMixin,View):
    login_url = 'login'
 
@@ -101,9 +101,51 @@ class StateView(LoginRequiredMixin,View):
             else:
                msg = 'No State Added Yet'
             return render(request,'show_state.html',{'msg': msg,'lan':lan })
-      except:
+      except Exception as e :
+         print(e)
          pass
          #404
+
+class DeleteState(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      state = State.objects.get(_id=id)
+      state.delete()
+      return redirect(reverse('allstate'))
+
+class UpdateState(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      state_obj = State.objects.get(_id=id)
+      form = StateForm(instance = state_obj)
+      language(request)
+      lan = request.session['language']
+      return render(request,'update_state.html',{'form':form,'lan':lan})
+   
+   def post(self,request,id):
+      try:
+         state_obj = State.objects.get(_id=id)
+         form = StateForm(request.POST,instance=state_obj)
+         language(request)
+         lan = request.session['language']
+
+         if lan == 'gu':
+            msg = 'રાજ્ય અપડેટ'
+         else:
+            msg = 'State Updated'   
+         form.is_valid()
+         form.save()
+         return render(request,'update_state.html',{'form':form,'msg':msg,'lan':lan})
+      except:
+            if lan == 'gu':
+               msg = 'રાજ્ય નથી અપડેટ'
+            else:
+               msg = 'State Not Updated'  
+            return render(request,'update_state.html',{'form':form,'msg':msg,'lan':lan})
+
+# District Section
 
 class AddDistrict(LoginRequiredMixin,View):
    login_url = 'login'
@@ -161,6 +203,52 @@ class DistrictView(LoginRequiredMixin,View):
          pass
          #404
 
+class DeleteDistrict(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      district = District.objects.get(_id=id)
+      district.delete()
+      return redirect(reverse('alldistrict'))
+
+class UpdateDistrict(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      district_obj = District.objects.get(_id=id)
+      form = DistrictForm(instance = district_obj)
+      language(request)
+      lan = request.session['language']
+      return render(request,'update_district.html',{'form':form,'lan':lan})
+
+   
+   def post(self,request,id):
+      try:
+         district_obj = District.objects.get(_id = id)
+         form = DistrictForm(request.POST,instance = district_obj)
+         language(request)
+         lan = request.session['language']
+         if lan == 'gu':
+            msg = 'જિલ્લો અપડેટ'
+         else:
+            msg = 'District Updated'   
+
+         form.is_valid()
+         form.save()
+        
+         return render(request,'update_district.html',{'form':form,'msg':msg,'lan':lan})
+      except:
+         if lan == 'gu':
+               msg = 'જિલ્લો નથી અપડેટ'
+         else:
+            msg = 'District Not Updated'   
+
+         return render(request,'update_district.html',{'form':form,'msg': msg,'lan':lan})
+
+
+
+# Category Section 
+
 class AddCategory(LoginRequiredMixin,View):
    login_url = 'login'
 
@@ -213,11 +301,56 @@ class CategoryView(LoginRequiredMixin,View):
                msg = 'No Category Added Yet'
             return render(request,'show_category.html',{'lan':lan,'msg':msg})
       except Exception as e:
-         print(e)
+         
          pass
          #404
 
+class DeleteCategory(LoginRequiredMixin,View):
+   login_url = 'login'
 
+   def get(self,request,id):
+      category = Categories.objects.get(_id=id)
+      category.delete()
+      return redirect(reverse('allcategory'))
+
+class UpdateCategory(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      try:
+         category_obj = Categories.objects.get(_id = id)
+         form = CategoryForm(instance = category_obj)
+         language(request)
+         lan = request.session['language']
+         return render(request,'update_category.html',{'form':form,'lan':lan})
+      except Exception as e:
+         pass
+         #404
+
+   def post(self,request,id):
+      try:
+         category_obj = Categories.objects.get(_id = id)
+         form = CategoryForm(request.POST,request.FILES,instance = category_obj)
+         form.is_valid()
+         form.save()
+         language(request)
+         lan = request.session['language']
+
+         if lan == 'gu':
+            msg = 'શ્રેણીઓ અપડેટ કર્યું'
+         else:
+            msg = 'Category Updated'   
+         return render(request,'update_category.html',{'form':form,'msg':msg,'lan':lan})
+      except:
+         if lan == 'gu':
+               msg = 'શ્રેણીઓ નથી અપડેટ કર્યું'
+         else:
+            msg = 'Category Not Updated'   
+         return render(request,'update_category.html',{'form':form,'msg':msg,'lan':lan})
+
+
+
+# Admin Section 
 class AddAdmin(LoginRequiredMixin,View):
    login_url = 'login'
 
@@ -269,9 +402,56 @@ class AdminView(LoginRequiredMixin,View):
             else:
                msg = 'No Admin Added Yet'
             return render(request,'show_admin.html',{'msg': msg,'lan':lan})
-      except:
+      except Exception as e:
+         print(e)
          pass
 
+class DeleteAdmin(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      admin= SubAdmin.objects.get(_id=id)
+      admin.delete()
+      return redirect(reverse('alladmin'))
+
+class UpdateAdmin(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      try:
+         admin_obj = SubAdmin.objects.get(_id = id)
+         form = AdminForm(instance = admin_obj)
+         language(request)
+         lan = request.session['language']
+         return render(request,'update_admin.html',{'form':form,'lan':lan})
+      except Exception as e:
+         pass
+         #404
+
+   def post(self,request,id):
+      try:
+         admin_obj = SubAdmin.objects.get(_id = id)
+         form = AdminForm(request.POST,request.FILES,instance = admin_obj)
+         form.is_valid()
+         form.save()
+         language(request)
+         lan = request.session['language']
+
+         if lan == 'gu':
+            msg = 'એડમિન અપડેટ કર્યું'
+         else:
+            msg = 'Admin Updated'   
+         return render(request,'update_admin.html',{'form':form,'msg':msg,'lan':lan})
+      except:
+         if lan == 'gu':
+               msg = 'એડમિન નથી અપડેટ કર્યું'
+         else:
+            msg = 'Admin Not Updated'   
+         return render(request,'update_admin.html',{'form':form,'msg':msg,'lan':lan})
+
+
+
+# Farmer Section
 class AddFarmer(LoginRequiredMixin,View):
    login_url = 'login'
 
@@ -325,7 +505,47 @@ class FarmerView(LoginRequiredMixin,View):
       except:
          pass
 
+class DeleteFarmer(LoginRequiredMixin,View):
+   login_url = 'login'
 
+   def get(self,request,id):
+      farmer = Farmer.objects.get(_id=id)
+      farmer.delete()
+      return redirect(reverse('allfarmer'))
+
+class UpdateFarmer(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      farmer_obj = Farmer.objects.get(_id=id)
+      form = FarmerForm(instance = farmer_obj)
+      language(request)
+      lan = request.session['language']
+      return render(request,'update_farmer.html',{'form':form,'lan':lan})
+
+   def post(self,request,id):
+      try:
+         farmer_obj = Farmer.objects.get(_id=id)
+         language(request)
+         lan = request.session['language']
+         
+         if lan == 'gu':
+            msg = 'ખેડૂત અપડેટ કર્યું'
+         else:
+            msg = 'Farmer Updated' 
+         form  = FarmerForm(request.POST,request.FILES,instance = farmer_obj)
+         form.is_valid()
+         form.save()
+         return render(request,'update_farmer.html',{'form':form,'msg': msg,'lan':lan})
+      except:
+         if lan == 'gu':
+               msg = 'ખેડૂત નથી અપડેટ'
+         else:
+            msg = 'Farmer Not Updated'   
+         return render(request,'update_farmer.html',{'form':form,'msg': msg,'lan':lan})
+
+
+# Customer Section 
 class AddCustomer(LoginRequiredMixin,View):
    login_url = 'login'
 
@@ -382,8 +602,47 @@ class CustomerView(LoginRequiredMixin,View):
             else:
                msg = 'No Customer Added Yet'
             return render(request,'show_customer.html',{'msg': msg,'lan':lan})
-      except:
+      except Exception as e:
+         print(e)
          pass
+
+class DeleteCustomer(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      customer = Customer.objects.get(_id=id)
+      customer.delete()
+      return redirect(reverse('allcustomer'))
+
+class UpdateCustomer(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):  
+      customer_obj = Customer.objects.get(_id = id)
+      form = CustomerForm(instance=customer_obj)  
+      language(request)
+      lan = request.session['language']
+      return render(request,'add_customer.html',{'form':form,'lan':lan})
+
+   def post(self,request):
+      try:
+         customer_obj = Customer.objects.get(_id = id) 
+         language(request)
+         lan = request.session['language']
+         if lan == 'gu':
+            msg = 'ગ્રાહક અપડેટ'
+         else:
+            msg = 'Customer Updated' 
+         form  = CustomerForm(request.POST,request.FILES,instance=customer_obj)
+         form.is_valid()
+         form.save() 
+         return render(request,'update_customer.html',{'form':form,'msg': msg,'lan':lan})
+      except Exception as e:
+         if lan == 'gu':
+               msg = 'ગ્રાહક નથી અપડેટ'
+         else:
+            msg = 'Customer Not Updated'   
+         return render(request,'update_customer.html',{'form':form,'msg': msg,'lan':lan})
 
 
 class AddProduct(LoginRequiredMixin,View):
@@ -438,6 +697,13 @@ class ProductView(LoginRequiredMixin,View):
       except:
          pass  
 
+class DeleteProduct(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      product = Products.objects.get(_id=id)
+      product.delete()
+      return redirect(reverse('allproduct'))
 
 
 class AddOrder(LoginRequiredMixin,View):
@@ -473,7 +739,7 @@ class AddOrder(LoginRequiredMixin,View):
          
          return render(request,'add_order.html',{'form':form,'itemform':orderfieldform,'msg': msg,'lan':lan})
       except Exception as e:
-         print(e)
+     
          if lan == 'gu':
                msg = 'ઓર્ડર નથી ઉમેરાયો'
          else:
@@ -481,6 +747,7 @@ class AddOrder(LoginRequiredMixin,View):
          return render(request,'add_order.html',{'form':form,'itemform':orderfieldform,'msg': msg,'lan':lan})
  
 class OrderView(LoginRequiredMixin,View):
+
    login_url = 'login'
 
    def get(self,request):
@@ -502,3 +769,11 @@ class OrderView(LoginRequiredMixin,View):
             return render(request,'show_order.html',{'msg': msg,'lan':lan})
       except:
          pass  
+
+class DeleteOrder(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      order = Order.objects.get(_id=id)
+      order.delete()
+      return redirect(reverse('allorder'))

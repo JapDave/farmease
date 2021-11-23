@@ -1,13 +1,14 @@
 {% extends 'index_base.html' %} 
-{% load static %}
+{% load static %} 
 {% load i18n %}
- {% load tagger %}
-
-{% block title %}Add|Admin{%endblock title %} 
+{% load tagger %}
+{% block title %}Update|Customer{%endblock title %} 
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
-{% endblock head %} {% block body %}
+{% endblock head %} 
+
+{% block body %}
 <div class="container-fluid">
   <div class="row">
     <!-- Area Chart -->
@@ -15,7 +16,7 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3d-flex flex-row align-items-center justify-content-between">
-           <h5 class="m-0 font-weight-bold text-primary">{% trans 'Add Admin' %}</h5>        
+             <h5 class="m-0 font-weight-bold text-primary">{% trans 'Update Customer' %}</h5> 
         </div>
         <!-- Card Body -->
         <div class="card-body">
@@ -60,31 +61,7 @@
                     <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
                     {{form.password}}
                     <!-- <div class="validation"></div> -->
-                  </div>
-
-                  <div class="form-group">            
-                    <p>{{form.state.label}} <span>*</span></p>
-                    <small class="text-danger p-0 ">{{form.state.errors}}</small>
-                    <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
-                    {{form.state}}
-                    <!-- <div class="validation"></div> -->
-                  </div>
-
-                  <div class="form-group">                 
-                    <p>{{form.district.label}} <span>*</span></p>
-                    <small class="text-danger p-0 ">{{form.district.errors}}</small>
-                    <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
-                    {{form.district}}
-                    <!-- <div class="validation"></div> -->
-                  </div>
-
-                  <div class="form-group">                 
-                    <p>{{form.postal_address.label}} <span>*</span></p>
-                    <small class="text-danger p-0 ">{{form.postal_address.errors}}</small>
-                    <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
-                    {{form.postal_address}}
-                    <div class="validation"></div>
-                  </div>
+                  </div>     
                 </div>
 
                 <div>
@@ -115,11 +92,36 @@
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     {{form.contact}}
                   </div>
+                  
+                    <div class="form-group">            
+                    <p>{{form.state.label}} <span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.state.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
+                    {{form.state}}
+                    <!-- <div class="validation"></div> -->
+                  </div>
+
+                  <div class="form-group">                 
+                    <p>{{form.district.label}} <span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.district.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
+                    {{form.district}}
+                    <!-- <div class="validation"></div> -->
+                  </div>
+
+                  <div class="form-group">                 
+                    <p>{{form.farmer.label}} <span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.farmer.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
+                    {{form.farmer}}
+                    <!-- <div class="validation"></div> -->
+                  </div>
+
                 </div>
               </div>
 
               <button type="submit" class="bouton-contact">
-                 {% trans 'Add Admin' %}
+                {% trans 'Update Customer' %}
               </button>
             </form>
           </div>

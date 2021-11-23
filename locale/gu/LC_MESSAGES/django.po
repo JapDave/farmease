@@ -19,11 +19,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: customer/models.py:37 farmer/models.py:78 subadmin/models.py:22
-msgid "State"
+msgid "States"
 msgstr "રાજ્ય"
 
 #: customer/models.py:38 farmer/models.py:79 subadmin/models.py:23
-msgid "District"
+msgid "Districts"
 msgstr "જિલ્લો"
 
 #: customer/models.py:40
@@ -73,10 +73,10 @@ msgid "Add Categories"
 msgstr "શ્રેણીઓ ઉમેરો"
 
 msgid "Show Farmer"
-msgstr "શ્રેણીઓ બતાવો"
+msgstr "ખેડૂત બતાવો"
 
 msgid "Add Farmer"
-msgstr "શ્રેણીઓ ઉમેરો"
+msgstr "ખેડૂત ઉમેરો"
 
 msgid "Show Customer"
 msgstr "ગ્રાહક બતાવો"
@@ -84,16 +84,16 @@ msgstr "ગ્રાહક બતાવો"
 msgid "Add Customer"
 msgstr "ગ્રાહક ઉમેરો"
 
-msgid "Show State"
+msgid "Show States"
 msgstr "રાજ્ય બતાવો"
 
-msgid "Add State"
+msgid "Add States"
 msgstr "રાજ્ય ઉમેરો"
 
-msgid "Show District"
+msgid "Show Districts"
 msgstr "જિલ્લો બતાવો"
 
-msgid "Add District"
+msgid "Add Districts"
 msgstr "જિલ્લો ઉમેરો"
 
 msgid "Show Products"
@@ -110,3 +110,36 @@ msgstr "ઓર્ડર ઉમેરો"
 
 msgid "Master"
 msgstr "માસ્ટર"
+
+msgid "Update Category"
+msgstr "અપડેટ શ્રેણી "
+
+msgid "Update Product"
+msgstr "અપડેટ ઉત્પાદનો "
+
+
+msgid "Update Order"
+msgstr "અપડેટ ઓર્ડર "
+
+msgid "Update Farmer"
+msgstr "અપડેટ ખેડૂત "
+
+msgid "Update Customer"
+msgstr "અપડેટ ગ્રાહક "
+
+msgid "Update Admin"
+msgstr "અપડેટ એડમિન"
+
+msgid "Add Admin"
+msgstr "એડમિન ઉમેરો"
+
+
+msgid "Show Admin"
+msgstr "એડમિન બતાવો"
+
+
+msgid "Update States"
+msgstr "અપડેટ રાજ્ય "
+
+msgid "Update Districts"
+msgstr "અપડેટ જિલ્લો"

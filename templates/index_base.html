@@ -18,7 +18,7 @@
     <link rel="stylesheet"  href="{% static 'assets/vendor/fontawesome-free/css/all.min.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
     <!-- Custom styles for this template-->
    <link rel="stylesheet" href="{% static 'assets/css/sb-admin-2.min.css' %}">
    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
@@ -72,16 +72,16 @@
                aria-expanded="true" aria-controls="collapseThree">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
                <span>
-                  <small class="sidebar-item-gu"> {% trans 'State' %} </small>
+                  <small class="sidebar-item-gu"> {% trans 'States' %} </small>
                </span>
             </a>
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
                      <a class="collapse-item" href="{% url 'allstate' %}">
-                       <small class="sidebar-item-gu"> {% trans 'Show State' %} </small>
+                       <small class="sidebar-item-gu"> {% trans 'Show States' %} </small>
                      </a>
                      <a class="collapse-item" href="{% url 'addstate' %}">
-                         <small class="sidebar-item-gu"> {% trans 'Add State' %} </small>
+                         <small class="sidebar-item-gu"> {% trans 'Add States' %} </small>
                      </a>                       
                </div>
             </div>
@@ -91,16 +91,16 @@
                aria-expanded="true" aria-controls="collapsefour">
                {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
                <span>
-                  <small class="sidebar-item-gu"> {% trans 'District' %} </small>
+                  <small class="sidebar-item-gu"> {% trans 'Districts' %} </small>
                </span>
             </a>
             <div id="collapsefour" class="collapse" aria-labelledby="headingfour" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
                      <a class="collapse-item" href="{% url 'alldistrict' %}">
-                        <small class="sidebar-item-gu"> {% trans 'Show District' %} </small>
+                        <small class="sidebar-item-gu"> {% trans 'Show Districts' %} </small>
                      </a>
                      <a class="collapse-item" href="{% url 'adddistrict' %}">
-                         <small class="sidebar-item-gu"> {% trans 'Add District' %} </small>
+                         <small class="sidebar-item-gu"> {% trans 'Add Districts' %} </small>
                      </a>                       
                </div>
             </div>

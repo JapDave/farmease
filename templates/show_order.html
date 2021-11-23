@@ -37,7 +37,6 @@
                                  <th>Farmer</th>
                                  <th>Customer</th>
                                  <th>Total Amount</th>
-                                 <th>Payment Method</th>
                                  <th>Edit</th>
                                  <th>Detail</th>
                                  <th>Delete</th>                                
@@ -49,13 +48,31 @@
                                     <td>{{forloop.counter}}</td>
                                     <td>{{order.farmer.first_name}}</td>
                                     <td>{{order.customer.first_name}}</td>
-                                    <td>{{order.total}}</td>
-                                    <td>{{order.payment_method}}</td>
-                                   
+                                    <td>{{order.total}}</td>      
                                     <td></td>
                                     <td></td>
-                                    <td></td>
+                                    <td class="text-center pointer"><a href="#myModal" data-toggle="modal"><i class="fas fa-trash-alt text-danger"></i></a></td>
                                  </tr>
+                                 <div id="myModal" class="modal fade">
+                                    <div class="modal-dialog modal-confirm">
+                                       <div class="modal-content">
+                                          <div class="modal-header flex-column">
+                                             <div class="icon-box">
+                                                <i class="fas fa-check"></i>
+                                             </div>						
+                                             <h4 class="modal-title w-100">Are you sure?</h4>	
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                          </div>
+                                          <div class="modal-body">
+                                             <p>Do you really want to delete order? This process cannot be undone.</p>
+                                          </div>
+                                          <div class="modal-footer justify-content-center">
+                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                             <a href="{% url 'deletedistrict' category|private:'_id' %}" class="btn btn-danger">Delete</a>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div> 
                               {% endfor %}
                               
                            </tbody>   
@@ -66,6 +83,30 @@
              </div>
          </div>
       </div>  
+       <div >
+            {% if results.has_other_pages %}
+            <ul class="pagination">
+               {% if results.has_previous %}
+               <li><a href="?page={{ results.previous_page_number }}">&laquo;</a></li>
+               {% else %}
+               <li class="disabled"><span>&laquo;</span></li>
+               {% endif %}
+               {% for i in results.paginator.page_range %}
+               {% if results.number == i %}
+               <li class="active"><span>{{ i }} <span class=""></span></span></li>
+               {% else %}
+               <li><a href="?page={{ i }}">{{ i }}</a></li>
+               {% endif %}
+               {% endfor %}
+               {% if results.has_next %}
+               <li><a href="?page={{ results.next_page_number }}">&raquo;</a></li>
+               {% else %}
+               <li class="disabled"><span>&raquo;</span></li>
+               {% endif %}
+            </ul>
+            {% endif %}
+         </div>
+      </div>
    </div>
 
 {% endblock body %}

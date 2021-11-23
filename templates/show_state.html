@@ -1,10 +1,12 @@
 {% extends 'index_base.html' %}
 {% load static %}
 {% load i18n %}
+{% load tagger %}
 
 {% block title %}States{% endblock title %}
 
 {% block head %}
+
    <script>
       $(document).ready(function() {
           $('#example').DataTable();
@@ -22,7 +24,7 @@
              <div class="card shadow mb-4">
                  <!-- Card Header - Dropdown -->
                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h5 class="m-0 font-weight-bold text-primary">{% trans 'Show State' %}</h5> 
+                    <h5 class="m-0 font-weight-bold text-primary">{% trans 'Show States' %}</h5> 
                  </div>
                  <!-- Card Body -->
                  <div class="card-body">
@@ -44,10 +46,33 @@
                                  <tr>
                                     <td>{{forloop.counter}}</td>
                                     <td>{{state.name}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                 </tr>
+                                    <td class="text-center pointer"><a href="{% url 'updatestate' state|private:'_id' %}"><i class="far fa-edit text-primary"></i></a></td>
+                                    <td class="text-center pointer">
+                                       <a href="#{{state.name}}" data-toggle="modal">
+                                          <i class="fas fa-trash-alt text-danger"></i>
+                                       </a>  
+                                        <div class="modal fade" id="{{state.name}}">
+                                          <div class="modal-dialog modal-confirm">
+                                             <div class="modal-content">
+                                                <div class="modal-header flex-column">
+                                                   <div class="icon-box">
+                                                      <i class="fas fa-check"></i>
+                                                   </div>						
+                                                   <h4 class="modal-title w-100">Are you sure?</h4>	
+                                                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                   <p>Do you really want to delete state? This process cannot be undone.</p>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+                                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                   <a href="{% url 'deletestate' state|private:'_id' %}" class="btn btn-danger">Delete</a>
+                                                </div>
+                                             </div>
+                                          </div> 
+                                       </div>                                                    
+                                    </td>                                             
+                                 </tr>                              
                               {% endfor %}
                               
                            </tbody>   
