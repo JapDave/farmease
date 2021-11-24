@@ -1,4 +1,10 @@
-{% extends 'index_base.html' %}
+{% if is_admin %}
+    {% include 'admin/index_base.html' %}
+    {% else %}
+        {% include 'index_base.html' %}
+{% endif %}
+  
+
 {% load static %}
 {% load i18n %}
 {% load tagger %}

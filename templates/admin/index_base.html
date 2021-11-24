@@ -61,9 +61,7 @@
                      <a class="collapse-item" href="{% url 'allcategory' %}">
                         <small class="sidebar-item-gu"> {% trans 'Show Categories' %} </small>
                      </a>
-                     <a class="collapse-item" href="{% url 'addcategory' %}">
-                       <small class="sidebar-item-gu"> {% trans 'Add Categories' %} </small>
-                     </a>                       
+                                    
                </div>
             </div>
          </li>
@@ -80,9 +78,7 @@
                      <a class="collapse-item" href="{% url 'allstate' %}">
                        <small class="sidebar-item-gu"> {% trans 'Show States' %} </small>
                      </a>
-                     <a class="collapse-item" href="{% url 'addstate' %}">
-                         <small class="sidebar-item-gu"> {% trans 'Add States' %} </small>
-                     </a>                       
+                                          
                </div>
             </div>
          </li>
@@ -99,9 +95,7 @@
                      <a class="collapse-item" href="{% url 'alldistrict' %}">
                         <small class="sidebar-item-gu"> {% trans 'Show Districts' %} </small>
                      </a>
-                     <a class="collapse-item" href="{% url 'adddistrict' %}">
-                         <small class="sidebar-item-gu"> {% trans 'Add Districts' %} </small>
-                     </a>                       
+                                         
                </div>
             </div>
          </li>
@@ -115,25 +109,7 @@
             <small class="index-utils-header">{% trans 'User' %}</small>
          </div>
          
-         <li class="nav-item">
-            <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapse2One"
-               aria-expanded="true" aria-controls="collapse2One">
-               {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
-               <span>
-                   <small class="sidebar-item-gu"> {% trans 'Admin' %} </small>
-               </span>
-            </a>
-            <div id="collapse2One" class="collapse" aria-labelledby="heading2One" data-parent="#accordionSidebar">
-               <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="{% url 'alladmin' %}">
-                         <small class="sidebar-item-gu"> {% trans 'Show Admin' %} </small>
-                     </a>
-                     <a class="collapse-item" href="{% url 'addadmin' %}">
-                         <small class="sidebar-item-gu"> {% trans 'Add Admin' %} </small>
-                     </a>                       
-               </div>
-            </div>
-         </li>
+     
          <li class="nav-item">
             <a class="nav-link collapsed pl-4 p-2"  data-toggle="collapse" data-target="#collapse2Two"
                aria-expanded="true" aria-controls="collapse2Two">

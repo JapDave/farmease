@@ -1,8 +1,5 @@
 from django.apps import AppConfig
 
 
-class AdminConfig(AppConfig):
+class SubadminConfig(AppConfig):
     name = 'subadmin'
-
-    def ready(self):
-        import subadmin.signals

@@ -1,24 +1,39 @@
 from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.views import View
-from django.conf import settings
-from django.core.mail import send_mail
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import authenticate,login
+from django.contrib.auth import login,logout
 from .forms import AddressForm, CategoryForm, DistrictForm, LoginForm, OrderFieldForm, OrderForm, StateForm
-from subadmin.models import SubAdmin
-from customer.models import  Customer, Order, OrderField
+from adminapi.models import SubAdmin
+from customer.models import  Customer, Order
 from farmer.models import Categories, Farmer, Products,State,District
 from django.core.paginator import Paginator
-from django.forms import inlineformset_factory
 from .forms import AdminForm,FarmerForm,CustomerForm,ProductForm
 from django.utils import translation
+from django.contrib.auth import get_user_model
+from django.contrib.auth.backends import ModelBackend
+
+class EmailBackend(ModelBackend):
+      def authenticate(self, request, username=None, password=None, **kwargs):
+         UserModel = get_user_model()
+         
+         try:
+               user = UserModel.objects.get(email=username)
+         except UserModel.DoesNotExist:
+               return None
+         else:
+               if user.check_password(password):
+                  return user
+         return None
+
 
 def language(request):
    if request.GET.get('prefered_language'):
       # translation.activate(request.GET.get('prefered_language'))
       request.session['language'] = request.GET.get('prefered_language')
    translation.activate(request.session['language'])
+   
+   
 
 class Login(View):
 
@@ -29,9 +44,9 @@ class Login(View):
    def post(self,request):
       form = LoginForm(request.POST)
       if form.is_valid():
-         username = form.cleaned_data.get("username")
+         email = form.cleaned_data.get("email")
          password = form.cleaned_data.get("password")
-         user = authenticate(username=username, password=password)
+         user = EmailBackend.authenticate(self,request,username=email, password=password)
          if user is not None:
                login(request, user)
                return redirect(reverse('index'))
@@ -40,6 +55,13 @@ class Login(View):
       else:
          return render(request,'login.html',{'form':form})
 
+class Logout(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request):
+      logout(request)
+      return redirect(reverse('login'))
+      
 
 class Index(LoginRequiredMixin,View):
    login_url = 'login'
@@ -48,7 +70,9 @@ class Index(LoginRequiredMixin,View):
       # request.session[settings.LANGUAGE_SESSION_KEY] = 'en'
       if request.GET.get('prefered_language'):
          language(request)
+         
          return render(request,'index.html',{'lan':request.session['language']})
+      request.session['language'] = 'en'
       return render(request,'index.html')
 
 # State Section 
@@ -351,6 +375,7 @@ class UpdateCategory(LoginRequiredMixin,View):
 
 
 # Admin Section 
+
 class AddAdmin(LoginRequiredMixin,View):
    login_url = 'login'
 
@@ -464,6 +489,7 @@ class DetailAdmin(LoginRequiredMixin,View):
 
 
 # Farmer Section
+
 class AddFarmer(LoginRequiredMixin,View):
    login_url = 'login'
 
@@ -572,6 +598,7 @@ class DetailFarmer(LoginRequiredMixin,View):
 
 
 # Customer Section 
+
 class AddCustomer(LoginRequiredMixin,View):
    login_url = 'login'
 
@@ -681,6 +708,118 @@ class DetailCustomer(LoginRequiredMixin,View):
          return render(request,'detail_customer.html',{'customer':customer_obj,'lan':lan})
       except:
          pass
+
+class AddAddress(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,customer_id):
+      try:        
+        
+         form = AddressForm()
+         language(request)
+         lan = request.session['language']
+         return render(request,'add_address.html',{'form':form,'lan':lan})
+      except Exception as e:
+         pass 
+   
+   def post(self,request,customer_id):
+      try:        
+         customer_obj = Customer.objects.get(_id=customer_id)       
+         form = AddressForm(request.POST)
+         form.is_valid()
+         address_obj = form.save(commit=False)
+         customer_obj.addresses.append(address_obj)
+         customer_obj.save()
+         language(request)
+         lan = request.session['language']
+         if lan == 'gu':
+            msg = 'સરનામું ઉમેરાયો'
+         else:
+            msg = 'Address Added' 
+         return render(request,'add_address.html',{'form':form,'lan':lan,'msg':msg})
+      except Exception as e:
+         print(e)
+         pass 
+
+class AddressView(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      try:
+         customer_obj = Customer.objects.get(_id = id )
+         address_list = []
+         language(request)
+         lan = request.session['language']
+
+         for item in customer_obj.addresses:
+            address_list.append(item)   
+               
+         page = request.GET.get('page',1)
+         paginator = Paginator(address_list,10)
+         customer_data = paginator.page(page)
+         return render(request,'show_address.html',{'customer_id':id,'addresses':customer_data,'lan':lan})
+        
+      except Exception as e:
+         print(e)
+         pass
+
+class UpdateAddress(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,customer_id,id):
+      try:        
+         customer_obj = Customer.objects.get(_id=customer_id)
+         for add in customer_obj.addresses:
+            if str(add._id) == id:
+                  data = add
+                  break
+         form = AddressForm(instance=data)
+         language(request)
+         lan = request.session['language']
+         return render(request,'update_address.html',{'form':form,'lan':lan})
+      except Exception as e:
+         pass 
+   
+   def post(self,request,customer_id,id):
+      try:        
+         customer_obj = Customer.objects.get(_id=customer_id)
+         counter = 0
+         for add in customer_obj.addresses:           
+            if str(add._id) == id:
+                  data = add
+                  break
+            counter += 1
+         form = AddressForm(request.POST,instance=data)
+         form.is_valid()
+         address_obj = form.save(commit=False)
+         customer_obj.addresses[counter] = address_obj
+         customer_obj.save()
+         language(request)
+         lan = request.session['language']
+         if lan == 'gu':
+            msg = 'સરનામું અપડેટ'
+         else:
+            msg = 'Address Updated' 
+         return render(request,'update_address.html',{'form':form,'lan':lan,'msg':msg})
+      except Exception as e:
+         print(e)
+         pass 
+
+class DeleteAddress(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,customer_id,id):
+      customer_obj = Customer.objects.get(_id=customer_id)
+      for add in customer_obj.addresses:
+         if str(add._id) == id:
+               data = add
+               break
+      try:
+         customer_obj.addresses.remove(data)
+         customer_obj.save()
+         return redirect(reverse('alladdress',kwargs={'id':customer_id}))
+      except Exception as e:
+         pass 
 
 
 # Product Section 

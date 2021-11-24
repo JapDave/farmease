@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'farmer',
     'customer',
+    'adminapi',
     'subadmin',
     'superadmin'
    
@@ -107,7 +108,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
-
+AUTHENTICATION_BACKENDS = ['superadmin.views.EmailBackend']
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

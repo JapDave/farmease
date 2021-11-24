@@ -12,7 +12,8 @@ urlpatterns = [
     path('superadmin/', include('superadmin.urls')),
     path('farmerapi/',include('farmer.urls')),
     path('customerapi/',include('customer.urls')),
-    path('admin/',include('subadmin.urls'))
+    path('adminapi/',include('adminapi.urls')),
+    path('admin/',include('subadmin.urls')),
    
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 

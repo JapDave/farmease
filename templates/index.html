@@ -1,4 +1,9 @@
-{% extends 'index_base.html' %}
+{% if is_admin %}
+    {% include 'admin/index_base.html' %}
+    {% else %}
+        {% include 'index_base.html' %}
+{% endif %}
+  
 {% load static %}
 {% block title %}Dashboard{% endblock title %}
 
@@ -106,7 +111,6 @@
             <!-- Content Row -->
 
             <div class="row">
-
                 <!-- Area Chart -->
                 <div class="col-xl-8 col-lg-7">
                     <div class="card shadow mb-4">

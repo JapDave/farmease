@@ -11,6 +11,7 @@ from django.conf.urls import url
 
 urlpatterns = [
    path('login',Login.as_view(),name='login'),
+   path('logout',Logout.as_view(),name='logout'),
    path('',Index.as_view(),name='index'), 
 
    path('addstate',AddState.as_view(),name='addstate'),
@@ -51,7 +52,10 @@ urlpatterns = [
    path('deletecustomer/<id>',DeleteCustomer.as_view(),name='deletecustomer'),
    path('updatecustomer/<id>',UpdateCustomer.as_view(),name='updatecustomer'),
    path('detailcustomer/<id>',DetailCustomer.as_view(),name='detailcustomer'),
-   path('detailcustomer/<id>',DetailCustomer.as_view(),name='addressdetail'),
+   path('addaddress/<customer_id>',AddAddress.as_view(),name='addaddress'),
+   path('addresses/<id>',AddressView.as_view(),name='alladdress'),
+   path('updateaddress/<customer_id>/<id>',UpdateAddress.as_view(),name='updateaddress'),
+   path('deletaddress/<customer_id>/<id>',DeleteAddress.as_view(),name='deleteaddress'),
    
    # Product Section
    path('addproduct',AddProduct.as_view(),name='addproduct'),

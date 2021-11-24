@@ -2,14 +2,16 @@ from django import forms
 from django.forms import fields
 from customer.models import Address, Customer,Order, OrderField
 from farmer.models import Categories, District, Farmer, Products, State
-from subadmin.models import SubAdmin
+from adminapi.models import SubAdmin
+
+
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(
+    email = forms.EmailField(
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Username",
+                "placeholder": "Email",
                 "class": "form-control"
             }
         ))
