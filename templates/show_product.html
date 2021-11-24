@@ -1,7 +1,7 @@
 {% extends 'index_base.html' %}
 {% load static %}
 {% load i18n %}
-
+{% load tagger %}
 {% block title %}Products{% endblock title %}
 
 {% block head %}
@@ -47,30 +47,34 @@
                                     <td>{{forloop.counter}}</td>
                                     <td><img src={{product.image.url}} width='75px' height='75px' class="rounded"/></td>
                                     <td>{{product.en.name}}</td>                                  
-                                    <td></td>
-                                    <td></td>
-                                     <td class="text-center pointer"><a href="#myModal" data-toggle="modal"><i class="fas fa-trash-alt text-danger"></i></a></td>
+                                    <td class="text-center pointer"><a href="{% url 'updateproduct' product|private:'_id' %}"><i class="far fa-edit text-primary"></i></a></td>
+                                    <td class="text-center pointer"><a href="{% url 'detailproduct' product|private:'_id' %}"><i class="fas fa-info-circle"></i></i></a></td>
+                                     <td class="text-center pointer">
+                                       <a href="#{{product|private:'_id'}}" data-toggle="modal"><i class="fas fa-trash-alt text-danger"></i>
+                                       </a>
+                                       <div id="{{product|private:'_id'}}" class="modal fade">
+                                          <div class="modal-dialog modal-confirm">
+                                             <div class="modal-content">
+                                                <div class="modal-header flex-column">
+                                                   <div class="icon-box">
+                                                      <i class="fas fa-check"></i>
+                                                   </div>						
+                                                   <h4 class="modal-title w-100">Are you sure?</h4>	
+                                                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                   <p>Do you really want to delete product? This process cannot be undone.</p>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+                                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                   <a href="{% url 'deleteproduct' product|private:'_id' %}" class="btn btn-danger">Delete</a>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div> 
+                                    </td>
                                  </tr>
-                                 <div id="myModal" class="modal fade">
-                                    <div class="modal-dialog modal-confirm">
-                                       <div class="modal-content">
-                                          <div class="modal-header flex-column">
-                                             <div class="icon-box">
-                                                <i class="fas fa-check"></i>
-                                             </div>						
-                                             <h4 class="modal-title w-100">Are you sure?</h4>	
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                          </div>
-                                          <div class="modal-body">
-                                             <p>Do you really want to delete product? This process cannot be undone.</p>
-                                          </div>
-                                          <div class="modal-footer justify-content-center">
-                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                             <a href="{% url 'deleteproduct' category|private:'_id' %}" class="btn btn-danger">Delete</a>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div> 
+                               
                               {% endfor %}
                               
                            </tbody>   

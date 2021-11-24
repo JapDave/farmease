@@ -53,7 +53,7 @@
                                     <td>{{farmer.last_name}}</td>
                                     <td>{{farmer.email}}</td>
                                     <td class="text-center pointer"><a href="{% url 'updatefarmer' farmer|private:'_id' %}"><i class="far fa-edit text-primary"></i></a></td>
-                                    <td></td>
+                                    <td class="text-center pointer"><a href="{% url 'detailfarmer' farmer|private:'_id' %}"><i class="fas fa-info-circle"></i></i></a></td>
                                     <td class="text-center pointer">
                                        <a href="#{{farmer.first_name}}" data-toggle="modal"><i class="fas fa-trash-alt text-danger"></i>
                                        </a>

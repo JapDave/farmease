@@ -37,7 +37,7 @@ class Customer(models.Model):
     state = models.ForeignKey(State, verbose_name=_("State"), on_delete=models.CASCADE)
     district = models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE)
     addresses = models.ArrayField(model_container=Address, verbose_name=("Addresses"),null=True,blank=True,default=[])
-    farmer = models.ForeignKey(Farmer, verbose_name=_("Farmer"), on_delete=models.CASCADE,default='')
+    farmer = models.ForeignKey(Farmer, verbose_name=("Farmer"), on_delete=models.CASCADE,default='')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True,null=True ,default=None)

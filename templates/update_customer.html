@@ -46,8 +46,7 @@
                     <!-- <div class="validation"></div> -->
                   </div>
 
-                  <div class="form-group">
-                    
+                  <div class="form-group">                   
                     <p>{{form.email.label}}<span>*</span></p>
                     <small class="text-danger p-0 ">{{form.email.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
@@ -62,6 +61,23 @@
                     {{form.password}}
                     <!-- <div class="validation"></div> -->
                   </div>     
+
+                   <div class="form-group">            
+                    <p>{{form.state.label}} <span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.state.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
+                    {{form.state}}
+                    <!-- <div class="validation"></div> -->
+                  </div>
+
+                  <div class="form-group">                 
+                    <p>{{form.district.label}} <span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.district.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
+                    {{form.district}}
+                    <!-- <div class="validation"></div> -->
+                  </div>
+
                 </div>
 
                 <div>
@@ -93,21 +109,7 @@
                     {{form.contact}}
                   </div>
                   
-                    <div class="form-group">            
-                    <p>{{form.state.label}} <span>*</span></p>
-                    <small class="text-danger p-0 ">{{form.state.errors}}</small>
-                    <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
-                    {{form.state}}
-                    <!-- <div class="validation"></div> -->
-                  </div>
-
-                  <div class="form-group">                 
-                    <p>{{form.district.label}} <span>*</span></p>
-                    <small class="text-danger p-0 ">{{form.district.errors}}</small>
-                    <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
-                    {{form.district}}
-                    <!-- <div class="validation"></div> -->
-                  </div>
+                   
 
                   <div class="form-group">                 
                     <p>{{form.farmer.label}} <span>*</span></p>

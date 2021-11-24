@@ -1,0 +1,106 @@
+{% extends 'index_base.html' %}
+{% load static %} 
+{% load i18n %}
+
+{% block title %}Update|Product{%endblock title %} 
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+{% endblock head %} 
+
+{% block body %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Area Chart -->
+    <div class="col-xl-12 col-lg-12">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3d-flex flex-row align-items-center justify-content-between">
+           <h5 class="m-0 font-weight-bold text-primary">{% trans 'Update Product' %}</h5>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+          <div class="chart-area">
+            <form class="adminform" method="POST" enctype="multipart/form-data">         
+             {% if msg %}
+               <div>
+                <h1 class="msg">{{msg}}</h1>
+              </div>
+             {% endif %}
+              <div class="formrow">
+                {% csrf_token %}
+                <div>
+                  <div class="form-group">
+                    <small>{{form.farmer.errors}}</small>
+                    <p>{{form.farmer.label}}<span>*</span></p>
+                    <!-- <span class="icon-case"><i class="fa fa-male"></i></span> -->
+                    {{form.farmer}}
+                    <!-- <div class="validation"></div> -->
+                  </div>
+
+                  <div class="form-group">                   
+                    <p>{{form.category.label}} <span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.category.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-user"></i></span> -->
+                    {{form.category}}
+                    <!-- <div class="validation"></div> -->
+                  </div>
+
+                  <div class="form-group">
+                    
+                    <p>{{form.gu.label}}<span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.gu.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
+                    {{form.gu}}
+                    <!-- <div class="validation"></div> -->
+                  </div>
+
+                  <div class="form-group">                  
+                    <p>{{form.en.label}}<span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.en.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
+                    {{form.en}}
+                    <!-- <div class="validation"></div> -->
+                  </div>
+                  
+                </div>
+
+                <div>
+                  <div class="form-group">                   
+                    <p>{{form.image.label}} <span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.image.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
+                    {{form.image}}
+                  </div>
+
+                  <div class="form-group">                   
+                    <p>{{form.price.label}} <span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.price.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
+                    {{form.price}}
+                  </div>
+
+                  <div class="form-group">                  
+                    <p>{{form.stock.label}} <span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.stock.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
+                    <div class="form-gender">{{form.stock}}</div>
+                  </div>            
+                </div>
+              </div>
+
+              <button type="submit" class="bouton-contact">
+                 {% if lan == 'gu' %}
+                    <h5 class="m-0 "> ઉત્પાદનો ઉમેરો </h5>   
+                    {% else %}
+                    Add Product 
+                  {% endif %}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body%}

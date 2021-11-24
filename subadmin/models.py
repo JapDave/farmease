@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import RegexValidator ,FileExtensionValidator,MinValueValidator
+from django.core.validators import RegexValidator ,FileExtensionValidator,MinValueValidator,MaxValueValidator
 import uuid
 from djongo import models
 from django.utils.translation import ugettext_lazy as _
@@ -21,6 +21,7 @@ class SubAdmin(models.Model):
    contact = models.CharField(("Contact No"),validators=[phoneNumberRegex],max_length=10,unique=True)
    state = models.ForeignKey(State, verbose_name=_("State"), on_delete=models.CASCADE)
    district = models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE)
+   pin_code =  models.PositiveIntegerField(("Pincode"), validators=[MinValueValidator(111111), MaxValueValidator(999999)])
    postal_address = models.TextField(("Postal Address"))
    created_at = models.DateTimeField(auto_now_add=True)
    updated_at = models.DateTimeField(auto_now=True)

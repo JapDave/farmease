@@ -39,8 +39,8 @@
                                  <th>First Name</th>
                                  <th>Last Name</th>
                                  <th>Email</th>
-                                 <th>Detail</th>
                                  <th>Edit</th>
+                                 <th>Detail</th>
                                  <th>Delete</th>                                
                               </tr>
                            </thead>
@@ -52,8 +52,8 @@
                                     <td>{{admin.first_name}}</td>
                                     <td>{{admin.last_name}}</td>
                                     <td>{{admin.email}}</td>
-                                    <td></td>
                                     <td class="text-center pointer"><a href="{% url 'updateadmin' admin|private:'_id' %}"><i class="far fa-edit text-primary"></i></a></td>
+                                    <td class="text-center pointer"><a href="{% url 'detailadmin' admin|private:'_id' %}"><i class="fas fa-info-circle"></i></i></a></td>                        
                                     <td class="text-center pointer"><a href="#myModal" data-toggle="modal"><i class="fas fa-trash-alt text-danger"></i></a></td>
                                  </tr>
                                  <div id="myModal" class="modal fade">

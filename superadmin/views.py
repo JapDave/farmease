@@ -449,6 +449,18 @@ class UpdateAdmin(LoginRequiredMixin,View):
             msg = 'Admin Not Updated'   
          return render(request,'update_admin.html',{'form':form,'msg':msg,'lan':lan})
 
+class DetailAdmin(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      try:
+         admin_obj = SubAdmin.objects.get(_id=id)
+         language(request)
+         lan = request.session['language']
+         return render(request,'detail_admin.html',{'admin':admin_obj,'lan':lan})
+      except Exception as e:
+         print(e)
+         pass
 
 
 # Farmer Section
@@ -544,6 +556,20 @@ class UpdateFarmer(LoginRequiredMixin,View):
             msg = 'Farmer Not Updated'   
          return render(request,'update_farmer.html',{'form':form,'msg': msg,'lan':lan})
 
+class DetailFarmer(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      try:
+         farmer_obj = Farmer.objects.get(_id=id)
+         language(request)
+         lan = request.session['language']
+         return render(request,'detail_farmer.html',{'farmer':farmer_obj,'lan':lan})
+      except Exception as e:
+         print(e)
+         pass
+
+
 
 # Customer Section 
 class AddCustomer(LoginRequiredMixin,View):
@@ -622,7 +648,7 @@ class UpdateCustomer(LoginRequiredMixin,View):
       form = CustomerForm(instance=customer_obj)  
       language(request)
       lan = request.session['language']
-      return render(request,'add_customer.html',{'form':form,'lan':lan})
+      return render(request,'update_customer.html',{'form':form,'lan':lan})
 
    def post(self,request):
       try:
@@ -644,6 +670,20 @@ class UpdateCustomer(LoginRequiredMixin,View):
             msg = 'Customer Not Updated'   
          return render(request,'update_customer.html',{'form':form,'msg': msg,'lan':lan})
 
+class DetailCustomer(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      try:
+         customer_obj = Customer.objects.get(_id=id)
+         language(request)
+         lan = request.session['language']
+         return render(request,'detail_customer.html',{'customer':customer_obj,'lan':lan})
+      except:
+         pass
+
+
+# Product Section 
 
 class AddProduct(LoginRequiredMixin,View):
    login_url = 'login'
@@ -694,7 +734,8 @@ class ProductView(LoginRequiredMixin,View):
             else:
                msg = 'No Product Added Yet'
             return render(request,'show_product.html',{'msg': msg,'lan':lan})
-      except:
+      except Exception as e:
+         print(e)
          pass  
 
 class DeleteProduct(LoginRequiredMixin,View):
@@ -705,6 +746,51 @@ class DeleteProduct(LoginRequiredMixin,View):
       product.delete()
       return redirect(reverse('allproduct'))
 
+class UpdateProduct(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      product_obj = Products.objects.get(_id=id)
+      form = ProductForm(instance = product_obj)
+      language(request)
+      lan = request.session['language']
+      return render(request,'update_product.html',{'form':form,'lan':lan})
+
+   def post(self,request,id):
+      try:
+         product_obj = Products.objects.get(_id=id)
+         language(request)
+         lan = request.session['language']
+         
+         if lan == 'gu':
+            msg = 'ઉત્પાદનો અપડેટ કર્યું'
+         else:
+            msg = 'Product Updated' 
+         form  = ProductForm(request.POST,request.FILES,instance = product_obj)
+         form.is_valid()
+         form.save()
+         return render(request,'update_product.html',{'form':form,'msg': msg,'lan':lan})
+      except:
+         if lan == 'gu':
+               msg = 'ઉત્પાદનો નથી અપડેટ'
+         else:
+            msg = 'Product Not Updated'   
+         return render(request,'update_product.html',{'form':form,'msg': msg,'lan':lan})
+
+class DetailProduct(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      try:
+         product_obj = Products.objects.get(_id=id)
+         language(request)
+         lan = request.session['language']
+         return render(request,'detail_product.html',{'product':product_obj,'lan':lan})
+      except Exception as e:
+         print(e)
+         pass
+
+# Order Section 
 
 class AddOrder(LoginRequiredMixin,View):
    login_url = 'login'
@@ -777,3 +863,47 @@ class DeleteOrder(LoginRequiredMixin,View):
       order = Order.objects.get(_id=id)
       order.delete()
       return redirect(reverse('allorder'))
+
+class UpdateOrder(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      order_obj = Order.objects.get(_id=id)
+      form = OrderForm(instance = order_obj)
+      language(request)
+      lan = request.session['language']
+      return render(request,'update_order.html',{'form':form,'lan':lan})
+
+   def post(self,request,id):
+      try:
+         order_obj = Order.objects.get(_id=id)    
+         language(request)
+         lan = request.session['language']
+         
+         if lan == 'gu':
+            msg = 'ઓર્ડર અપડેટ કર્યું'
+         else:
+            msg = 'order Updated' 
+         form  = OrderForm(request.POST,request.FILES,instance = order_obj)
+         form.is_valid()
+         form.save()
+         return render(request,'update_order.html',{'form':form,'msg': msg,'lan':lan})
+      except:
+         if lan == 'gu':
+               msg = 'ઓર્ડર નથી અપડેટ'
+         else:
+            msg = 'Order Not Updated'   
+         return render(request,'update_order.html',{'form':form,'msg': msg,'lan':lan})
+
+class DetailOrder(LoginRequiredMixin,View):
+   login_url = 'login'
+
+   def get(self,request,id):
+      try:
+         order_obj = Order.objects.get(_id=id)
+         language(request)
+         lan = request.session['language']
+         return render(request,'detail_order.html',{'order':order_obj,'lan':lan})
+      except Exception as e:
+         print(e)
+         pass

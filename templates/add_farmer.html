@@ -124,12 +124,19 @@
                     {{form.customer_capacity}}
                   </div>
 
-                    <div class="form-group">
+                  <div class="form-group">
                     <p>{{form.status.label}} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.status.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     {{form.status}}
                   </div>
+						<div class="form-group">
+							<p>{{form.pin_code.label}} <span>*</span></p>
+							<small class="text-danger p-0 ">{{form.pin_code.errors}}</small>
+							<!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
+							{{form.pin_code}}
+						</div>
+						
 
                 </div>
               </div>

@@ -53,7 +53,7 @@
                                     <td>{{customer.last_name}}</td>
                                     <td>{{customer.email}}</td>
                                     <td class="text-center pointer"><a href="{% url 'updatecustomer' customer|private:'_id' %}"><i class="far fa-edit text-primary"></i></a></td>
-                                    <td></td>
+                                    <td class="text-center pointer"><a href="{% url 'detailcustomer' customer|private:'_id' %}"><i class="fas fa-info-circle"></i></i></a></td>                                 
                                     <td class="text-center pointer">
                                        <a href="#{{customer.email}}" data-toggle="modal"><i class="fas fa-trash-alt text-danger"></i>
                                        </a>
@@ -74,7 +74,7 @@
                                           </div>
                                           <div class="modal-footer justify-content-center">
                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                             <a href="{% url 'deletecustomer' category|private:'_id' %}" class="btn btn-danger">Delete</a>
+                                             <a href="{% url 'deletecustomer' customer|private:'_id' %}" class="btn btn-danger">Delete</a>
                                           </div>
                                        </div>
                                     </div>
