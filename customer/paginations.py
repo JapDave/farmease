@@ -36,5 +36,5 @@ class OrderPagination(PageNumberPagination):
              },
             'total pages ': self.page.paginator.count,
             'current page': self.page.number,
-            'Orders': data
+            'orders': data
           })

@@ -1,4 +1,4 @@
-{% extends 'index_base.html' %} 
+{% extends is_admin|yesno:"admin/index_base.html,index_base.html" %}
 {% load static %} 
 {% load i18n %}
 
@@ -6,6 +6,17 @@
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+<script>
+  function upload_img(input) {
+    if (input.files && input.files[0]) {
+      var src = URL.createObjectURL(input.files[0])
+      $('#img_id').attr('src', src)
+      $('#img_id').css("visibility", "visible")
+      $('#img_id').css("width", "100px")
+      $('#img_id').css("height", "100px")
+    }
+  }
+</script> 
 {% endblock head %} 
 
 {% block body %}
@@ -32,14 +43,14 @@
                 <div>
                   <div class="form-group">
                     <small>{{form.first_name.errors}}</small>
-                    <p>{{form.first_name.label}}<span>*</span></p>
+                    <p> {% trans form.first_name.label %}<span>*</span></p>
                     <!-- <span class="icon-case"><i class="fa fa-male"></i></span> -->
                     {{form.first_name}}
                     <!-- <div class="validation"></div> -->
                   </div>
 
                   <div class="form-group">                   
-                    <p>{{form.last_name.label}} <span>*</span></p>
+                    <p> {% trans form.last_name.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.last_name.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-user"></i></span> -->
                     {{form.last_name}}
@@ -47,8 +58,7 @@
                   </div>
 
                   <div class="form-group">
-                    
-                    <p>{{form.email.label}}<span>*</span></p>
+                    <p> {% trans form.email.label %}<span>*</span></p>
                     <small class="text-danger p-0 ">{{form.email.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
                     {{form.email}}
@@ -56,7 +66,7 @@
                   </div>
 
                   <div class="form-group">                  
-                    <p>{{form.password.label}}<span>*</span></p>
+                    <p> {% trans form.password.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.password.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
                     {{form.password}}
@@ -64,14 +74,14 @@
                   </div>
 
                      <div class="form-group">                 
-                        <p>{{addressform.pin_code.label}} <span>*</span></p>
+                        <p> {% trans addressform.pin_code.label %} <span>*</span></p>
                         <small class="text-danger p-0 ">{{addressform.pin_code.errors}}</small>
                         <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
                         {{addressform.pin_code}}                 
                      </div>
                      
                      <div class="form-group">                 
-                        <p>{{addressform.postal_address.label}} <span>*</span></p>
+                        <p> {% trans addressform.postal_address.label %} <span>*</span></p>
                         <small class="text-danger p-0 ">{{addressform.postal_address.errors}}</small>
                         <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
                         {{addressform.postal_address}}                 
@@ -80,36 +90,37 @@
                 </div>
 
                 <div>
-                  <div class="form-group">                   
-                    <p>{{form.profile_photo.label}} <span>*</span></p>
+                  <div class="form-group">  
+                    <p>{% trans form.profile_photo.label %} <span>*</span></p>
+                    <img id="img_id" src="#" class="m-1"/>   
                     <small class="text-danger p-0 ">{{form.profile_photo.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     {{form.profile_photo}}
                   </div>
 
                   <div class="form-group">                   
-                    <p>{{form.age.label}} <span>*</span></p>
+                    <p> {% trans form.age.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.age.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     {{form.age}}
                   </div>
 
                   <div class="form-group">                  
-                    <p>{{form.gender.label}} <span>*</span></p>
+                    <p> {% trans form.gender.label %}<span>*</span></p>
                     <small class="text-danger p-0 ">{{form.gender.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     <div class="form-gender">{{form.gender}}</div>
                   </div>
 
                   <div class="form-group">
-                    <p>{{form.contact.label}} <span>*</span></p>
+                    <p> {% trans form.contact.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.contact.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     {{form.contact}}
                   </div>
                   
                     <div class="form-group">            
-                    <p>{{form.state.label}} <span>*</span></p>
+                    <p> {% trans form.state.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.state.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
                     {{form.state}}
@@ -117,7 +128,7 @@
                   </div>
 
                   <div class="form-group">                 
-                    <p>{{form.district.label}} <span>*</span></p>
+                    <p> {% trans form.district.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.district.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
                     {{form.district}}
@@ -125,13 +136,12 @@
                   </div>
 
                   <div class="form-group">                 
-                    <p>{{form.farmer.label}} <span>*</span></p>
+                    <p> {% trans form.farmer.label %}<span>*</span></p>
                     <small class="text-danger p-0 ">{{form.farmer.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
                     {{form.farmer}}
                     <!-- <div class="validation"></div> -->
                   </div>
-
                 </div>
               </div>
 

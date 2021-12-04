@@ -1,4 +1,4 @@
-{% extends 'index_base.html' %} 
+{% extends is_admin|yesno:"admin/index_base.html,index_base.html" %}
 {% load static %} 
 {% load i18n %}
 
@@ -6,6 +6,18 @@
 
 {% block head %}
 	<link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+  <script>
+    function upload_img(input) {
+      if (input.files && input.files[0]) {
+        var src = URL.createObjectURL(input.files[0])
+        $('#img_id2').attr('src', src)
+        $('#img_id2').css("visibility", "visible")
+        $('#img_id2').css("width", "100px")
+        $('#img_id2').css("height", "100px")
+        
+      }
+    }
+</script>
 {% endblock head %} 
 
 {% block body %}
@@ -46,8 +58,7 @@
                     <!-- <div class="validation"></div> -->
                   </div>
 
-                  <div class="form-group">
-                    
+                  <div class="form-group"> 
                     <p>{{form.email.label}}<span>*</span></p>
                     <small class="text-danger p-0 ">{{form.email.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
@@ -55,7 +66,7 @@
                     <!-- <div class="validation"></div> -->
                   </div>
 
-                  <div class="form-group">                  
+                  <div class="form-group"> 
                     <p>{{form.password.label}}<span>*</span></p>
                     <small class="text-danger p-0 ">{{form.password.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
@@ -84,7 +95,6 @@
                     <small class="text-danger p-0 ">{{form.postal_address.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-home"></i></span> -->
                     {{form.postal_address}}
-                 
                   </div>
                 </div>
 

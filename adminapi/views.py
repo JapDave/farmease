@@ -1,5 +1,7 @@
 from customer.models import Order,Customer
+from customer.views import Register
 from farmer.models import Farmer, Products
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, permissions
 from customer.serializers import OrderSerializer,CustomerSerializer
 from farmer.serializers import FarmerSerializer, ProductSerializer
@@ -16,6 +18,8 @@ import random
 from django.conf import settings
 from django.core.mail import send_mail
 import hashlib
+from farmer.views import Register as fr
+from rest_framework.views import APIView
 
 
 class ForgotPassword(generics.GenericAPIView):
@@ -36,8 +40,6 @@ class ForgotPassword(generics.GenericAPIView):
             return Response({'detail':'Otp Sent To Email'},status=status.HTTP_200_OK)
         except:
             return Response({'detail':'Error To Get Registered Farmer '},status=status.HTTP_400_BAD_REQUEST)
-
-
 
 class OtpVerification(generics.GenericAPIView):
     permission_classes = (permissions.AllowAny,)
@@ -76,7 +78,6 @@ class ChangePassword(generics.GenericAPIView):
            
             return Response({'detail':'Password Not Changed'},status=status.HTTP_404_NOT_FOUND)
 
-
 class Login(RestLoginView):
     permission_classes = (permissions.AllowAny,)
 
@@ -101,6 +102,26 @@ class Login(RestLoginView):
         user = serializer.validated_data['user']
         return self.get_response(user,request)
 
+class Logout(APIView):
+    authentication_classes = (TokenAuthentication,)
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            token_obj = Token.objects.get(key=request.data['token'])
+            token_obj.delete()
+            # del request.session['token_id']
+            response = Response({"success": "Successfully logged out."},
+                            status=status.HTTP_200_OK)
+        except (AttributeError, ObjectDoesNotExist): 
+            response = Response({"error": "Already Logged Out"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        return response
+
+class FarmerRegister(fr):
+    authentication_classes = (TokenAuthentication,)
+
+class CustomerRegister(Register):
+     authentication_classes = (TokenAuthentication,)
 
 class ProfileChangePassword(generics.GenericAPIView):
     authentication_classes = (TokenAuthentication,)
@@ -189,7 +210,7 @@ class FarmerDetail(generics.GenericAPIView):
     def get(self,request,farmer_id):
         try:
             serializer = FarmerSerializer(Farmer.objects.get(_id=farmer_id,state=request.user.state))
-            return Response({'detail':serializer.data},status=status.HTTP_200_OK)
+            return Response({'farmer':serializer.data},status=status.HTTP_200_OK)
         except:
             return Response({'detail':'Error To Get Farmer Detail'},status=status.HTTP_404_NOT_FOUND)
     
@@ -199,9 +220,47 @@ class FarmerDetail(generics.GenericAPIView):
             serializer = FarmerSerializer(farmer_obj,data=request.data,partial=True)
             serializer.is_valid()
             serializer.update(farmer_obj,serializer.validated_data)        
-            return Response({'result':'Farmer Approved','detail':serializer.data},status=status.HTTP_200_OK)
+            return Response({'message':'Farmer Updated','farmer':serializer.data},status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({'detail':'Error To Approve Farmer'},status=status.HTTP_404_NOT_FOUND)
+            return Response({'detail':'Error To Update Farmer'},status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self,request,farmer_id):
+        try:
+            farmer_obj = Farmer.objects.get(_id=farmer_id)
+            farmer_obj.delete()
+            return Response({'success':'Farmer Deleted'},status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error':'Farmer Not Deleted'},status=status.HTTP_400_BAD_REQUEST)
+
+
+class CustomerDetail(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+
+    def get(self,request,customer_id):
+        try:
+            serializer = CustomerSerializer(Customer.objects.get(_id=customer_id,state=request.user.state))
+            return Response({'customer':serializer.data},status=status.HTTP_200_OK)
+        except:
+            return Response({'detail':'Error To Get Customer Detail'},status=status.HTTP_404_NOT_FOUND)
+    
+    def post(self,request,customer_id):
+        try:
+            customer_obj = Customer.objects.get(_id=customer_id,state=request.user.state)
+            serializer = CustomerSerializer(customer_obj,data=request.data,partial=True)
+            serializer.is_valid()
+            serializer.update_data(customer_obj,request.data)
+            return Response({'message':'Customer Updated','Customer':serializer.data},status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'detail':'Error To Update Customer'},status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self,request,farmer_id):
+        try:
+            customer_obj = Customer.objects.get(_id=farmer_id)
+            customer_obj.delete()
+            return Response({'success':'Customer Deleted'},status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error':'Customer Not Deleted'},status=status.HTTP_400_BAD_REQUEST)
+
 
 class ProductList(generics.GenericAPIView):
     authentication_classes = (TokenAuthentication,)
@@ -210,8 +269,8 @@ class ProductList(generics.GenericAPIView):
     page_size = 10
     page = 1
   
-    def get(self,request,farmer_id):     
-        product_obj = Products.objects.filter(farmer = farmer_id)
+    def get(self,request):     
+        product_obj = Products.objects.filter(farmer__state = request.user.state)
         if product_obj.count() > 0:
             page = self.paginate_queryset(product_obj)
             if page is not None:
@@ -229,7 +288,7 @@ class ProductDetail(generics.GenericAPIView):
     def get(self,request,product_id):
         try:
             serializer = ProductSerializer(Products.objects.get(_id=product_id))
-            return Response({'detail':serializer.data},status=status.HTTP_200_OK)
+            return Response({'product':serializer.data},status=status.HTTP_200_OK)
         except:
             return Response({'detail':'Error To Get Product Detail'},status=status.HTTP_404_NOT_FOUND)
 
@@ -252,3 +311,14 @@ class OrderHistory(generics.GenericAPIView):
             return Response({'detail':serializer.data},status=status.HTTP_200_OK)
         else:
             return Response({"detail":"No Order Found."},status=status.HTTP_204_NO_CONTENT)
+
+class OrderDetail(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+
+    def get(self,request,order_id):
+        try:
+            order_obj = Order.objects.get(_id=order_id)
+            serializer = OrderSerializer(order_obj)
+            return Response({'order':serializer.data},status=status.HTTP_200_OK)
+        except:
+            return Response({'detail':'No Order Detail Found'},status=status.HTTP_400_BAD_REQUEST)

@@ -1,4 +1,4 @@
-{% extends 'index_base.html' %}
+{% extends is_admin|yesno:"admin/index_base.html,index_base.html" %}
 {% load static %}
 {% load i18n %}
 {% load tagger %}
@@ -6,12 +6,24 @@
 {% block title %}Customer{% endblock title %}
 
 {% block head %}
-   <script>
-      $(document).ready(function() {
-          $('#example').DataTable();
-      });
-   </script>
-   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function () {
+    $('#dtBasicExample').DataTable({
+     lengthChange:true,
+     searching: true,
+     paging:false,
+     columnDefs: [
+     { searchable: false, targets: 0 }
+     ],
+     order:[[ 0,"desc" ]],
+
+    });
+});
+</script>
+
+
 {% endblock head %}
 
 {% block body %}
@@ -31,7 +43,7 @@
                         {% if msg %}
                            <p class="text-danger">{{msg}}</p>
                            {% else %}
-                              <table id="example" class="table table-striped table-bordered" style="width:100%">
+                              <table id="dtBasicExample" class="table table-striped table-bordered" style="width:100%">
                            <thead>
                               <tr>
                                  <th> Sr.No </th>
@@ -46,14 +58,27 @@
                            </thead>
                            <tbody>
                               {% for customer in results %}
+                                 {% if is_admin %}
+                                       {% define customer|get_item:'_id' as id %}
+                                       {% define  customer.profile_photo as photo %}
+                                       {% define  'admin_updatecustomer' as update_url %}                                  
+                                       {% define  'admin_detailcustomer' as detail_url %}
+                                       {% define  'admin_deletecustomer' as delete_url %}
+                                 {% else %}
+                                       {% define customer|private:'_id' as id %}
+                                       {% define customer.profile_photo.url as photo %}
+                                       {% define  'updatecustomer' as update_url %}
+                                       {% define  'detailcustomer' as detail_url %}
+                                       {% define  'deletecustomer' as delete_url %}
+                                 {% endif %}
                                  <tr>
                                     <td>{{forloop.counter}}</td>
-                                    <td><img src={{customer.profile_photo.url}} width='75px' height='75px' class="rounded"/></td>
+                                    <td><img src={{photo}} width='75px' height='75px' class="rounded"/></td>
                                     <td>{{customer.first_name}}</td>
                                     <td>{{customer.last_name}}</td>
                                     <td>{{customer.email}}</td>
-                                    <td class="text-center pointer"><a href="{% url 'updatecustomer' customer|private:'_id' %}"><i class="far fa-edit text-primary"></i></a></td>
-                                    <td class="text-center pointer"><a href="{% url 'detailcustomer' customer|private:'_id' %}"><i class="fas fa-info-circle"></i></i></a></td>                                 
+                                    <td class="text-center pointer"><a href="{% url update_url id %}"><i class="far fa-edit text-primary"></i></a></td>
+                                    <td class="text-center pointer"><a href="{% url detail_url id %}"><i class="fas fa-info-circle"></i></i></a></td>                                 
                                     <td class="text-center pointer">
                                        <a href="#{{customer.email}}" data-toggle="modal"><i class="fas fa-trash-alt text-danger"></i>
                                        </a>
@@ -74,7 +99,7 @@
                                           </div>
                                           <div class="modal-footer justify-content-center">
                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                             <a href="{% url 'deletecustomer' customer|private:'_id' %}" class="btn btn-danger">Delete</a>
+                                             <a href="{% url delete_url id %}" class="btn btn-danger">Delete</a>
                                           </div>
                                        </div>
                                     </div>

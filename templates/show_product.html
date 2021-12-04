@@ -1,16 +1,28 @@
-{% extends 'index_base.html' %}
+{% extends is_admin|yesno:"admin/index_base.html,index_base.html" %}
 {% load static %}
 {% load i18n %}
 {% load tagger %}
 {% block title %}Products{% endblock title %}
 
 {% block head %}
-   <script>
-      $(document).ready(function() {
-          $('#example').DataTable();
-      });
-   </script>
-   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function () {
+    $('#dtBasicExample').DataTable({
+     lengthChange:true,
+     searching: true,
+     paging:false,
+     columnDefs: [
+     { searchable: false, targets: 0 }
+     ],
+     order:[[ 0,"desc" ]],
+
+    });
+});
+</script>
+
+
 {% endblock head %}
 
 {% block body %}
@@ -30,29 +42,45 @@
                         {% if msg %}
                            <p class="text-danger">{{msg}}</p>
                            {% else %}
-                              <table id="example" class="table table-striped table-bordered" style="width:100%">
+                              <table id="dtBasicExample" class="table table-striped table-bordered" style="width:100%">
                            <thead>
                               <tr>
                                  <th> Sr.No </th>
                                  <th>Image</th>
                                  <th>Name</th>
-                                 <th>Edit</th>
+                                 {% if not is_admin %}
+                                    <th>Edit</th>
+                                 {% endif %}
                                  <th>Detail</th>
                                  <th>Delete</th>                                
                               </tr>
                            </thead>
                            <tbody>
                               {% for product in results %}
+                                 {% if is_admin %}
+                                          {% define product|get_item:'_id' as id %}
+                                          {% define  product.image as photo %}
+                                          {% define  'admin_detailproduct' as detail_url %}
+                                          {% define  'admin_deleteproduct' as delete_url %}
+                                    {% else %}
+                                          {% define product|private:'_id' as id %}
+                                          {% define product.image.url as photo %}
+                                          {% define  'updateproduct' as update_url %} 
+                                          {% define  'detailproduct' as detail_url %}
+                                          {% define  'deleteproduct' as delete_url %}
+                                    {% endif %}
                                  <tr>
                                     <td>{{forloop.counter}}</td>
-                                    <td><img src={{product.image.url}} width='75px' height='75px' class="rounded"/></td>
+                                    <td><img src={{photo}} width='75px' height='75px' class="rounded"/></td>
                                     <td>{{product.en.name}}</td>                                  
-                                    <td class="text-center pointer"><a href="{% url 'updateproduct' product|private:'_id' %}"><i class="far fa-edit text-primary"></i></a></td>
-                                    <td class="text-center pointer"><a href="{% url 'detailproduct' product|private:'_id' %}"><i class="fas fa-info-circle"></i></i></a></td>
+                                   {% if update_url %}
+                                       <td class="text-center pointer"><a href="{% url update_url id %}"><i class="far fa-edit text-primary"></i></a></td>
+                                   {% endif %} 
+                                    <td class="text-center pointer"><a href="{% url detail_url id %}"><i class="fas fa-info-circle"></i></i></a></td>
                                      <td class="text-center pointer">
-                                       <a href="#{{product|private:'_id'}}" data-toggle="modal"><i class="fas fa-trash-alt text-danger"></i>
+                                       <a href="#{{id}}" data-toggle="modal"><i class="fas fa-trash-alt text-danger"></i>
                                        </a>
-                                       <div id="{{product|private:'_id'}}" class="modal fade">
+                                       <div id="{{id}}" class="modal fade">
                                           <div class="modal-dialog modal-confirm">
                                              <div class="modal-content">
                                                 <div class="modal-header flex-column">
@@ -67,7 +95,7 @@
                                                 </div>
                                                 <div class="modal-footer justify-content-center">
                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                   <a href="{% url 'deleteproduct' product|private:'_id' %}" class="btn btn-danger">Delete</a>
+                                                   <a href="{% url delete_url id  %}" class="btn btn-danger">Delete</a>
                                                 </div>
                                              </div>
                                           </div>

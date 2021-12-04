@@ -15,7 +15,7 @@ class ParanoidModelManager(models.Manager):
 
 class CategoryField(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(("Category-Name"),max_length=50,unique=True)
+    name = models.CharField(("Category Name"),max_length=50,unique=True)
     
     class Meta:
         abstract = True
@@ -66,8 +66,8 @@ class District(models.Model):
 
 class Farmer(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    first_name = models.CharField(("FirstName"), max_length=50)  
-    last_name = models.CharField(("LastName"), max_length=50)  
+    first_name = models.CharField(("First Name"), max_length=50)  
+    last_name = models.CharField(("Last Name"), max_length=50)  
     email = models.EmailField(("Email"), max_length=54,unique=True)
     password = models.CharField(("Password"), max_length=64)
     profile_photo = models.ImageField(("Profile Photo"), upload_to='farmer',validators=[FileExtensionValidator(['jpg','jpeg','png','webp'])],height_field=None, width_field=None, max_length=None)
@@ -80,7 +80,7 @@ class Farmer(models.Model):
     # village = models.CharField(("Village"), max_length=20)
     pin_code =  models.PositiveIntegerField(("Pincode"), validators=[MinValueValidator(111111), MaxValueValidator(999999)])
     postal_address = models.TextField(("Postal Address"))
-    customer_capacity = models.PositiveIntegerField(_("Customer-Capacity"),default=2147483647,validators=[MinValueValidator(1)])
+    customer_capacity = models.PositiveIntegerField(_("Customer Capacity"),default=2147483647,validators=[MinValueValidator(1)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True,null=True ,default=None)

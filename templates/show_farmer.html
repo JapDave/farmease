@@ -1,10 +1,4 @@
-{% if is_admin %}
-    {% include 'admin/index_base.html' %}
-    {% else %}
-        {% include 'index_base.html' %}
-{% endif %}
-  
-
+{% extends is_admin|yesno:"admin/index_base.html,index_base.html" %}
 {% load static %}
 {% load i18n %}
 {% load tagger %}
@@ -12,18 +6,28 @@
 {% block title %}Farmer{% endblock title %}
 
 {% block head %}
-   <script>
-      $(document).ready(function() {
-          $('#example').DataTable();
+<script>
+   $(document).ready(function () {
+      $('#dtBasicExample').DataTable({
+      lengthChange:true,
+      searching: true,
+      paging:false,
+      columnDefs: [
+      { searchable: false, targets: 0 }
+      ],
+      order:[[ 0,"desc" ]],
+
       });
-   </script>
-   <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+   });
+</script>
 {% endblock head %}
 
 {% block body %}
+
+
+
    <div class="container-fluid">
       <div class="row">
-
          <!-- Area Chart -->
          <div class="col-xl-12 col-lg-12">
              <div class="card shadow mb-4">
@@ -37,7 +41,7 @@
                         {% if msg %}
                            <p class="text-danger">{{msg}}</p>
                            {% else %}
-                              <table id="example" class="table table-striped table-bordered" style="width:100%">
+                              <table id="dtBasicExample" class="table table-striped table-bordered" style="width:100%">
                            <thead>
                               <tr>
                                  <th> Sr.No </th>
@@ -51,15 +55,30 @@
                               </tr>
                            </thead>
                            <tbody>
+                        
                               {% for farmer in results %}
+                                 {% if is_admin %}
+                                    {% define farmer|get_item:'_id' as id %}
+                                    {% define  farmer.profile_photo as photo %}
+                                    {% define  'admin_updatefarmer' as update_url %}                                  
+                                    {% define  'admin_detailfarmer' as detail_url %}
+                                    {% define  'admin_deletefarmer' as delete_url %}
+                                    {% else %}
+                                    {% define farmer|private:'_id' as id %}
+                                    {% define farmer.profile_photo.url as photo %}
+                                    {% define  'updatefarmer' as update_url %}
+                                    {% define  'detailfarmer' as detail_url %}
+                                    {% define  'deletefarmer' as delete_url %}
+                                 {% endif %}
                                  <tr>
+                                   
                                     <td>{{forloop.counter}}</td>
-                                    <td><img src={{farmer.profile_photo.url}} width='75px' height='75px' class="rounded"/></td>
+                                    <td><img src={{photo}} width='75px' height='75px' class="rounded"/></td>
                                     <td>{{farmer.first_name}}</td>
                                     <td>{{farmer.last_name}}</td>
                                     <td>{{farmer.email}}</td>
-                                    <td class="text-center pointer"><a href="{% url 'updatefarmer' farmer|private:'_id' %}"><i class="far fa-edit text-primary"></i></a></td>
-                                    <td class="text-center pointer"><a href="{% url 'detailfarmer' farmer|private:'_id' %}"><i class="fas fa-info-circle"></i></i></a></td>
+                                    <td class="text-center pointer"><a href="{% url update_url id %}"><i class="far fa-edit text-primary"></i></a></td> 
+                                    <td class="text-center pointer"><a href="{% url detail_url id %}"><i class="fas fa-info-circle"></i></i></a></td> 
                                     <td class="text-center pointer">
                                        <a href="#{{farmer.first_name}}" data-toggle="modal"><i class="fas fa-trash-alt text-danger"></i>
                                        </a>
@@ -78,7 +97,7 @@
                                                 </div>
                                                 <div class="modal-footer justify-content-center">
                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                   <a href="{% url 'deletefarmer' farmer|private:'_id' %}" class="btn btn-danger">Delete</a>
+                                                   <a href="{% url delete_url id %} " class="btn btn-danger">Delete</a> 
                                                 </div>
                                              </div>
                                           </div>

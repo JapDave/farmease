@@ -16,7 +16,7 @@ class SubAdmin(models.Model):
    password = models.CharField(("Password"), max_length=64)
    age = models.PositiveIntegerField(("Age"),blank=False)
    gender = models.CharField(("Gender"), max_length=50,blank=False)
-   profile_photo = models.ImageField(("Profile Photo"), upload_to='farmer',validators=[FileExtensionValidator(['jpg','jpeg','png','webp'])],height_field=None, width_field=None, max_length=None)
+   profile_photo = models.ImageField(("Profile Photo"), upload_to='admin',validators=[FileExtensionValidator(['jpg','jpeg','png','webp'])],height_field=None, width_field=None, max_length=None)
    phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{10}$")
    contact = models.CharField(("Contact No"),validators=[phoneNumberRegex],max_length=10,unique=True)
    state = models.ForeignKey(State, verbose_name=_("State"), on_delete=models.CASCADE)

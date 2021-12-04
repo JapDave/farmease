@@ -1,4 +1,4 @@
-{% extends 'index_base.html' %}
+{% extends is_admin|yesno:"admin/index_base.html,index_base.html" %}
 {% load static %}
 {% load i18n %}
 {% load tagger %}
@@ -13,7 +13,17 @@
 {% block body %}
    <div class="container-fluid">
       <div class="row">
-
+         {% if is_admin %}
+            {% define farmer|get_item:'_id' as id %}
+            {% define  farmer.profile_photo as photo %}
+            {% define  'admin_updatefarmer' as update_url %}  
+            {% define  'admin_deletefarmer' as delete_url %}       
+            {% else %}
+            {% define farmer|private:'_id' as id %}
+            {% define farmer.profile_photo.url as photo %}
+            {% define  'updatefarmer' as update_url %}
+            {% define  'deletefarmer' as delete_url %}        
+         {% endif %}
          <!-- Area Chart -->
          <div class="col-xl-12 col-lg-12">
             <div class="card shadow mb-4">
@@ -30,7 +40,7 @@
                               <div class="row">                                  
                                  <div class="col-md-4">
                                     <div class="text-center">
-                                      <img src={{farmer.profile_photo.url}} width='250px' height='250px' class="rounded"/>
+                                      <img src={{photo}} width='250px' height='250px' class="rounded"/>
                                     </div>
                                  </div>                             
                                  <div class="col-md-4 mt-1">                                
@@ -57,7 +67,7 @@
                                     <div class="form-group">
                                        <label class="col-md-5 control-label">State:</label>
                                        <div class="col-md-7">
-                                          {{farmer.state}}
+                                          {{farmer.state.name}}
                                        </div>
                                     </div>     
                                     <div class="form-group">
@@ -92,7 +102,7 @@
                                     <div class="form-group">
                                        <label class="col-md-5 control-label">District:</label>
                                        <div class="col-md-7">
-                                          {{farmer.district}}
+                                          {{farmer.district.name}}
                                        </div>
                                     </div> 
                                     <div class="form-group">
@@ -106,13 +116,13 @@
                               </div>
                               <div class="card-footer py-3 d-flex flex-row align-items-center justify-content-end">                   
                                  
-                                 <a href="{% url 'updatefarmer' farmer|private:'_id' %}" class="btn btn-primary btn-icon-split m-1">
+                                 <a href="{% url update_url id %}" class="btn btn-primary btn-icon-split m-1">
                                     <span class="icon text-white-50">
                                        <small class="text-light">Edit</small>
                                     </span>
                                  </a>
 
-                                 <a href="{% url 'deletefarmer' farmer|private:'_id' %}" class="btn btn-danger btn-icon-split m-1">
+                                 <a href="{% url 'deletefarmer' id %}" class="btn btn-danger btn-icon-split m-1">
                                     <span class="icon text-white-50">
                                        <small class="text-light">Delete</small>
                                     </span>

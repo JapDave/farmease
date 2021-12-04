@@ -19,11 +19,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: customer/models.py:37 farmer/models.py:78 subadmin/models.py:22
-msgid "States"
+msgid "State"
 msgstr "રાજ્ય"
 
 #: customer/models.py:38 farmer/models.py:79 subadmin/models.py:23
-msgid "Districts"
+msgid "District"
 msgstr "જિલ્લો"
 
 #: customer/models.py:40
@@ -32,7 +32,11 @@ msgstr "ખેડૂત"
 
 #: customer/models.py:97
 msgid "Product"
+msgstr "ઉત્પાદન"
+
+msgid "Products"
 msgstr "ઉત્પાદનો"
+
 
 #: customer/models.py:136 farmer/models.py:108 subadmin/models.py:49
 msgid "Key"
@@ -65,6 +69,9 @@ msgstr "ડેશબોર્ડ"
 
 msgid "Categories"
 msgstr "શ્રેણીઓ"
+
+msgid "Category"
+msgstr "શ્રેણી"
 
 msgid "Show Categories"
 msgstr "શ્રેણીઓ બતાવો"
@@ -117,7 +124,6 @@ msgstr "અપડેટ શ્રેણી "
 msgid "Update Product"
 msgstr "અપડેટ ઉત્પાદનો "
 
-
 msgid "Update Order"
 msgstr "અપડેટ ઓર્ડર "
 
@@ -133,13 +139,77 @@ msgstr "અપડેટ એડમિન"
 msgid "Add Admin"
 msgstr "એડમિન ઉમેરો"
 
-
 msgid "Show Admin"
 msgstr "એડમિન બતાવો"
-
 
 msgid "Update States"
 msgstr "અપડેટ રાજ્ય "
 
 msgid "Update Districts"
 msgstr "અપડેટ જિલ્લો"
+
+msgid "First Name"
+msgstr "મૂળ નામ"
+
+msgid "Last Name"
+msgstr "છેલ્લું નામ"
+
+msgid "Email"
+msgstr "ઇમેઇલ"
+
+msgid "Password"
+msgstr "પાસવર્ડ"
+
+msgid "Profile photo"
+msgstr "પ્રોફાઇલ ફોટો"
+
+msgid "Image"
+msgstr "ફોટો"
+
+msgid "Postal Address"
+msgstr "સરનામું"
+
+msgid "Address"
+msgstr "સરનામું"
+
+msgid "Pincode"
+msgstr "પીન કોડ"
+ 
+msgid "Status"
+msgstr "સ્થિતિ"
+
+msgid "Contact No"
+msgstr "ફોન નં"
+
+msgid "Gender"
+msgstr "જાતિ"
+
+msgid "payment Method"
+msgstr "ચુકવણી પદ્ધતિ"
+
+msgid "Product qty"
+msgstr "ઉત્પાદન ક્યુએન્ટીટી"
+
+msgid "Total Amount"
+msgstr "કુલ રકમ"
+
+msgid "Stock"
+msgstr "સ્ટૉક"
+
+msgid "Price"
+msgstr "રકમ"
+
+msgid "Description"
+msgstr "વર્ણન"
+
+msgid "Name"
+msgstr "નામ"
+
+msgid "Customer Capacity"
+msgstr "ગ્રાહક ક્ષમતા"
+
+msgid "Category Name"
+msgstr "શ્રેણીનું નામ"
+
+msgid "Age"
+msgstr "ઉંમર"

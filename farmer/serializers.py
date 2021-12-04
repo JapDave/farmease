@@ -75,7 +75,7 @@ class ProductFieldSerializer(serializers.EmbeddedModelSerializer):
         model = ProductField
         fields = '__all__'
 
-class RegisterSerializer(serializers.DjongoModelSerializer):
+class FarmerRegisterSerializer(serializers.DjongoModelSerializer):
   
     class Meta:
         model = Farmer

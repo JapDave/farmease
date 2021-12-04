@@ -1,4 +1,4 @@
-{% extends 'index_base.html' %}
+{% extends is_admin|yesno:"admin/index_base.html,index_base.html" %}
 {% load static %}
 {% load i18n %}
 {% load tagger %}
@@ -6,18 +6,23 @@
 {% block title %}Detail|Customer{% endblock title %}
 
 {% block head %}
-   {% comment %} <script>
-      $(document).ready(function() {
-          $('#example').DataTable();
-      });
-   </script> {% endcomment %}
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
 {% endblock head %}
 
 {% block body %}
    <div class="container-fluid">
       <div class="row">
-
+         {% if is_admin %}
+            {% define customer|get_item:'_id' as id %}
+            {% define  customer.profile_photo as photo %}
+            {% define  'admin_updatecustomer' as update_url %}  
+            {% define  'admin_deletecustomer' as delete_url %}       
+            {% else %}
+            {% define customer|private:'_id' as id %}
+            {% define customer.profile_photo.url as photo %}
+            {% define  'updatecustomer' as update_url %}
+            {% define  'deletecustomer' as delete_url %}
+         {% endif %}
          <!-- Area Chart -->
          <div class="col-xl-12 col-lg-12">
             <div class="card shadow mb-4">
@@ -34,7 +39,7 @@
                               <div class="row">                                  
                                  <div class="col-md-4">
                                     <div class="text-center">
-                                      <img src={{customer.profile_photo.url}} width='250px' height='250px' class="rounded"/>
+                                      <img src={{photo}} width='250px' height='250px' class="rounded"/>
                                     </div>
                                  </div>                             
                                  <div class="col-md-4 mt-1">                                
@@ -61,7 +66,7 @@
                                     <div class="form-group">
                                        <label class="col-md-5 control-label">State:</label>
                                        <div class="col-md-7">
-                                          {{customer.state}}
+                                          {{customer.state.name}}
                                        </div>
                                     </div>                                      
                                  </div>
@@ -84,13 +89,13 @@
                                     <div class="form-group">
                                        <label class="col-md-5 control-label">Farmer Selected:</label>
                                        <div class="col-md-7">
-                                          {{customer.farmer}}
+                                          {{customer.farmer.first_name}}
                                        </div>
                                     </div>    
                                     <div class="form-group">
                                        <label class="col-md-5 control-label">District:</label>
                                        <div class="col-md-7">
-                                          {{customer.district}}
+                                          {{customer.district.name}}
                                        </div>
                                     </div> 
                                  
@@ -98,19 +103,19 @@
                               </div>
                               <div class="card-footer py-3 d-flex flex-row align-items-center justify-content-end">                   
                                  
-                                 <a href="{% url 'alladdress' customer|private:'_id'  %}" class="btn btn-success btn-icon-split m-1">
+                                 <a href="{% url 'alladdress' id %}" class="btn btn-success btn-icon-split m-1">
                                     <span class="icon text-white-50">
                                        <small class="text-light">Addresses</small>
                                     </span>
-                                 </a>
+                                 </a> 
 
-                                 <a href="{% url 'updatecustomer' customer|private:'_id' %}" class="btn btn-primary btn-icon-split m-1">
+                                 <a href="{% url update_url id %}" class="btn btn-primary btn-icon-split m-1">
                                     <span class="icon text-white-50">
                                        <small class="text-light">Edit</small>
                                     </span>
                                  </a>
 
-                                 <a href="{% url 'deletecustomer' customer|private:'_id' %}" class="btn btn-danger btn-icon-split m-1">
+                                 <a href="{% url delete_url id %}" class="btn btn-danger btn-icon-split m-1">
                                     <span class="icon text-white-50">
                                        <small class="text-light">Delete</small>
                                     </span>

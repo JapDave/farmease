@@ -25,8 +25,8 @@ class Address(models.Model):
     
 class Customer(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    first_name = models.CharField(("FirstName"), max_length=50) 
-    last_name = models.CharField(("LastName"), max_length=50) 
+    first_name = models.CharField(("First Name"), max_length=50) 
+    last_name = models.CharField(("Last Name"), max_length=50) 
     password = models.CharField(("Password"), max_length=64)
     email = models.EmailField(("Email"), max_length=54,unique=True)
     profile_photo = models.ImageField(("Profile Photo"), upload_to='Customer', height_field=None, width_field=None, max_length=None)
@@ -95,7 +95,7 @@ class Cart(models.Model):
 class OrderField(models.Model):
     _id = models.UUIDField(default=uuid.uuid4,primary_key=True)
     product = models.ForeignKey(Products, verbose_name=_("Products"), on_delete=models.CASCADE)
-    qty = models.PositiveIntegerField(("Product-qty"),default=1) 
+    qty = models.PositiveIntegerField(("Product Qty"),default=1) 
    
     objects = models.DjongoManager()
 
@@ -108,12 +108,12 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, verbose_name=("Customer"), on_delete=models.CASCADE)
     farmer = models.ForeignKey(Farmer, verbose_name=("Farmer"), on_delete=models.CASCADE,default=None)
     items = models.ArrayField(OrderField, verbose_name=("Items"),default=None)  
-    total = models.PositiveIntegerField(("Total-Amount"))
+    total = models.PositiveIntegerField(("Total Amount"))
     address = models.EmbeddedField(Address)
-    CHOICES = [('0','Pending'),('1','Approved'),('2','Dispatched'),('3','Delievered'),('4','Cancelled')]
+    CHOICES = (('0','Pending'),('1','Approved'),('2','Dispatched'),('3','Delievered'),('4','Cancelled'))
     status = models.CharField(("status"),choices=CHOICES, max_length=50,default='0')
     CHOICES1 = [('0','COD'),('1','ONLINE')]
-    payment_method = models.CharField(("Payment-Method"),choices=CHOICES1 ,max_length=50) 
+    payment_method = models.CharField(("Payment Method"),choices=CHOICES1 ,max_length=50) 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(blank=True, null=True, default=None)

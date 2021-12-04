@@ -113,11 +113,15 @@ class Register(generics.GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)     
         serializer.is_valid(raise_exception=True)      
-        serializer.save()
-        return Response({
-            "user": serializer.data,
-            "message": "Customer Created Successfully.  Now perform Login to get your token",
-        })
+        result  =  serializer.create(serializer.validated_data)
+        if result != None:
+            return Response({
+                "user": CustomerSerializer(result).data,
+                "message": "Customer Created Successfully.  Now perform Login to get your token",
+            })
+        else:
+            return Response({'detail':'Customer Not Created'},status=status.HTTP_400_BAD_REQUEST)
+
 
 class Login(RestLoginView):
     permission_classes = (permissions.AllowAny,)

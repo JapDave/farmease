@@ -1,7 +1,5 @@
-from django.core.validators import integer_validator
-from django.db.models import fields
-from farmer.models import Products
-from farmer.serializers import ProductSerializer
+from farmer.models import Products,State,District
+from farmer.serializers import DistrictSerializer, FarmerSerializer, StateSerializer
 from rest_framework import  serializers as restserial
 from .models import Cart, CartField, Customer, Order, OrderField, Token, Address
 from django.utils.translation import gettext_lazy as _
@@ -11,8 +9,6 @@ import hashlib
 from googletrans import Translator
 translator = Translator(service_urls=[
       'translate.google.com',])
-
-
 
 class LoginUserSerializer(restserial.Serializer):
     email = restserial.EmailField()
@@ -62,23 +58,43 @@ class AddressSerializer(serializers.EmbeddedModelSerializer):
 
 class RegisterSerializer(serializers.DjongoModelSerializer):
     # addresses = AddressSerializer()
-
-    class Meta:
-        model = Customer
-        exclude = ['farmer','deleted_at']
-        extra_kwargs = {
-            'password':{'write_only': True},
-        }
-        
+    pin_code = restserial.IntegerField(max_value=None, min_value=1)
+    postal_address = restserial.CharField()
 
 
-class CustomerSerializer(serializers.DjongoModelSerializer):
-    # addresses = AddressSerializer()
-  
     class Meta:
         model = Customer
         exclude = ['deleted_at']
+        extra_kwargs = {
+            'password':{'write_only': True},
+        }
+        depth:1
 
+    def create(self,validated_data): 
+        pin_code = validated_data.pop('pin_code')
+        postal_address = validated_data.pop('postal_address')
+        address_obj = Address(pin_code=pin_code,postal_address=postal_address)
+        address_obj.save()
+        customer_obj = Customer(**validated_data)
+        customer_obj.addresses.append(address_obj)
+        customer_obj.save()
+        return customer_obj
+           
+
+class CustomerSerializer(serializers.DjongoModelSerializer):
+    farmer = FarmerSerializer()
+    state = StateSerializer()
+    district = DistrictSerializer()
+
+    class Meta:
+        model = Customer
+        exclude = ['deleted_at']
+        depth:2
+
+    def update_data(self,instance,data):
+        state = State.objects.get(_id=data.get('state'))
+        district = District.objects.get(_id=data.get('district'))   
+        return super().save(state=state,district=district)
 
 class CartFieldSerializer(serializers.EmbeddedModelSerializer):
     # product = ProductSerializer()
@@ -109,6 +125,7 @@ class OrderSerializer(serializers.DjongoModelSerializer):
     class Meta:
         model = Order
         exclude = ['deleted_at']
+        depth = 3
      
 
 

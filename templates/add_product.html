@@ -5,6 +5,17 @@
 {% block title %}Add|Product{%endblock title %} 
 
 {% block head %}
+<script>
+  function upload_img(input) {
+    if (input.files && input.files[0]) {
+      var src = URL.createObjectURL(input.files[0])
+      $('#img_id').attr('src', src)
+      $('#img_id').css("visibility", "visible")
+      $('#img_id').css("width", "100px")
+      $('#img_id').css("height", "100px")
+    }
+  }
+</script>
 <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
 {% endblock head %} 
 
@@ -32,14 +43,14 @@
                 <div>
                   <div class="form-group">
                     <small>{{form.farmer.errors}}</small>
-                    <p>{{form.farmer.label}}<span>*</span></p>
+                    <p> {% trans form.farmer.label %}<span>*</span></p>
                     <!-- <span class="icon-case"><i class="fa fa-male"></i></span> -->
                     {{form.farmer}}
                     <!-- <div class="validation"></div> -->
                   </div>
 
                   <div class="form-group">                   
-                    <p>{{form.category.label}} <span>*</span></p>
+                    <p> {% trans form.category.label %}<span>*</span></p>
                     <small class="text-danger p-0 ">{{form.category.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-user"></i></span> -->
                     {{form.category}}
@@ -48,15 +59,15 @@
 
                   <div class="form-group">
                     
-                    <p>{{form.gu.label}}<span>*</span></p>
+                    <p> {% trans form.gu.label %}<span>*</span></p>
                     <small class="text-danger p-0 ">{{form.gu.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
-                    {{form.gu}}
+                      {{form.gu}} 
                     <!-- <div class="validation"></div> -->
                   </div>
 
                   <div class="form-group">                  
-                    <p>{{form.en.label}}<span>*</span></p>
+                    <p> {% trans form.en.label %}<span>*</span></p>
                     <small class="text-danger p-0 ">{{form.en.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
                     {{form.en}}
@@ -66,22 +77,23 @@
                 </div>
 
                 <div>
-                  <div class="form-group">                   
-                    <p>{{form.image.label}} <span>*</span></p>
+                  <div class="form-group">  
+                    <img id="img_id" src="#" />                   
+                    <p> {% trans form.image.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.image.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     {{form.image}}
                   </div>
 
                   <div class="form-group">                   
-                    <p>{{form.price.label}} <span>*</span></p>
+                    <p> {% trans form.price.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.price.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     {{form.price}} Per Kg
                   </div>
 
                   <div class="form-group">                  
-                    <p>{{form.stock.label}} <span>*</span></p>
+                    <p> {% trans form.stock.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.stock.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     <div class="form-gender">{{form.stock}} Kg</div>

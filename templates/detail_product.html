@@ -1,4 +1,4 @@
-{% extends 'index_base.html' %}
+{% extends is_admin|yesno:"admin/index_base.html,index_base.html" %}
 {% load static %}
 {% load i18n %}
 {% load tagger %}
@@ -13,7 +13,17 @@
 {% block body %}
    <div class="container-fluid">
       <div class="row">
-
+         {% if is_admin %}
+            {% define  product|get_item:'_id' as id %}
+            {% define  product.image as photo %}
+            {% comment %} {% define  'admin_updateproduct' as update_url %}   {% endcomment %}
+            {% define  'admin_deleteproduct' as delete_url %}       
+            {% else %}
+            {% define product|private:'_id' as id %}
+            {% define product.image.url as photo %}
+            {% comment %} {% define  'updateproduct' as update_url %} {% endcomment %}
+            {% define  'deleteproduct' as delete_url %}
+         {% endif %}
          <!-- Area Chart -->
          <div class="col-xl-12 col-lg-12">
             <div class="card shadow mb-4">
@@ -30,7 +40,7 @@
                               <div class="row">                                  
                                  <div class="col-md-4">
                                     <div class="text-center">
-                                      <img src={{product.image.url}} width='250px' height='250px' class="rounded"/>
+                                      <img src= {{photo}} width='250px' height='250px' class="rounded"/>
                                     </div>
                                  </div>                             
                                  <div class="col-md-4 mt-1">                                
@@ -51,7 +61,7 @@
                                     <div class="form-group">
                                        <label class="col-md-5 control-label">Farmer:</label>
                                        <div class="col-md-7">
-                                          {{product.farmer}}
+                                          {{product.farmer.first_name}}
                                        </div>
                                     </div>
                                     
@@ -80,9 +90,24 @@
                                     </div>
 
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">Category:</label>
-                                       <div class="col-md-7">
-                                       {{product.category}}
+                                       <label class="control-label">Category:</label>
+                                       <div>
+                                          <label class="control-label">Gu:</label>
+                                          <div class="col-lg-7">
+                                             <div>
+                                                <label class="control-label">Name:</label>
+                                                {{product.category.gu.name}}
+                                             </div>
+                                          </div>   
+                                       </div>
+                                       <div >
+                                          <label class="control-label">En:</label>
+                                          <div class="col-lg-7">
+                                             <div>
+                                                <label class="control-label">Name:</label>
+                                                {{product.category.en.name}}
+                                             </div>
+                                          </div>  
                                        </div>
                                     </div> 
 
@@ -96,13 +121,13 @@
                               </div>
                               <div class="card-footer py-3 d-flex flex-row align-items-center justify-content-end">                   
                                  
-                                 <a href="{% url 'updateproduct' product|private:'_id' %}" class="btn btn-primary btn-icon-split m-1">
+                                 {% comment %} <a href="{% url update_url id %}" class="btn btn-primary btn-icon-split m-1">
                                     <span class="icon text-white-50">
                                        <small class="text-light">Edit</small>
                                     </span>
-                                 </a>
+                                 </a> {% endcomment %}
 
-                                 <a href="{% url 'deleteproduct' product|private:'_id' %}" class="btn btn-danger btn-icon-split m-1">
+                                 <a href="{% url delete_url id  %}" class="btn btn-danger btn-icon-split m-1">
                                     <span class="icon text-white-50">
                                        <small class="text-light">Delete</small>
                                     </span>

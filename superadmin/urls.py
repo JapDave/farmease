@@ -2,10 +2,7 @@ from django.urls import path,include
 from .views import *
 from django.conf.urls.static import static
 from django.conf import settings
-from django.conf.urls.i18n import i18n_patterns
 from django.utils.translation import ugettext_lazy as _
-from django.conf.urls import url
-
 
 
 
@@ -32,7 +29,7 @@ urlpatterns = [
    path('updatecategory/<id>',UpdateCategory.as_view(),name='updatecategory'),
 
    # Admin Section
-   path('addadmin',AddAdmin.as_view(),name='addadmin'),
+   path('addadmins',AddAdmin.as_view(),name='addadmin'),
    path('admins',AdminView.as_view(),name='alladmin'),
    path('deleteadmin/<id>',DeleteAdmin.as_view(),name='deleteadmin'),
    path('updateadmin/<id>',UpdateAdmin.as_view(),name='updateadmin'),

@@ -5,6 +5,17 @@
 {% block title %}Update|Category{% endblock title %}
 {% block head %}
    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+   <script>
+      function upload_img(input) {
+        if (input.files && input.files[0]) {
+         var src = URL.createObjectURL(input.files[0])
+         $('#img_id2').attr('src', src)   
+         $('#img_id2').css("visibility", "visible")
+         $('#img_id2').css("width", "100px")
+         $('#img_id2').css("height", "100px") 
+        }
+      }
+    </script>
 {% endblock head %}
 
 {% block body %}
@@ -21,7 +32,6 @@
             <!-- Card Body -->
             <div class="card-body">
                <div class="chart-area ">
-                 
                   <form class="adminform" method="POST" enctype="multipart/form-data">
                   {% if msg %}
                      <div > 

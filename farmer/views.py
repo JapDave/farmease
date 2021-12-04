@@ -132,7 +132,7 @@ class Login(RestLoginView):
 
 
 class Register(generics.GenericAPIView):
-    serializer_class = RegisterSerializer
+    serializer_class = FarmerRegisterSerializer
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, *args,  **kwargs):

@@ -8,21 +8,20 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-
+   
    <title>{% block title %}{% endblock title %}</title>
 
     <!-- Custom fonts for this template-->
-    <link rel="stylesheet"  href="{% static 'assets/vendor/fontawesome-free/css/all.min.css' %}">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
-    <!-- Custom styles for this template-->
-   <link rel="stylesheet" href="{% static 'assets/css/sb-admin-2.min.css' %}">
-   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
-   <link href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css">
+    <script src="{% static 'assets/vendor/jquery-easing/jquery.easing.min.js'%}"></script>
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> 
+ 
+    <!-- Custom scripts for all pages-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+    <script src="{% static 'assets/js/sb-admin-2.min.js'%}"></script>
+    <link rel="stylesheet" href="{% static 'assets/css/sb-admin-2.min.css' %}"> 
+    <script src="{%static 'assets/js/datatables.min.js'%}"> </script>
 
    {% block head %}{% endblock head %}    
 
@@ -33,7 +32,7 @@
       <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
          <!-- Sidebar - Brand -->
-         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'index' %}">
+         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'admin_index' %}">
             
             <div class="sidebar-brand-text mx-3"> 
                <h5 class="index-header">{% trans 'Dashboard' %}</h5>
@@ -48,51 +47,51 @@
          </div>
 
          <!-- Nav Item - Pages Collapse Menu -->
-         <li class="nav-item">
+         <li class="nav-item {% if 'category' == segment %}active{% endif %}">
             <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapseTwo"
                aria-expanded="true" aria-controls="collapseTwo">
-               {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
+               <i class="fas fa-box"></i>
                <span>
                   <small class="sidebar-item-gu"> {% trans 'Categories' %} </small>
                </span>
             </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div id="collapseTwo" class="collapse {% if 'category' == segment %}show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="{% url 'allcategory' %}">
+                     <a class="collapse-item {% if 'category' == segment %}active{% endif %}" href="{% url 'admin_allcategory' %}">
                         <small class="sidebar-item-gu"> {% trans 'Show Categories' %} </small>
                      </a>
                                     
                </div>
             </div>
          </li>
-         <li class="nav-item">
+         <li class="nav-item {% if 'state' == segment %}active{% endif %}">
             <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapseThree"
                aria-expanded="true" aria-controls="collapseThree">
-               {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
+               <i class="fas fa-flag"></i>
                <span>
-                  <small class="sidebar-item-gu"> {% trans 'States' %} </small>
+                  <small class="sidebar-item-gu"> {% trans 'State' %} </small>
                </span>
             </a>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+            <div id="collapseThree" class="collapse {% if 'state' == segment %}show{% endif %}" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="{% url 'allstate' %}">
+                     <a class="collapse-item {% if 'state' == segment %}active{% endif %}"  href="{% url 'admin_allstate' %}">
                        <small class="sidebar-item-gu"> {% trans 'Show States' %} </small>
                      </a>
                                           
                </div>
             </div>
          </li>
-         <li class="nav-item">
+         <li class="nav-item {% if 'district' == segment %}active{% endif %}">
             <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapsefour"
                aria-expanded="true" aria-controls="collapsefour">
-               {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
+               <i class="fas fa-flag-checkered"></i>
                <span>
-                  <small class="sidebar-item-gu"> {% trans 'Districts' %} </small>
+                  <small class="sidebar-item-gu"> {% trans 'District' %} </small>
                </span>
             </a>
-            <div id="collapsefour" class="collapse" aria-labelledby="headingfour" data-parent="#accordionSidebar">
+            <div id="collapsefour" class="collapse {% if 'district' == segment %}show{% endif %}" aria-labelledby="headingfour" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="{% url 'alldistrict' %}">
+                     <a class="collapse-item {% if 'district' == segment %}active{% endif %}" href="{% url 'admin_alldistrict' %}">
                         <small class="sidebar-item-gu"> {% trans 'Show Districts' %} </small>
                      </a>
                                          
@@ -110,39 +109,39 @@
          </div>
          
      
-         <li class="nav-item">
-            <a class="nav-link collapsed pl-4 p-2"  data-toggle="collapse" data-target="#collapse2Two"
+         <li class="nav-item {% if 'farmer' in segment %}active{% endif %}">
+            <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapse2Two"
                aria-expanded="true" aria-controls="collapse2Two">
-               {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
+               <i class="fas fa-user-circle"></i>
                <span>
                  <small class="sidebar-item-gu"> {% trans 'Farmer' %} </small>
                </span>
             </a>
-            <div id="collapse2Two" class="collapse" aria-labelledby="heading2Two" data-parent="#accordionSidebar">
+            <div id="collapse2Two" class="collapse {% if 'farmer' in segment %}show{% endif %}" aria-labelledby="heading2Two" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="{% url 'allfarmer' %}">
+                     <a class="collapse-item {% if 'showfarmer' == segment  %}active{% endif %}" href="{% url 'admin_allfarmer' %}">
                          <small class="sidebar-item-gu"> {% trans 'Show Farmer' %} </small>
                      </a>
-                     <a class="collapse-item" href="{% url 'addfarmer' %}">
+                     <a class="collapse-item {% if 'addfarmer' == segment %}active{% endif %}" href="{% url 'admin_addfarmer' %}">
                          <small class="sidebar-item-gu"> {% trans 'Add Farmer' %} </small>
                      </a>                       
                </div>
             </div>
          </li>
-         <li class="nav-item">
-            <a class="nav-link collapsed pl-4 p-2"  data-toggle="collapse" data-target="#collapse2Three"
+         <li class="nav-item {% if 'customer' in segment %}active{% endif %}">
+            <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapse2Three"
                aria-expanded="true" aria-controls="collapse2Three">
-               {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
+               <i class="fas fa-users"></i>  
                <span>
                    <small class="sidebar-item-gu"> {% trans 'Customer' %} </small>
                </span>
             </a>
-            <div id="collapse2Three" class="collapse" aria-labelledby="heading2Three" data-parent="#accordionSidebar">
+            <div id="collapse2Three" class="collapse {% if 'customer' in segment %}show{% endif %}" aria-labelledby="heading2Three" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="{% url 'allcustomer' %}">
+                     <a class="collapse-item {% if 'showcustomer' == segment  %}active{% endif %}" href="{% url 'admin_allcustomer' %}">
                        <small class="sidebar-item-gu"> {% trans 'Show Customer' %} </small>
                      </a>
-                     <a class="collapse-item" href="{% url 'addcustomer' %}">
+                     <a class="collapse-item {% if 'addcustomer' == segment  %}active{% endif %}" href="{% url 'admin_addcustomer' %}">
                        <small class="sidebar-item-gu"> {% trans 'Add Customer' %} </small>
                      </a>                       
                </div>
@@ -156,22 +155,20 @@
             <small class="index-utils-header">{% trans 'Product' %}</small>
          </div>
          
-         <li class="nav-item">
-            <a class="nav-link collapsed pl-4 p-2"  data-toggle="collapse" data-target="#collapse3One"
+         <li class="nav-item {% if 'product' in segment %}active{% endif %}">
+            <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapse3One"
                aria-expanded="true" aria-controls="collapse3One">
-               {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
+               <i class="fab fa-product-hunt"></i>
                <span>
                  <small class="sidebar-item-gu"> {% trans 'Product' %} </small>
                </span>
             </a>
-            <div id="collapse3One" class="collapse" aria-labelledby="heading3One" data-parent="#accordionSidebar">
+            <div id="collapse3One" class="collapse {% if 'product' in segment %}show{% endif %}" aria-labelledby="heading3One" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="{% url 'allproduct' %}">
+                     <a class="collapse-item {% if 'showproduct' == segment  %}active{% endif %}" href="{% url 'admin_allproduct' %}">
                        <small class="sidebar-item-gu"> {% trans 'Show Products' %} </small>
                      </a>
-                     <a class="collapse-item" href="{% url 'addproduct' %}">
-                         <small class="sidebar-item-gu"> {% trans 'Add Product' %} </small>
-                     </a>                       
+                                        
                </div>
             </div>
          </li>
@@ -182,22 +179,19 @@
              <small class="index-utils-header">{% trans 'Orders' %}</small>
          </div>
          
-         <li class="nav-item">
+         <li class="nav-item {% if 'order' in segment %}active{% endif %}">
             <a class="nav-link collapsed pl-4 p-2" href="#" data-toggle="collapse" data-target="#collapse4One"
                aria-expanded="true" aria-controls="collapse4One">
-               {% comment %} <i class="fas fa-fw fa-cog"></i> {% endcomment %}
+               <i class="fas fa-shipping-fast"></i>
                <span>
                   <small class="sidebar-item-gu"> {% trans 'Orders' %} </small>
                </span>
             </a>
-            <div id="collapse4One" class="collapse" aria-labelledby="heading4One" data-parent="#accordionSidebar">
+            <div id="collapse4One" class="collapse {% if 'order' in segment %}show{% endif %}" aria-labelledby="heading4One" data-parent="#accordionSidebar">
                <div class="bg-white py-2 collapse-inner rounded">
-                     <a class="collapse-item" href="{% url 'allorder' %}">
-                       <small class="sidebar-item-gu"> {% trans 'Show Orders' %} </small>
-                     </a>
-                     <a class="collapse-item" href="{% url 'addorder' %}">
-                        <small class="sidebar-item-gu"> {% trans 'Add Orders' %} </small>
-                     </a>                       
+                  <a class="collapse-item {% if 'order' in segment %}active{% endif %}" href="{% url 'admin_allorder' %}">
+                     <small class="sidebar-item-gu"> {% trans 'Show Orders' %} </small>
+                  </a>                    
                </div>
             </div>
          </li>
@@ -229,24 +223,30 @@
                      <i class="fa fa-bars"></i>
                </button>
 
-               
-
                <!-- Topbar Navbar -->
                {% comment %} <h1 class="h3 mb-0 text-gray-800">Dashboard</h1> {% endcomment %}
                <ul class="navbar-nav ml-auto">
-
-                  <li class="nav-item m-auto">
-                    <form method = "GET" name="form">
-                        <div>
-                           <label>Language</label>
-                            <select class='select-lan' name="prefered_language" onchange="this.form.submit()">
-                              <option value="en">English</option>
-                              <option value="gu" {% if lan == 'gu' %}selected{% endif %}>Gujarati</option>
-                            </select>
+                  <li class="nav-item m-2 mt-3"> 
+                     <form method = "GET" name="form">
+                        <div class="dropdown mb-4">
+                           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Language
+                            </button>
+                           <div class="dropdown-menu " aria-labelledby="dropdownMenuButton">
+                              <table cellpadding="5px" class="gender" >
+                                 <tr>
+                                    <td><input type="radio" name="prefered_language" value="en"  {% if lan == 'en' %}checked{% endif %}  onchange="this.form.submit()" id="radio1"></td>
+                                    <td><label class="select-lan" for="radio1">English</label></td>
+                                 </tr>  
+                                 <tr>
+                                    <td><input type="radio" name="prefered_language" value="gu"  {% if lan == 'gu' %}checked{% endif %}  onchange="this.form.submit()" id="radio2"></td>
+                                    <td><label class="select-lan" for="radio2">Gujarati</label></td>
+                                 </tr>   
+                              </table>
+                           </div>
                         </div>
-                    </form>
+                     </form>
                   </li>
-                     <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                      <li class="nav-item dropdown no-arrow d-sm-none">
                         <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -395,24 +395,27 @@
                   <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                   <div class="modal-footer">
                      <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                     <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+                     <a class="btn btn-primary" href="{% url 'admin_logout' %}">Logout</a>
                   </div>
                </div>
          </div>
  </div>
  
-
-
     <!-- Bootstrap core JavaScript-->
+    
+
+    <!-- Core plugin JavaScript-->
    
     <script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
     <!-- Core plugin JavaScript-->
     <script src="{% static 'assets/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-
+    <script src="{%static 'assets/js/datatables.min.js'%}"> </script>
     <!-- Custom scripts for all pages-->
     <script src="{% static 'assets/js/sb-admin-2.min.js' %}"></script>
-
+    <link rel="stylesheet" href="{% static 'assets/css/datatables.min.css' %}">
+ 
+   
 </body>
 </html>
