@@ -111,11 +111,18 @@
                                           {{farmer.pin_code}}
                                        </div>
                                     </div> 
-                                 
                                  </div>
+
+                                 <div class = "py-3 d-flex w-100 flex-row align-items-center justify-content-end">
+                                    <a href="{% url update_url id %}" class="btn btn-success btn-icon-split m-1">
+                                       <span class="icon text-white-50">
+                                          <p class="text-light">{% trans "Watch Video" %} </p>
+                                       </span>
+                                    </a>
+                                 </div> 
                               </div>
-                              <div class="card-footer py-3 d-flex flex-row align-items-center justify-content-end">                   
-                                 
+
+                              <div class="card-footer  py-3 d-flex flex-row align-items-center justify-content-end">                   
                                  <a href="{% url update_url id %}" class="btn btn-primary btn-icon-split m-1">
                                     <span class="icon text-white-50">
                                        <p class="text-light">{% trans "Edit" %}</p>

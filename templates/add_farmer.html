@@ -110,6 +110,13 @@
                     {{form.profile_photo}}
                   </div>
 
+                  <div class="form-group">               
+                    <p> {% trans form.profile_video.label %} <span>*</span></p>
+                    <small class="text-danger p-0 ">{{form.profile_video.errors}}</small>
+                    <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
+                    {{form.profile_video}}
+                  </div>
+
                   <div class="form-group">                   
                     <p> {% trans form.age.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.age.errors}}</small>

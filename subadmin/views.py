@@ -225,9 +225,9 @@ class AddFarmer(View):
          try:
             response = requests.post(url,data=request.POST,files=request.FILES,headers={'Authorization': token }).json()
          except:
-            return redirect(reverse('login'))
+            return redirect(reverse('admin_login'))
          if 'detail' in response:
-            form = FarmerForm(request.POST)     
+            form = FarmerForm(request.POST,request.FILES)     
             context = {
                   'is_admin':True,
                   'lan':lan,
@@ -290,8 +290,9 @@ class UpdateFarmer(View):
          url = 'http://127.0.0.1:8000/adminapi/farmerdetail/'+id
          try:
             response = requests.post(url,data=request.POST,files=request.FILES,headers={'Authorization': token }).json()   
-         except:
-            return redirect(reverse('login'))
+         except Exception as e:
+            print(e)
+            #return redirect(reverse('admin_login'))
          if 'detail' in response:
             form = FarmerForm(request.POST)     
             return render(request,'update_farmer.html',{'form':form,'lan':lan,'is_admin':True})      
