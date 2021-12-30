@@ -5,9 +5,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login,logout
 
 from adminapi.views import CustomerRegister
-from .forms import AddressForm, CategoryForm, CustomerUpdateForm, DistrictForm, LoginForm, OrderFieldForm, OrderForm, StateForm
+from .forms import CategoryForm,CustomerUpdateForm, DistrictForm, LoginForm, OrderFieldForm, OrderForm, StateForm
 from adminapi.models import SubAdmin
-from customer.models import  Customer, Order
+from customer.models import  Customer, Order,AddressForm
 from farmer.models import Categories, Farmer, Products,State,District
 from django.core.paginator import Paginator
 from .forms import AdminForm,FarmerForm,CustomerForm,ProductForm

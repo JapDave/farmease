@@ -35,33 +35,33 @@
                                  </div>                             
                                  <div class="col-md-4 mt-1">                                
                                     <div class="form-group">
-                                       <label class="col-lg-5 control-label">First Name:</label>
+                                       <label class="col-lg-5 control-label">{% trans "First Name" %}</label>
                                        <div class="col-lg-7">
                                           {{admin.first_name}}
                                        </div>
                                     </div>
                                     
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">Email:</label>
+                                       <label class="col-md-5 control-label">{% trans "Email" %}</label>
                                        <div class="col-md-7">
                                           {{admin.email}}
                                        </div>
                                     </div>
                                     
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">Age:</label>
+                                       <label class="col-md-5 control-label">{% trans "Age" %}</label>
                                        <div class="col-md-7">
                                           {{admin.age}}
                                        </div>
                                     </div> 
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">State:</label>
+                                       <label class="col-md-5 control-label">{% trans "State" %}</label>
                                        <div class="col-md-7">
                                           {{admin.state}}
                                        </div>
                                     </div>     
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">Postal Address:</label>
+                                       <label class="col-md-5 control-label">{% trans "Postal Address" %}</label>
                                        <div class="col-md-7">
                                           {{admin.postal_address}}
                                        </div>
@@ -70,27 +70,27 @@
                                  <div class="col-md-4">
                                  
                                     <div class="form-group">
-                                       <label class="col-lg-5 control-label">Last Name:</label>
+                                       <label class="col-lg-5 control-label">{% trans "Last Name" %}</label>
                                        <div class="col-lg-7">
                                           {{admin.last_name}}
                                        </div>
                                     </div>
 
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">Contact:</label>
+                                       <label class="col-md-5 control-label">{% trans "Contact No" %}</label>
                                        <div class="col-md-7">
                                        {{admin.contact}}
                                        </div>
                                     </div> 
 
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">District:</label>
+                                       <label class="col-md-5 control-label">{% trans "District" %}</label>
                                        <div class="col-md-7">
                                           {{admin.district}}
                                        </div>
                                     </div> 
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">Pin Code:</label>
+                                       <label class="col-md-5 control-label">{% trans "Pincode" %}</label>
                                        <div class="col-md-7">
                                           {{admin.pin_code}}
                                        </div>
@@ -102,13 +102,13 @@
                                  
                                  <a href="{% url 'updateadmin' admin|private:'_id' %}" class="btn btn-primary btn-icon-split m-1">
                                     <span class="icon text-white-50">
-                                       <small class="text-light">Edit</small>
+                                       <small class="text-light">{% trans "Edit" %}</small>
                                     </span>
                                  </a>
 
                                  <a href="{% url 'deleteadmin' admin|private:'_id' %}" class="btn btn-danger btn-icon-split m-1">
                                     <span class="icon text-white-50">
-                                       <small class="text-light">Delete</small>
+                                       <small class="text-light">{% trans "Delete" %}</small>
                                     </span>
                                  </a>
                              </div>

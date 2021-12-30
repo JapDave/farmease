@@ -2,13 +2,13 @@ from django import forms
 from django.forms import fields
 from django.forms.widgets import FileInput
 from customer.models import Address, Customer,Order, OrderField
-from farmer.models import Categories, District, Farmer, Products, State,FileExtensionValidator
+from farmer.models import Categories, District, Farmer, ProductField, Products, State,FileExtensionValidator
 from adminapi.models import SubAdmin
 from string import Template
 from django.utils.safestring import mark_safe
 from django.forms import ImageField
 from django.conf import settings
-
+from django.utils.translation import ugettext_lazy as _ 
 
 class LoginForm(forms.Form):
     email = forms.EmailField(
@@ -40,11 +40,7 @@ class DistrictForm(forms.ModelForm):
         model = District
         exclude = ['deleted_at']
 
-class AddressForm(forms.ModelForm):
 
-    class Meta:
-        model = Address
-        fields = '__all__'
 
 #
 class PictureWidget(forms.widgets.FileInput):
@@ -108,6 +104,9 @@ class CustomerUpdateForm(forms.ModelForm):
         widgets = {'gender':forms.RadioSelect(choices=CHOICES)}
 
 
+
+
+
 class ProductForm(forms.ModelForm):
 
     image = ImageField(widget=PictureWidget)
@@ -120,6 +119,10 @@ class OrderFieldForm(forms.ModelForm):
     class Meta:
         model = OrderField
         exclude = ['_id']
+        labels = {
+            'product':_('Product'),
+            'qty':_('Product Qty')
+        }
 
 class OrderForm(forms.ModelForm):
 

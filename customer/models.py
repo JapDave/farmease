@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
 import binascii
 import os
-
+from django import forms
 from farmer.models import Products
 
 class ParanoidModelManager(models.Manager):
@@ -16,24 +16,34 @@ class ParanoidModelManager(models.Manager):
 
 class Address(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    pin_code =  models.PositiveIntegerField(("Pincode"), validators=[MinValueValidator(111111), MaxValueValidator(999999)])
-    postal_address = models.TextField(("Postal Address"))
+    pin_code =  models.PositiveIntegerField(validators=[MinValueValidator(111111), MaxValueValidator(999999)])
+    postal_address = models.TextField()
     objects = models.DjongoManager()
 
     class Meta:
         abstract = True
-    
+
+class AddressForm(forms.ModelForm):
+   
+    class Meta:
+        model = Address
+        fields = '__all__'
+        labels = {
+            'pin_code':_('Pincode'),
+            'postal_address':_('Postal Address')
+        }
+
 class Customer(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    first_name = models.CharField(("First Name"), max_length=50) 
-    last_name = models.CharField(("Last Name"), max_length=50) 
+    first_name = models.CharField(("First Name"), max_length=50,default="") 
+    last_name = models.CharField(("Last Name"), max_length=50,default="") 
     password = models.CharField(("Password"), max_length=64)
     email = models.EmailField(("Email"), max_length=54,unique=True)
     profile_photo = models.ImageField(("Profile Photo"), upload_to='Customer', height_field=None, width_field=None, max_length=None)
     phoneNumberRegex = RegexValidator(regex = r"^\+?1?\d{10}$")
     contact = models.CharField(("Contact No"),validators=[phoneNumberRegex],max_length=10,unique=True)
-    age = models.PositiveIntegerField(("Age"),blank=False)
-    gender = models.CharField(("Gender"), max_length=50,blank=False)
+    age = models.PositiveIntegerField(("Age"),blank=False,default=0)
+    gender = models.CharField(("Gender"), max_length=50,blank=False,default="")
     state = models.ForeignKey(State, verbose_name=_("State"), on_delete=models.CASCADE)
     district = models.ForeignKey(District, verbose_name=_("District"), on_delete=models.CASCADE)
     addresses = models.ArrayField(model_container=Address, verbose_name=("Addresses"),null=True,blank=True,default=[])
@@ -94,14 +104,17 @@ class Cart(models.Model):
 
 class OrderField(models.Model):
     _id = models.UUIDField(default=uuid.uuid4,primary_key=True)
-    product = models.ForeignKey(Products, verbose_name=_("Products"), on_delete=models.CASCADE)
-    qty = models.PositiveIntegerField(("Product Qty"),default=1) 
-   
+    product = models.ForeignKey(Products,on_delete=models.CASCADE)
+    qty = models.PositiveIntegerField(default=1) 
     objects = models.DjongoManager()
 
-    class Meta:
-        abstract = True
-    
+    # class Meta:
+    #     abstract = True
+    def __str__(self):
+           return self.product
+
+
+
 
 class Order(models.Model):
     _id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -109,7 +122,7 @@ class Order(models.Model):
     farmer = models.ForeignKey(Farmer, verbose_name=("Farmer"), on_delete=models.CASCADE,default=None)
     items = models.ArrayField(OrderField, verbose_name=("Items"),default=None)  
     total = models.PositiveIntegerField(("Total Amount"))
-    address = models.EmbeddedField(Address)
+    address = models.EmbeddedField(Address, model_form_class = AddressForm)
     CHOICES = (('0','Pending'),('1','Approved'),('2','Dispatched'),('3','Delievered'),('4','Cancelled'))
     status = models.CharField(("status"),choices=CHOICES, max_length=50,default='0')
     CHOICES1 = [('0','COD'),('1','ONLINE')]

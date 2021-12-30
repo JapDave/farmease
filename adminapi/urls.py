@@ -18,6 +18,7 @@ urlpatterns = [
    path('farmerdetail/<farmer_id>', FarmerDetail.as_view()),
    path('customerdetail/<customer_id>', CustomerDetail.as_view()),
    path('products', ProductList.as_view()),
+   path('addproduct', AddProduct.as_view()),
    path('productdetail/<product_id>', ProductDetail.as_view()),
    path('orderhistory/<farmer_id>', OrderHistory.as_view()),
    path('orderdetail/<order_id>', OrderDetail.as_view()),

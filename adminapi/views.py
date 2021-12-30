@@ -4,7 +4,7 @@ from farmer.models import Farmer, Products
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, permissions
 from customer.serializers import OrderSerializer,CustomerSerializer
-from farmer.serializers import FarmerSerializer, ProductSerializer
+from farmer.serializers import FarmerSerializer, ProductSerializer,AddProductSerializer
 from rest_auth.views import LoginView as RestLoginView
 from .authentication import TokenAuthentication
 from .serializers import TokenSerializer,LoginUserSerializer,AdminSerializer
@@ -260,6 +260,22 @@ class CustomerDetail(generics.GenericAPIView):
             return Response({'success':'Customer Deleted'},status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error':'Customer Not Deleted'},status=status.HTTP_400_BAD_REQUEST)
+
+class AddProduct(generics.GenericAPIView):
+    authentication_classes = (TokenAuthentication,)
+
+    def post(self,request):
+        try:
+            serializer = AddProductSerializer(data=request.data)
+            serializer.is_valid()
+            result =  serializer.create(request)
+            if result == True:
+                return Response({'detail':'Product Created'},status=status.HTTP_201_CREATED)
+            else:
+                return Response({'detail':result},status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({'detail':serializer.errors},status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class ProductList(generics.GenericAPIView):

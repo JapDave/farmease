@@ -31,7 +31,7 @@
                   {% csrf_token %}
                   <div>
                      <div class="form-group">                  
-                     <p>{{form.farmer.label}}<span>*</span></p>
+                     <p> {% trans form.farmer.label %} <span>*</span></p>
                      <small class="text-danger p-0 ">{{form.farmer.errors}}</small>
                      <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
                      {{form.farmer}}
@@ -39,7 +39,7 @@
                      </div>
                      
                      <div class="form-group">                  
-                     <p>{{form.customer.label}}<span>*</span></p>
+                     <p> {% trans form.customer.label %} <span>*</span></p>
                      <small class="text-danger p-0 ">{{form.customer.errors}}</small>
                      <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
                      {{form.customer}}
@@ -47,7 +47,7 @@
                      </div>
 
                      <div class="form-group">                  
-                     <p>{{itemform.product.label}}<span>*</span></p>
+                     <p> {% trans itemform.product.label %} <span>*</span></p>
                      <small class="text-danger p-0 ">{{itemform.product.errors}}</small>
                      <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
                      {{itemform.product}}
@@ -55,7 +55,7 @@
                      </div>
 
                      <div class="form-group">                  
-                     <p>{{itemform.qty.label}}<span>*</span></p>
+                     <p> {% trans itemform.qty.label %} <span>*</span></p>
                      <small class="text-danger p-0 ">{{itemform.qty.errors}}</small>
                      <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
                      {{itemform.qty}}
@@ -63,7 +63,7 @@
                      </div>                 
 
                      <div class="form-group">                  
-                     <p>{{form.payment_method.label}} <span>*</span></p>
+                     <p>{% trans form.payment_method.label %} <span>*</span></p>
                      <small class="text-danger p-0 ">{{form.payment_method.errors}}</small>
                      <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                      {{form.payment_method}}
@@ -73,7 +73,7 @@
                   <div>
 
                      <div class="form-group">                  
-                     <p>{{form.total.label}}<span>*</span></p>
+                     <p>{% trans form.total.label %} <span>*</span></p>
                      <small class="text-danger p-0 ">{{form.total.errors}}</small>
                      <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
                      {{form.total}}
@@ -81,14 +81,14 @@
                      </div>
 
                      <div class="form-group">                  
-                     <p>{{form.address.label}} <span>*</span></p>
+                     <p> {% trans form.address.label %} <span>*</span></p>
                      <small class="text-danger p-0 ">{{form.address.errors}}</small>
                      <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                      {{form.address}}
                      </div>            
 
                      <div class="form-group">                  
-                     <p>{{form.status.label}} <span>*</span></p>
+                     <p> {% trans form.status.label %} <span>*</span></p>
                      <small class="text-danger p-0 ">{{form.status.errors}}</small>
                      <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                      {{form.status}}

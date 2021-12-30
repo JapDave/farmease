@@ -10,9 +10,6 @@ translator = Translator(service_urls=[
       'translate.google.com',])
 
 
-
-
-
 class StateSerializer(serializers.DjongoModelSerializer):
 
     class Meta:
@@ -166,8 +163,8 @@ class ProductSerializer(serializers.DjongoModelSerializer):
 
     class Meta:
         model = Products
-        exclude = ['farmer','deleted_at']
-        depth = 1
+        exclude = ['deleted_at']
+        depth = 2
 
     def updateproduct(self,instance,data):
         result = {}

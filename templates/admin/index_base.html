@@ -168,7 +168,9 @@
                      <a class="collapse-item {% if 'showproduct' == segment  %}active{% endif %}" href="{% url 'admin_allproduct' %}">
                        <small class="sidebar-item-gu"> {% trans 'Show Products' %} </small>
                      </a>
-                                        
+                     <a class="collapse-item {% if 'addproduct' == segment  %}active{% endif %}" href="{% url 'admin_addproduct' %}">
+                        <small class="sidebar-item-gu"> {% trans 'Add Product' %} </small>
+                     </a>                  
                </div>
             </div>
          </li>

@@ -16,7 +16,7 @@
       <div class="card shadow mb-4">
         <!-- Card Header - Dropdown -->
         <div class="card-header py-3d-flex flex-row align-items-center justify-content-between">
-           <h5 class="m-0 font-weight-bold text-primary">{% trans 'Update Orders' %}</h5>
+           <h5 class="m-0 font-weight-bold text-primary">{% trans 'Update Order' %}</h5>
         </div>
         <!-- Card Body -->
         <div class="card-body">
@@ -32,14 +32,14 @@
                 <div>
                   <div class="form-group">
                     <small>{{form.farmer.errors}}</small>
-                    <p>{{form.farmer.label}}<span>*</span></p>
+                    <p> {% trans form.farmer.label %} <span>*</span></p>
                     <!-- <span class="icon-case"><i class="fa fa-male"></i></span> -->
                     {{form.farmer}}
                     <!-- <div class="validation"></div> -->
                   </div>
 
                   <div class="form-group">                   
-                    <p>{{form.address.label}} <span>*</span></p>
+                    <p> {% trans form.address.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.address.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-user"></i></span> -->
                     {{form.address}}
@@ -48,7 +48,7 @@
 
                   <div class="form-group">
                     
-                    <p>{{form.status.label}}<span>*</span></p>
+                    <p> {% trans form.status.label  %}<span>*</span></p>
                     <small class="text-danger p-0 ">{{form.status.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
                     {{form.status}}
@@ -58,21 +58,21 @@
 
                 <div>
                   <div class="form-group">                   
-                    <p>{{form.customer.label}}<span>*</span></p>
+                    <p> {% trans form.customer.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.customer.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     {{form.customer}}
                   </div>
 
                   <div class="form-group">                   
-                    <p>{{form.total.label}} <span>*</span></p>
+                    <p> {% trans form.total.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.total.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     {{form.total}}
                   </div>
 
                   <div class="form-group">                  
-                    <p>{{form.payment_method.label}} <span>*</span></p>
+                    <p>{% trans form.payment_method.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.payment_method.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     <div class="form-gender">{{form.payment_method}}</div>

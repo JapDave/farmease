@@ -112,7 +112,7 @@ msgstr "ઉત્પાદનો ઉમેરો"
 msgid "Show Orders"
 msgstr "ઓર્ડર બતાવો"
 
-msgid "Add Orders"
+msgid "Add Order"
 msgstr "ઓર્ડર ઉમેરો"
 
 msgid "Master"
@@ -130,8 +130,14 @@ msgstr "અપડેટ ઓર્ડર "
 msgid "Update Farmer"
 msgstr "અપડેટ ખેડૂત "
 
+msgid "Farmer Detail"
+msgstr "ખેડૂત વિગત"
+
 msgid "Update Customer"
 msgstr "અપડેટ ગ્રાહક "
+
+msgid "Customer Detail"
+msgstr "ગ્રાહક વિગત"
 
 msgid "Update Admin"
 msgstr "અપડેટ એડમિન"
@@ -184,11 +190,17 @@ msgstr "ફોન નં"
 msgid "Gender"
 msgstr "જાતિ"
 
-msgid "payment Method"
+msgid "Payment Method"
 msgstr "ચુકવણી પદ્ધતિ"
 
-msgid "Product qty"
+msgid "Product Qty"
 msgstr "ઉત્પાદન ક્યુએન્ટીટી"
+
+msgid "Shipping Address"
+msgstr "પહોંચાડવાનું સરનામું"
+
+msgid "Order Status"
+msgstr "ઓર્ડર સ્થિતિ"
 
 msgid "Total Amount"
 msgstr "કુલ રકમ"
@@ -202,9 +214,6 @@ msgstr "રકમ"
 msgid "Description"
 msgstr "વર્ણન"
 
-msgid "Name"
-msgstr "નામ"
-
 msgid "Customer Capacity"
 msgstr "ગ્રાહક ક્ષમતા"
 
@@ -213,3 +222,29 @@ msgstr "શ્રેણીનું નામ"
 
 msgid "Age"
 msgstr "ઉંમર"
+
+msgid "Name"
+msgstr "નામ"
+
+msgid "Sr.No"
+msgstr "ક્રમ નં"
+
+msgid "Edit"
+msgstr "ફેરફાર"
+
+msgid "Detail"
+msgstr "વિગત"
+
+msgid "Delete"
+msgstr "કાઢી નાખો"
+
+msgid "Farmer Selected"
+msgstr "ખેડૂત પસંદ કરેલ"
+
+msgid "Product Detail"
+msgstr "ઉત્પાદન વિગત"
+
+msgid "Order Detail"
+msgstr "ઓર્ડર વિગત"
+
+

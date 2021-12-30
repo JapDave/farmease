@@ -1,5 +1,5 @@
 from farmer.models import Products,State,District
-from farmer.serializers import DistrictSerializer, FarmerSerializer, StateSerializer
+from farmer.serializers import DistrictSerializer, FarmerSerializer, ProductSerializer, StateSerializer
 from rest_framework import  serializers as restserial
 from .models import Cart, CartField, Customer, Order, OrderField, Token, Address
 from django.utils.translation import gettext_lazy as _
@@ -114,21 +114,23 @@ class QtySerializer(restserial.Serializer):
     qty = restserial.IntegerField(max_value=None, min_value=1) 
    
 
-class OrderFieldSerializer(serializers.EmbeddedModelSerializer):
-    _id = restserial.UUIDField(default=uuid.uuid4)
-
+class OrderFieldSerializer(serializers.DjongoModelSerializer):
+  
     class Meta:
         model = OrderField
         fields = '__all__'
+        depth = 3
 
 class OrderSerializer(serializers.DjongoModelSerializer):
+
+    items = OrderFieldSerializer(many=True, read_only=True) 
+       
     class Meta:
         model = Order
         exclude = ['deleted_at']
-        depth = 3
-     
+        depth = 5
 
-
+             
 class TokenSerializer(serializers.DjongoModelSerializer):
     user = CustomerSerializer(Customer.objects.all())
 

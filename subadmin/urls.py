@@ -24,6 +24,7 @@ urlpatterns = [
     path('customerdetail/<id>',DetailCustomer.as_view(),name='admin_detailcustomer'),
     path('deletecustomer/<id>',DeleteCustomer.as_view(),name='admin_deletecustomer'),
     path('products',ProductView.as_view(),name='admin_allproduct'),
+    path('addproduct',AddProduct.as_view(),name='admin_addproduct'),
     path('productdetail/<id>',DetailProduct.as_view(),name='admin_detailproduct'),
     path('productdelete/<id>',DeleteProduct.as_view(),name='admin_deleteproduct'),
     path('order',OrderView.as_view(),name='admin_allorder'),

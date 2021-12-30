@@ -44,56 +44,56 @@
                                  </div>                             
                                  <div class="col-md-4 mt-1">                                
                                     <div class="form-group">
-                                       <label class="col-lg-5 control-label">First Name:</label>
+                                       <label class="col-lg-5 control-label label-tittle">{% trans "First Name" %}</label>
                                        <div class="col-lg-7">
                                           {{customer.first_name}}
                                        </div>
                                     </div>
                                     
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">Email:</label>
+                                       <label class="col-md-5 control-label label-tittle">{% trans "Email" %}</label>
                                        <div class="col-md-7">
                                           {{customer.email}}
                                        </div>
                                     </div>
                                     
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">Age:</label>
+                                       <label class="col-md-5 control-label label-tittle">{% trans "Age" %}</label>
                                        <div class="col-md-7">
                                           {{customer.age}}
                                        </div>
                                     </div> 
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">State:</label>
+                                       <label class="col-md-5 control-label label-tittle">{% trans "State" %}</label>
                                        <div class="col-md-7">
                                           {{customer.state.name}}
                                        </div>
                                     </div>                                      
                                  </div>
+
                                  <div class="col-md-4">
-                                 
                                     <div class="form-group">
-                                       <label class="col-lg-5 control-label">Last Name:</label>
+                                       <label class="col-lg-5 control-label label-tittle">{% trans "Last Name" %}</label>
                                        <div class="col-lg-7">
                                           {{customer.last_name}}
                                        </div>
                                     </div>
 
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">Contact:</label>
+                                       <label class="col-md-5 control-label label-tittle">{% trans "Contact No" %}</label>
                                        <div class="col-md-7">
                                        {{customer.contact}}
                                        </div>
                                     </div> 
 
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">Farmer Selected:</label>
+                                       <label class="col-md-5 control-label label-tittle">{% trans "Farmer Selected" %}</label>
                                        <div class="col-md-7">
                                           {{customer.farmer.first_name}}
                                        </div>
                                     </div>    
                                     <div class="form-group">
-                                       <label class="col-md-5 control-label">District:</label>
+                                       <label class="col-md-5 control-label label-tittle">{% trans "District" %}</label>
                                        <div class="col-md-7">
                                           {{customer.district.name}}
                                        </div>
@@ -102,26 +102,26 @@
                                  </div>
                               </div>
                               <div class="card-footer py-3 d-flex flex-row align-items-center justify-content-end">                   
-                                 
-                                 <a href="{% url 'alladdress' id %}" class="btn btn-success btn-icon-split m-1">
-                                    <span class="icon text-white-50">
-                                       <small class="text-light">Addresses</small>
-                                    </span>
-                                 </a> 
+                                 {% if not  is_admin  %}
+                                    <a href="{% url 'alladdress' id %}" class="btn btn-success btn-icon-split m-1">
+                                       <span class="icon text-white-50">
+                                          <p class="text-light">Addresses</p>
+                                       </span>
+                                    </a> 
+                                 {% endif %}
 
                                  <a href="{% url update_url id %}" class="btn btn-primary btn-icon-split m-1">
                                     <span class="icon text-white-50">
-                                       <small class="text-light">Edit</small>
+                                       <p class="text-light">{% trans "Edit" %}</p>
                                     </span>
                                  </a>
 
                                  <a href="{% url delete_url id %}" class="btn btn-danger btn-icon-split m-1">
                                     <span class="icon text-white-50">
-                                       <small class="text-light">Delete</small>
+                                       <p class="text-light">{% trans "Delete" %}</p>
                                     </span>
                                  </a>
-                             </div>
-                              
+                             </div>                              
                         {% endif %}                    
                      </div>
                  </div>

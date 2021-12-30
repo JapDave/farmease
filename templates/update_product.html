@@ -43,14 +43,14 @@
                 <div>
                   <div class="form-group">
                     <small>{{form.farmer.errors}}</small>
-                    <p>{{form.farmer.label}}<span>*</span></p>
+                    <p>{% trans form.farmer.label %} <span>*</span></p>
                     <!-- <span class="icon-case"><i class="fa fa-male"></i></span> -->
                     {{form.farmer}}
                     <!-- <div class="validation"></div> -->
                   </div>
 
                   <div class="form-group">                   
-                    <p>{{form.category.label}} <span>*</span></p>
+                    <p> {% trans form.category.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.category.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-user"></i></span> -->
                     {{form.category}}
@@ -78,24 +78,24 @@
 
                 <div>
                   <div class="form-group">                   
-                    <p>{{form.image.label}} <span>*</span></p>
+                    <p> {% trans form.image.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.image.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
                     {{form.image}}
                   </div>
 
                   <div class="form-group">                   
-                    <p>{{form.price.label}} <span>*</span></p>
+                    <p> {% trans form.price.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.price.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
-                    {{form.price}}
+                    {{form.price}} Per Kg
                   </div>
 
                   <div class="form-group">                  
-                    <p>{{form.stock.label}} <span>*</span></p>
+                    <p> {% trans form.stock.label %} <span>*</span></p>
                     <small class="text-danger p-0 ">{{form.stock.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-building-o"></i></span> -->
-                    <div class="form-gender">{{form.stock}}</div>
+                    <div class="form-gender">{{form.stock}} Kg</div>
                   </div>            
                 </div>
               </div>

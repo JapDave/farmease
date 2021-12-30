@@ -1,4 +1,4 @@
-{% extends 'index_base.html' %}
+{% extends is_admin|yesno:"admin/index_base.html,index_base.html" %}
 {% load static %} 
 {% load i18n %}
 
@@ -6,6 +6,8 @@
 
 {% block head %}
 <script>
+  var v = document.getElementById("id_gu-name").label;
+  console.log(v)
   function upload_img(input) {
     if (input.files && input.files[0]) {
       var src = URL.createObjectURL(input.files[0])
@@ -57,14 +59,14 @@
                     <!-- <div class="validation"></div> -->
                   </div>
 
-                  <div class="form-group">
-                    
+                  <div class="form-group">                  
                     <p> {% trans form.gu.label %}<span>*</span></p>
                     <small class="text-danger p-0 ">{{form.gu.errors}}</small>
                     <!-- <span class="icon-case"><i class="fa fa-envelope-o"></i></span> -->
-                      {{form.gu}} 
+                      {{form.gu}}
                     <!-- <div class="validation"></div> -->
                   </div>
+                    
 
                   <div class="form-group">                  
                     <p> {% trans form.en.label %}<span>*</span></p>

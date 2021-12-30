@@ -2,13 +2,15 @@ from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.views import View
 from requests.api import request
-from superadmin.forms import AddressForm, CustomerForm, LoginForm,FarmerForm
+from superadmin.forms import  CustomerForm, LoginForm,FarmerForm
 import requests
 from django.contrib.auth.mixins import LoginRequiredMixin
 from superadmin.views import language
 from django.core.paginator import Paginator
 from farmer.models import Farmer,State,District
-from customer.models import Customer,Categories
+from customer.models import Customer,Categories,AddressForm
+from superadmin.forms import ProductForm
+
 
 class Login(View): 
    def get(self,request):
@@ -479,6 +481,7 @@ class ProductView(View):
          page = request.GET.get(response['current page'],1)
          paginator = Paginator(response['results'],10)
          product_data = paginator.page(page)
+        
          context = {
                'is_admin':True,
                'lan':lan,
@@ -489,6 +492,15 @@ class ProductView(View):
       except Exception as e: 
          pass
 
+class AddProduct(View):
+
+   def get(self,request):  
+      form = ProductForm()
+      language(request)
+      lan = request.session['language']
+      return render(request,'add_product.html',{'is_admin':True,'form':form,'lan':lan,'segment':'addproduct'})
+
+
 class DetailProduct(View):
    
    def get(self,request,id):
@@ -498,7 +510,7 @@ class DetailProduct(View):
       try:
          url = 'http://127.0.0.1:8000/adminapi/productdetail/'+id
          try:
-            response = requests.get(url,headers={'Authorization': token }).json()      
+            response = requests.get(url,headers={'Authorization': token }).json()   
          except:
             return redirect(reverse('login'))
          if 'product' in response:
@@ -541,8 +553,8 @@ class OrderView(View):
             url = 'http://127.0.0.1:8000/adminapi/orderhistory/'+id
             try:
                order_response = requests.get(url,headers={'Authorization': token }).json()
-            except:
-               return redirect(reverse('login'))
+            except Exception as e:
+               return redirect(reverse('admin_login'))
             page = request.GET.get(order_response['current page'],1)
             paginator = Paginator(order_response['orders'],10)
             order_data = paginator.page(page)
@@ -563,7 +575,7 @@ class OrderDetail(View):
          try:
             response = requests.get(url,headers={'Authorization': token }).json()
          except:
-            return redirect(reverse('allorder'))
+            return redirect(reverse('admin_allorder'))
          if 'order' in response:
             context = {
                'is_admin':True,
@@ -571,9 +583,10 @@ class OrderDetail(View):
                'order':response['order'],
                'lan':lan
             }
+          
             return render(request,'detail_order.html',context)
          else:
-            return redirect(reverse('allorder'))
+            return redirect(reverse('admin_allorder'))
       except Exception as e:
          print(e)
-         pass
+         pass  
